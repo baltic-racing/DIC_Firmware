@@ -40,5 +40,6 @@ void display_write_str(struct DISPLAY_PAGE *display, char data[], uint8_t row, u
 void display_large_number(struct DISPLAY_PAGE *display, uint8_t offset, uint8_t number);
 
 void display_voltage(struct DISPLAY_PAGE *display, uint16_t number);
+
 	
 #endif /* DISPLAY_H_ */

@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "canlib.h"
+#include "candata.h"
 #include "display.h"
 #include "port_definitions.h"
 #include "portextender.h"
@@ -18,6 +19,9 @@ int main(void)
 	configure_spi_bus();
 	
 	sys_timer_config();
+
+	init_mobs();
+	can_cfg();
 	
 	extern volatile unsigned long sys_time;
 	extern volatile uint8_t draw_data;
@@ -40,10 +44,10 @@ int main(void)
 	struct DISPLAY_PAGE dsp_startup = get_empty_display();
 	
 	
-	//display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
-	//display_write_str(&dsp_startup, "        .--.        ",1,0);
-	//display_write_str(&dsp_startup, "   .----'   '--.    ",2,0);
-	//display_write_str(&dsp_startup, "   '-()-----()-'    ",3,0);
+	display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
+	display_write_str(&dsp_startup, "        .--.        ",1,0);
+	display_write_str(&dsp_startup, "   .----'   '--.    ",2,0);
+	display_write_str(&dsp_startup, "   '-()-----()-'    ",3,0);
 	
 	//display_large_number(&dsp_startup,1,7);
 	//display_large_number(&dsp_startup,5,8);
@@ -73,9 +77,12 @@ int main(void)
 			time_10ms = 0;
 			time_50ms++;
 			time_100ms++;
+			can_receive();
 		}
 		
 		if (time_50ms > 4){
+			display_large_number(&dsp_startup,0,get_mob_data(SWC_DATA)[0]);
+			display_large_number(&dsp_startup,16,get_mob_data(SWC_DATA)[1]);
 			time_50ms = 0;
 			//switch(sys_time%7){
 			//	case 0:
