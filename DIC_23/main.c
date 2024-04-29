@@ -28,6 +28,8 @@ int main(void)
 	
 	volatile unsigned long sys_time_old;
 	
+	uint8_t dsp = 0;
+	
 	uint8_t time_10ms = 0;
 	uint8_t time_50ms = 0;
 	unsigned long time_100ms = 0;
@@ -43,6 +45,10 @@ int main(void)
 	//display pages holding data
 	struct DISPLAY_PAGE dsp_startup = get_empty_display();
 	
+	struct DISPLAY_PAGE dsp_voltage = get_empty_display();
+	
+	struct DISPLAY_PAGE dsp_temp = get_empty_display();
+	
 	
 	display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
 	display_write_str(&dsp_startup, "        .--.        ",1,0);
@@ -55,7 +61,7 @@ int main(void)
 	//display_large_number(&dsp_startup,13,4);
 	//display_large_number(&dsp_startup,17,11);
 	
-	display_voltage(&dsp_startup, 579);
+	//display_voltage(&dsp_startup, 579);
 	
 		
 	//Variable die das Aktive Display hällt!
@@ -80,10 +86,39 @@ int main(void)
 			can_receive();
 		}
 		
-		if (time_50ms > 4){
-			display_large_number(&dsp_startup,0,get_mob_data(SWC_DATA)[0]);
-			display_large_number(&dsp_startup,16,get_mob_data(SWC_DATA)[1]);
-			time_50ms = 0;
+		if(time_100ms > 299){
+			switch (dsp){
+				case 0 :
+				active_display = &dsp_voltage;
+				display_voltage(active_display, 320);
+				dsp = 1;
+				time_100ms = 0;
+				break;
+				
+				case 1 : 
+				active_display = & dsp_temp;
+				display_temp(active_display, 320);
+				dsp = 2;
+				time_100ms = 0;
+				break;
+				
+				case 2 :
+				active_display = & dsp_voltage;
+				display_voltage(active_display, 320);
+				dsp = 1;
+				time_100ms = 0;
+				break;
+				
+			}
+			
+			
+			
+		}
+		
+		//if (time_50ms > 4){
+		//	display_large_number(&dsp_startup,0,get_mob_data(SWC_DATA)[0]);
+		//	display_large_number(&dsp_startup,16,get_mob_data(SWC_DATA)[1]);
+		//	time_50ms = 0;
 			//switch(sys_time%7){
 			//	case 0:
 			//		pre_defined_led_colors(PE_OFF);
@@ -109,11 +144,11 @@ int main(void)
 			//}
 		}
 		
-		if (time_100ms > 9){
-			time_100ms = 0;
-			pre_defined_led_colors(PE_OFF);
+	//	if (time_100ms > 9){
+		//	time_100ms = 0;
+		//	pre_defined_led_colors(PE_OFF);
 			
-		}
 		
-	}
+		
+	
 }

@@ -132,16 +132,33 @@ void init_display(){
 }
 
 void display_voltage(struct DISPLAY_PAGE *display, uint16_t number){
-	display_large_number(display, 0, 12);
-	display_write_str(display,"o",1,4);
-	display_write_str(display,"o",2,4);
-	display_large_number(display, 15, number%10);
+	//display_large_number(display, 0, 12);
+	//display_write_str(display,"o",1,4);
+	//display_write_str(display,"o",2,4);
+	display_large_number(display, 14, 11);
+	display_write_str(display, "\x07", 3, 4);
+	display_large_number(display, 10, number%10);
 	number = number/10;
-	display_large_number(display, 11, number%10);
+	display_large_number(display, 6, number%10);
 	number = number/10;
-	display_large_number(display, 7, number%10);
+	display_large_number(display, 0, number%10);
 }
 
+
+
+void display_temp(struct DISPLAY_PAGE *display, uint16_t number){
+	//display_large_number(display, 0, 12);
+	//display_write_str(display,"o",1,4);
+	//display_write_str(display,"o",2,4);
+	display_large_number(display, 16, 13);
+	display_write_str(display,"o", 0, 14);
+	display_write_str(display, "\x07", 3, 8);
+	display_large_number(display, 10, number%10);
+	number = number/10;
+	display_large_number(display, 4, number%10);
+	number = number/10;
+	display_large_number(display, 0, number%10);
+}
 
 void display_large_number(struct DISPLAY_PAGE *display, uint8_t offset, uint8_t number){
 
@@ -227,6 +244,13 @@ void display_large_number(struct DISPLAY_PAGE *display, uint8_t offset, uint8_t 
 			display_write_str(display, "\xff \xff",0,offset);
 			display_write_str(display, "\xff \xff",1,offset);
 			display_write_str(display, "\xff \xff",2,offset);
+			display_write_str(display, "\xff\xff\xff",3,offset);
+			break;
+			//we misuse the 13 as C
+		case 13:
+			display_write_str(display, "\xff\xff\xff",0,offset);
+			display_write_str(display, "\xff  ",1,offset);
+			display_write_str(display, "\xff  ",2,offset);
 			display_write_str(display, "\xff\xff\xff",3,offset);
 			break;
 			
