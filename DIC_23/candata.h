@@ -66,6 +66,7 @@
 void init_mobs();
 
 void can_receive();
+void can_transmit();
 
 void can_put_data();
 
