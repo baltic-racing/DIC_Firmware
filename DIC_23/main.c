@@ -10,10 +10,10 @@
 #include "portextender.h"
 #include "sys_timer.h"
 
-extern uint16_t max_voltage;
-extern uint16_t min_voltage;
-extern uint16_t max_temp;
-extern uint16_t min_temp;
+extern uint16_t bms_max_voltage;
+extern uint16_t bms_min_voltage;
+extern uint16_t bms_max_temp;
+extern uint16_t bms_min_temp;
 
 
 /*	MAIN	*/
@@ -101,21 +101,21 @@ int main(void)
 			switch (dsp){
 				case 0 :
 				active_display = &dsp_voltage;
-				display_voltage(active_display, max_voltage/100);
+				display_voltage(active_display, bms_max_voltage/100);
 				dsp = 1;
 				time_100ms = 0;
 				break;
 				
 				case 1 : 
 				active_display = & dsp_temp;
-				display_temp(active_display, max_temp/100);
+				display_temp(active_display, bms_max_temp/100);
 				dsp = 2;
 				time_100ms = 0;
 				break;
 				
 				case 2 :
 				active_display = & dsp_voltage;
-				display_voltage(active_display, max_voltage/100);
+				display_voltage(active_display, bms_max_voltage/100);
 				dsp = 1;
 				time_100ms = 0;
 				break;

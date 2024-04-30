@@ -10,21 +10,58 @@
 #define CANDATA_H_
 #include "canlib.h"
 
-#define SWC_MOB_ID (uint16_t) 0x750
+#define AMS_0_MOB_ID (uint16_t) 0x200
+#define AMS_1_MOB_ID (uint16_t) 0x201
+
+#define SHR_MOB_ID (uint16_t) 0x400
+#define SHL_MOB_ID (uint16_t) 0x410
+#define SHB_MOB_ID (uint16_t) 0x420
+
+#define DIC_MOB_ID (uint16_t) 0x500
+
 #define FUSEBOX_MOB_ID (uint16_t) 0x600
-#define DATALOGGER_1_MOB_ID (uint16_t) 0x796
-#define DATALOGGER_2_MOB_ID (uint16_t) 0x797
-#define AMS_2_MOB_ID (uint16_t) 0x202
-#define DIC_0_MOB_ID (uint16_t) 0x500
+
+#define SWC_MOB_ID (uint16_t) 0x750
+
+#define LOGGER_0_MOB_ID (uint16_t) 0x796
+#define LOGGER_1_MOB_ID (uint16_t) 0x797
+#define LOGGER_2_MOB_ID (uint16_t) 0x798
+#define LOGGER_3_MOB_ID (uint16_t) 0x799
+
+/*
+#define INV0_0_MOB_ID (uint16_t) 
+#define INV0_1_MOB_ID (uint16_t) 
+
+#define INV1_0_MOB_ID (uint16_t) 
+#define INV1_1_MOB_ID (uint16_t) 
+*/
 
 #define DSP_MODE_BYTE 0
 
-#define SWC_DATA 0
-#define FUSEBOX_DATA 1
-#define LOGGER1_DATA 2
-#define LOGGER2_DATA 3
-#define AMS2_DATA 4
-#define DIC0_DATA 5
+#define AMS0_DATA 0
+#define AMS1_DATA 1
+
+#define SHR_DATA 2
+#define SHL_DATA 3
+#define SHB_DATA 4
+
+#define DIC_DATA 5
+
+#define FUSEBOX_DATA 6
+
+#define SWC_DATA 7
+
+#define LOGGER0_DATA 8
+#define LOGGER1_DATA 9
+#define LOGGER2_DATA 10
+#define LOGGER3_DATA 11
+
+#define INV00_DATA 12
+#define INV01_DATA 13
+
+#define INV10_DATA 14
+#define INV11_DATA 15
+
 
 void init_mobs();
 
