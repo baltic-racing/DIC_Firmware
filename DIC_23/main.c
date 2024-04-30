@@ -10,6 +10,12 @@
 #include "portextender.h"
 #include "sys_timer.h"
 
+extern uint16_t max_voltage;
+extern uint16_t min_voltage;
+extern uint16_t max_temp;
+extern uint16_t min_temp;
+
+
 /*	MAIN	*/
 int main(void)
 {
@@ -30,6 +36,7 @@ int main(void)
 	
 	uint8_t dsp = 0;
 	
+
 	uint8_t time_10ms = 0;
 	uint8_t time_50ms = 0;
 	unsigned long time_100ms = 0;
@@ -72,6 +79,7 @@ int main(void)
 		if (draw_data){
 			draw_data = 0;
 			draw_char(active_display,&display_state);
+			
 		}
 		if((sys_time - sys_time_old) >= 1){
 			sys_time_old = sys_time;
@@ -84,27 +92,30 @@ int main(void)
 			time_50ms++;
 			time_100ms++;
 			can_receive();
+			//get_mob_data(AMS2_DATA);
+			can_put_data();
+			can_transmit();
 		}
 		
 		if(time_100ms > 299){
 			switch (dsp){
 				case 0 :
 				active_display = &dsp_voltage;
-				display_voltage(active_display, 320);
+				display_voltage(active_display, max_voltage/100);
 				dsp = 1;
 				time_100ms = 0;
 				break;
 				
 				case 1 : 
 				active_display = & dsp_temp;
-				display_temp(active_display, 320);
+				display_temp(active_display, max_temp/100);
 				dsp = 2;
 				time_100ms = 0;
 				break;
 				
 				case 2 :
 				active_display = & dsp_voltage;
-				display_voltage(active_display, 320);
+				display_voltage(active_display, max_voltage/100);
 				dsp = 1;
 				time_100ms = 0;
 				break;

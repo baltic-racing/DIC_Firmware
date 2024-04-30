@@ -7,9 +7,9 @@
 
 struct CAN_MOB{
 	
-	uint8_t mob_id;
-	uint8_t mob_idmask;
-	uint8_t mob_number;
+	uint16_t mob_id;
+	uint16_t mob_idmask;
+	uint16_t mob_number;
 	
 };
 
