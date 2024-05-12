@@ -14,6 +14,7 @@ extern uint16_t bms_max_voltage;
 extern uint16_t bms_min_voltage;
 extern uint16_t bms_max_temp;
 extern uint16_t bms_min_temp;
+extern uint16_t cooling_front;
 
 
 /*	MAIN	*/
@@ -56,23 +57,25 @@ int main(void)
 	
 	struct DISPLAY_PAGE dsp_temp = get_empty_display();
 	
+	struct DISPLAY_PAGE dsp_driver = get_empty_display();
 	
 	display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
 	display_write_str(&dsp_startup, "        .--.        ",1,0);
 	display_write_str(&dsp_startup, "   .----'   '--.    ",2,0);
 	display_write_str(&dsp_startup, "   '-()-----()-'    ",3,0);
 	
-	//display_large_number(&dsp_startup,1,7);
-	//display_large_number(&dsp_startup,5,8);
-	//display_large_number(&dsp_startup,9,9);
-	//display_large_number(&dsp_startup,13,4);
-	//display_large_number(&dsp_startup,17,11);
+	display_write_str(&dsp_driver, "TSV:XXXV      AT:XXC",0,0);
+	display_write_str(&dsp_driver, "LVV:XX.XV     CT:XXC",1,0);
+	display_write_str(&dsp_driver, "BB:XX       CTMD:XXC",2,0);
+	display_write_str(&dsp_driver, "ERR:                ",3,0);
 	
-	//display_voltage(&dsp_startup, 579);
+	dsp_driver.data[1][18] = cooling_front%10+0x30;
+	cooling_front = cooling_front/10;
+	dsp_driver.data[1][17] = cooling_front%10+0x30;
 	
-		
-	//Variable die das Aktive Display hällt!
-	struct DISPLAY_PAGE *active_display = &dsp_startup;
+	
+	//Variable die das Aktive Display hält!
+	struct DISPLAY_PAGE *active_display = &dsp_driver;
 	
 	while (1)
 	{
@@ -96,34 +99,8 @@ int main(void)
 			can_put_data();
 			can_transmit();
 		}
-		
-		if(time_100ms > 299){
-			switch (dsp){
-				case 0 :
-				active_display = &dsp_voltage;
-				display_voltage(active_display, bms_max_voltage/100);
-				dsp = 1;
-				time_100ms = 0;
-				break;
 				
-				case 1 : 
-				active_display = & dsp_temp;
-				display_temp(active_display, bms_max_temp/100);
-				dsp = 2;
-				time_100ms = 0;
-				break;
-				
-				case 2 :
-				active_display = & dsp_voltage;
-				display_voltage(active_display, bms_max_voltage/100);
-				dsp = 1;
-				time_100ms = 0;
-				break;
-				
-			}
-			
-			
-			
+}
 		}
 		
 		//if (time_50ms > 4){
@@ -153,7 +130,7 @@ int main(void)
 			//		pre_defined_led_colors(PE_WHITE);
 			//		break;
 			//}
-		}
+		//}
 		
 	//	if (time_100ms > 9){
 		//	time_100ms = 0;
@@ -162,4 +139,4 @@ int main(void)
 		
 		
 	
-}
+//}

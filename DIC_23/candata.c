@@ -324,6 +324,8 @@ void can_receive(){
 	can_rx(&fusebox_mob, mob_databytes[FUSEBOX_DATA]);
 	can_rx(&swc_mob, mob_databytes[SWC_DATA]);
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
+	can_rx(&shb_mob, mob_databytes[SHB_DATA]);
+	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
 }
 
 void can_transmit(){
@@ -356,8 +358,8 @@ void can_put_data(){
 	
 	APPS = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
 	
-	cooling_front = mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8);
-	cooling_rear = mob_databytes[SHB_DATA][4] | (mob_databytes[SHB_DATA][5] << 8);
+	cooling_front = mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8/10);
+	cooling_rear = mob_databytes[SHB_DATA][4] | (mob_databytes[SHB_DATA][5] << 8/10);
 	
 	TS_ON = (~PINA & (1 << PA0));
 	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
