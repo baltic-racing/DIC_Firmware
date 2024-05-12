@@ -69,9 +69,6 @@ int main(void)
 	display_write_str(&dsp_driver, "BB:XX       CTMD:XXC",2,0);
 	display_write_str(&dsp_driver, "ERR:                ",3,0);
 	
-	dsp_driver.data[1][18] = cooling_front%10+0x30;
-	cooling_front = cooling_front/10;
-	dsp_driver.data[1][17] = cooling_front%10+0x30;
 	
 	
 	//Variable die das Aktive Display hält!
@@ -89,7 +86,7 @@ int main(void)
 			time_10ms++;
 		}
 		
-		if (time_10ms > 9){
+		if (time_10ms >=10){
 			
 			time_10ms = 0;
 			time_50ms++;
@@ -98,6 +95,11 @@ int main(void)
 			//get_mob_data(AMS2_DATA);
 			can_put_data();
 			can_transmit();
+			//cooling Auswertung
+			uint16_t tnp_temp = (float) ((0.128479*cooling_front) - (8.137044)); // NTC Kurve ist linearisiert im Bereich 80°-20°, außerhalb ungenauer
+			dsp_driver.data[1][18] = tnp_temp%10+0x30;
+			tnp_temp = tnp_temp/10;
+			dsp_driver.data[1][17] = tnp_temp%10+0x30;
 		}
 				
 }
@@ -131,12 +133,3 @@ int main(void)
 			//		break;
 			//}
 		//}
-		
-	//	if (time_100ms > 9){
-		//	time_100ms = 0;
-		//	pre_defined_led_colors(PE_OFF);
-			
-		
-		
-	
-//}
