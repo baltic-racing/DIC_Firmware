@@ -31,6 +31,9 @@ uint16_t APPS = 0;
 uint16_t cooling_front = 0;
 uint16_t cooling_rear = 0;
 
+uint16_t pressure_front = 0;
+uint16_t pressure_rear = 0;
+
 uint8_t Ready_2_Drive = 0;
 uint8_t TS_ON = 0;
 uint8_t SDCIDIC = 0;
@@ -360,6 +363,9 @@ void can_put_data(){
 	
 	cooling_front = mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8);
 	cooling_rear = mob_databytes[SHB_DATA][4] | (mob_databytes[SHB_DATA][5] << 8);
+	
+	pressure_front = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
+	pressure_rear = mob_databytes[SHL_DATA][4] | (mob_databytes[SHL_DATA][5] << 8);
 	
 	TS_ON = (~PINA & (1 << PA0));
 	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
