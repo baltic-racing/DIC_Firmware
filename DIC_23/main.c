@@ -56,6 +56,8 @@ int main(void)
 	
 	struct DISPLAY_PAGE dsp_temp = get_empty_display();
 	
+	struct DISPLAY_PAGE dsp_main = get_empty_display();
+	
 	
 	display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
 	display_write_str(&dsp_startup, "        .--.        ",1,0);
@@ -96,7 +98,12 @@ int main(void)
 			can_put_data();
 			can_transmit();
 		}
+		if(time_100ms > 299){
+			active_display = &dsp_main;
+			display_main(active_display );
+		}
 		
+		/*
 		if(time_100ms > 299){
 			switch (dsp){
 				case 0 :
@@ -125,6 +132,7 @@ int main(void)
 			
 			
 		}
+		*/
 		
 		//if (time_50ms > 4){
 		//	display_large_number(&dsp_startup,0,get_mob_data(SWC_DATA)[0]);
@@ -159,7 +167,6 @@ int main(void)
 		//	time_100ms = 0;
 		//	pre_defined_led_colors(PE_OFF);
 			
-		
+	}
 		
 	
-}
