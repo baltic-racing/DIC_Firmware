@@ -31,6 +31,7 @@ uint16_t APPS = 0;
 uint16_t cooling_1 = 0;
 uint16_t cooling_2 = 0;
 uint16_t cooling_temp = 0;
+uint16_t cooling_temp_deg = 0;
 
 uint8_t Ready_2_Drive = 0;
 uint8_t TS_ON = 0;
@@ -324,7 +325,11 @@ void can_receive(){
 	can_rx(&logger2_mob, mob_databytes[LOGGER2_DATA]);
 	can_rx(&fusebox_mob, mob_databytes[FUSEBOX_DATA]);
 	can_rx(&swc_mob, mob_databytes[SWC_DATA]);
+	can_rx(&ams0_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
+	can_rx(&shr_mob, mob_databytes[SHB_DATA]);
+	can_rx(&shl_mob, mob_databytes[SHB_DATA]);
+	can_rx(&shb_mob, mob_databytes[SHB_DATA]);
 }
 
 void can_transmit(){
@@ -352,15 +357,15 @@ void can_put_data(){
 	
 	bms_min_voltage = mob_databytes[AMS1_DATA][0] | (mob_databytes[AMS1_DATA][1] << 8);
 	bms_max_voltage = mob_databytes[AMS1_DATA][2] | (mob_databytes[AMS1_DATA][3] << 8);
-	bms_min_temp = mob_databytes[AMS1_DATA][4] | (mob_databytes[AMS1_DATA][5] << 8);
-	bms_max_temp = mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8);
+	bms_min_temp = (mob_databytes[AMS1_DATA][4] | (mob_databytes[AMS1_DATA][5] << 8))/100;
+	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8))/100;
 	
 	APPS = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
 	
 	cooling_1 = mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8);
 	cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
-	cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
-	
+	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
+	cooling_temp_deg = (float) ((0.128479*cooling_1) - (8.137044))*10; // NTC Kurve ist linearisiert im Bereich 80°-20°, außerhalb ungenauer
 	
 	TS_ON = (~PINA & (1 << PA0));
 	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);

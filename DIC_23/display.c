@@ -14,7 +14,7 @@
 extern uint16_t ts_voltage;
 extern uint16_t bms_max_temp;
 extern uint16_t battery_voltage;
-extern uint16_t cooling_temp;
+extern uint16_t cooling_temp_deg;
 
 
 uint8_t dsp_command [7] = {
@@ -161,9 +161,9 @@ void display_main(struct DISPLAY_PAGE *display)
 	display_small_number(display,5, 2, (battery_voltage/10)%10);
 	display_small_number(display,4, 2, ((battery_voltage/10)/10)%10);
 	
-	display_small_number(display,18, 2,cooling_temp%10) ;
-	display_small_number(display,16, 2, (cooling_temp/10)%10);
-	display_small_number(display,15, 2, ((cooling_temp/10)/10)%10);
+	display_small_number(display,18, 2,cooling_temp_deg%10) ;
+	display_small_number(display,16, 2, (cooling_temp_deg/10)%10);
+	display_small_number(display,15, 2, ((cooling_temp_deg/10)/10)%10);
 	
 
 	

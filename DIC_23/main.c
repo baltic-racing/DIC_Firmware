@@ -132,41 +132,44 @@ int main(void)
 			
 			
 		}
-		*/
 		
-		//if (time_50ms > 4){
+		*/
+		/*
+		if (time_50ms > 4){
 		//	display_large_number(&dsp_startup,0,get_mob_data(SWC_DATA)[0]);
 		//	display_large_number(&dsp_startup,16,get_mob_data(SWC_DATA)[1]);
-		//	time_50ms = 0;
-			//switch(sys_time%7){
-			//	case 0:
-			//		pre_defined_led_colors(PE_OFF);
-			//		break;
-			//	case 1:
-			//		pre_defined_led_colors(PE_RED);
-			//		break;
-			//	case 2:
-			//		pre_defined_led_colors(PE_BLUE);
-			//		break;
-			//	case 3:
-			//		pre_defined_led_colors(PE_GREEN);
-			//		break;
-			//	case 4:
-			//		pre_defined_led_colors(PE_AMBER);
-			//		break;
-			//	case 5:
-			//		pre_defined_led_colors(PE_PURPLE);
-			//		break;
-			//	case 6:
-			//		pre_defined_led_colors(PE_WHITE);
-			//		break;
-			//}
+			time_50ms = 0;
+			switch(sys_time%7){
+				case 0:
+					pre_defined_led_colors(PE_OFF);
+					break;
+				case 1:
+					pre_defined_led_colors(PE_RED);
+					break;
+				case 2:
+					pre_defined_led_colors(PE_BLUE);
+					break;
+				case 3:
+					pre_defined_led_colors(PE_GREEN);
+					break;
+				case 4:
+					pre_defined_led_colors(PE_AMBER);
+					break;
+				case 5:
+					pre_defined_led_colors(PE_PURPLE);
+					break;
+				case 6:
+					pre_defined_led_colors(PE_WHITE);
+					break;
+			}
 		}
-		
+		*/
 	//	if (time_100ms > 9){
 		//	time_100ms = 0;
 		//	pre_defined_led_colors(PE_OFF);
 			
+	}
+	
 	}
 		
 	
