@@ -10,6 +10,10 @@
 #define PORTEXTENDER_H_
 
 
+#define LED_COUNT_TOP_LEFT 5
+#define LED_COUNT_TOP_RIGHT 10
+#define LED_Count 15
+
 //defines to enable disable the CS Pins
 #define DIS_CS_LEFT PORTA |= (1<<PA3);
 #define EN_CS_LEFT PORTA &= ~(1<<PA3);
@@ -21,7 +25,7 @@
 //ENUM für den PortExtender
 enum portextender {RGB_LEFT, RGB_RIGHT};
 
-enum led_color{PE_RED, PE_BLUE, PE_GREEN, PE_WHITE, PE_PURPLE, PE_AMBER, PE_OFF};
+enum led_color{PE_RED, PE_BLUE, PE_GREEN, PE_WHITE, PE_PURPLE, PE_LIGHTBLUE, PE_AMBER, PE_OFF};
 
 struct SPI_MSG {
 	enum portextender selected_extender;
@@ -53,7 +57,15 @@ void extender_leds_blocking(enum portextender extender, uint8_t data);
 
 void pre_defined_led_colors(enum led_color color);
 
+void clear_top_left_bar(void);
+void clear_top_right_bar(void);
 
+void led_top_left_bar(uint16_t max_value_l, uint16_t min_value_l, uint16_t current_value_l);
+void led_top_right_bar(uint16_t max_value_r, uint16_t min_value_r, uint16_t current_value_r);
+void led_left_top_bar_select(uint8_t select_l);
+void led_right_top_bar_select(uint8_t select_r);
+
+void bms_error(uint8_t error);
 
 //Register Definitions
 //Datenblatt Seite 5

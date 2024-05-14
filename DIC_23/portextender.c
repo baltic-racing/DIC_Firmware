@@ -156,6 +156,10 @@ void pre_defined_led_colors(enum led_color color){
 			extender_leds_blocking(RGB_LEFT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
 			extender_leds_blocking(RGB_RIGHT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
 			break;
+		case PE_LIGHTBLUE:
+			extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
+			extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
+			break;
 		case PE_WHITE:
 			extender_leds_blocking(RGB_LEFT,0xff);
 			extender_leds_blocking(RGB_RIGHT,0xff);
@@ -170,4 +174,62 @@ void pre_defined_led_colors(enum led_color color){
 			break;
 	}
 
+}
+
+
+//This Function turns off the left Top Bar
+void clear_top_left_bar(void)
+{
+	PORTA &= ~(1<<PA4) & ~(1<<PA5) & ~(1<<PA6) & ~(1<<PA7);
+	PORTG &= ~(1<<PG2);
+}
+
+//This Function turns off the right Top Bar
+void clear_top_right_bar(void)
+{
+	PORTC = 0;
+	PORTG &= ~(1<<PG0) & ~(1<<PG1);
+}
+
+//This Function calculates the amount of LEDs of the left Top Bar which needs to be turned on
+void led_top_left_bar(uint16_t max_value_l, uint16_t min_value_l, uint16_t current_value_l)
+{
+	clear_top_left_bar();
+	uint16_t Top_Left_Bar_Divider = (max_value_l - min_value_l) / (LED_COUNT_TOP_LEFT - 1);
+	int8_t amount_l = (current_value_l - min_value_l + Top_Left_Bar_Divider) / Top_Left_Bar_Divider;
+	if (amount_l > 0) {led_left_top_bar_select(amount_l);}
+	else {led_left_top_bar_select(0);}
+}
+
+//This Function calculates the amount of LEDs of the right Top Bar which needs to be turned on
+void led_top_right_bar(uint16_t max_value_r, uint16_t min_value_r, uint16_t current_value_r)
+{
+	clear_top_right_bar();
+	uint16_t Top_Right_Bar_Divider = (max_value_r - min_value_r) / (LED_COUNT_TOP_RIGHT - 1);
+	int8_t amount_r = (current_value_r - min_value_r + Top_Right_Bar_Divider) / Top_Right_Bar_Divider;
+	if (amount_r > 0) {led_right_top_bar_select(amount_r);}
+	else {led_right_top_bar_select(0);}
+}
+
+//This Function turns on the desired amount of LEDs of the left Top Bar
+void led_left_top_bar_select(uint8_t select_l)
+{
+	PORTA |= ~(0xFF << select_l) << PA4;
+	PORTG |= (1<<PG2) & ((0x80) >> select_l);
+}
+
+//This Function turns on the desired amount of LEDs of the right Top Bar
+void led_right_top_bar_select(uint8_t select_r)
+{
+	PORTC |= ~(0xFF >> select_r);
+	PORTG |= (~(0xFF << (select_r/9)) << (select_r/9)) + (select_r/10);
+}
+
+void bms_error(uint8_t error)
+{
+	switch (error)
+	{
+		case 0: {PORTD &= (0b01100000); break;}	//Every 1 in this number represents an Pin which is connected to the bottom LED bar, 0 = on
+		case 1: {PORTD |= (0b10011111); break;}	//Every 1 in this number represents an Pin which is connected to the bottom LED bar, 1 = on
+	}
 }

@@ -10,10 +10,10 @@
 #include "portextender.h"
 #include "sys_timer.h"
 
-extern uint16_t bms_max_voltage;
-extern uint16_t bms_min_voltage;
+// extern uint16_t bms_max_voltage;
+//extern uint16_t bms_min_voltage;
 extern uint16_t bms_max_temp;
-extern uint16_t bms_min_temp;
+//extern uint16_t bms_min_temp;
 
 
 /*	MAIN	*/
@@ -58,6 +58,7 @@ int main(void)
 	
 	struct DISPLAY_PAGE dsp_main = get_empty_display();
 	
+
 	
 	display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
 	display_write_str(&dsp_startup, "        .--.        ",1,0);
@@ -100,7 +101,13 @@ int main(void)
 		}
 		if(time_100ms > 299){
 			active_display = &dsp_main;
+			
 			display_main(active_display );
+			pre_defined_led_colors(PE_AMBER);
+			led_left_top_bar_select(5);
+			led_right_top_bar_select(10);
+			bms_error(1);
+			
 		}
 		
 		/*
