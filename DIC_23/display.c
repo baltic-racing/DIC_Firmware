@@ -144,6 +144,13 @@ void init_display(){
 
 void display_main(struct DISPLAY_PAGE *display)
 {
+	uint8_t TS_ON = 0;
+	uint8_t Ready_2_Drive = 0;
+	
+	
+	
+	TS_ON = (~PINA & (1 << PA0));
+	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
 	display_write_str(display," -- ROLLOUT TY24 -- ", 0, 0);
 	display_write_str(display,"TSV:   V  ACCU:  . C", 1, 0);
 	display_write_str(display,"LVV:  . V COOL:  . C", 2, 0);
@@ -164,6 +171,9 @@ void display_main(struct DISPLAY_PAGE *display)
 	display_small_number(display,18, 2, cooling_1%10) ;
 	display_small_number(display,16, 2, (cooling_1/10)%10);
 	display_small_number(display,15, 2, ((cooling_1/10)/10)%10);
+	
+		display_small_number(display,6, 3, TS_ON );
+		display_small_number(display,5, 3, Ready_2_Drive );
 	
 	
 

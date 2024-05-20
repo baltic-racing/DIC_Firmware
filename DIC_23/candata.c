@@ -349,7 +349,7 @@ uint8_t* get_mob_data(uint8_t mob){
 void can_put_data(){
 	
 	ts_voltage = mob_databytes[AMS0_DATA][0] | (mob_databytes[AMS0_DATA][1] << 8);
-	//ts_current = mob_databytes[AMS0_DATA][2] | (mob_databytes[AMS0_DATA][3] << 8);
+	ts_current = mob_databytes[AMS0_DATA][2] | (mob_databytes[AMS0_DATA][3] << 8);
 	//state_of_charge = mob_databytes[AMS0_DATA][4] | (mob_databytes[AMS0_DATA][5] << 8);
 	//ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
 	//imd_error = ((mob_databytes[AMS0_DATA][6]>>6) & 1);

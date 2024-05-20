@@ -97,6 +97,7 @@ int main(void)
 			can_receive();
 			//get_mob_data(AMS2_DATA);
 			can_put_data();
+			
 			can_transmit();
 		}
 		if(time_100ms > 299){
