@@ -26,8 +26,10 @@ uint16_t bms_min_voltage = 0;
 uint16_t bms_max_temp = 0;
 uint16_t bms_min_temp = 0;
 
-uint16_t APPS = 0;
-
+uint16_t APPS1 = 0;
+uint16_t APPS2 = 0;
+uint16_t BPSF = 0;
+uint16_t BPSR = 0;
 uint16_t cooling_1 = 0;
 uint16_t cooling_2 = 0;
 uint16_t cooling_temp = 0;
@@ -324,8 +326,8 @@ void can_receive(){
 	
 	can_rx(&ams0_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
-	can_rx(&shr_mob, mob_databytes[SHB_DATA]);
-	can_rx(&shl_mob, mob_databytes[SHB_DATA]);
+	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
+	can_rx(&shl_mob, mob_databytes[SHL_DATA]);
 	can_rx(&shb_mob, mob_databytes[SHB_DATA]);
 	//can_rx(&logger1_mob, mob_databytes[LOGGER1_DATA]);
 	//can_rx(&logger2_mob, mob_databytes[LOGGER2_DATA]);
@@ -362,8 +364,10 @@ void can_put_data(){
 	//bms_min_temp = (mob_databytes[AMS1_DATA][4] | (mob_databytes[AMS1_DATA][5] << 8))/100;
 	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8))/100;
 	
-	//APPS = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
-	
+	APPS1 = mob_databytes[SHR_DATA][0] | (mob_databytes[SHR_DATA][1] << 8);
+	APPS2 = mob_databytes[SHR_DATA][2] | (mob_databytes[SHR_DATA][3] << 8);
+	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
+	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
 	cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
 	cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
 	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
