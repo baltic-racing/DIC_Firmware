@@ -67,6 +67,11 @@ void led_right_top_bar_select(uint8_t select_r);
 
 void bms_error(uint8_t error);
 
+void led_top_light(uint8_t LED);
+void led_top_clear(uint8_t LED);
+
+void led_startup_animation(uint8_t frame);
+
 //Register Definitions
 //Datenblatt Seite 5
 #define PE_IODIR (uint8_t) 0x00

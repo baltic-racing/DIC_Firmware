@@ -225,6 +225,57 @@ void led_right_top_bar_select(uint8_t select_r)
 	PORTG |= (~(0xFF << (select_r/9)) << (select_r/9)) + (select_r/10);
 }
 
+void led_top_light( uint8_t LED)
+{
+	
+		switch(LED){
+			
+			case 0: {PORTA |= (1<<PA4); break;}
+			case 1: {PORTA |= (1<<PA5); break;}	
+			case 2: {PORTA |= (1<<PA6); break;}
+			case 3: {PORTA |= (1<<PA7); break;}
+			case 4: {PORTG |= (1<<PG2); break;}
+			case 5: {PORTC |= (1<<PC7); break;}
+			case 6: {PORTC |= (1<<PC6); break;}
+			case 7: {PORTC |= (1<<PC5); break;}
+			case 8: {PORTC |= (1<<PC4); break;}
+			case 9: {PORTC |= (1<<PC3); break;}
+			case 10: {PORTC |= (1<<PC2); break;}
+			case 11: {PORTC |= (1<<PC1); break;}
+			case 12: {PORTC |= (1<<PC0); break;}
+			case 13: {PORTG |= (1<<PG1); break;}
+			case 14: {PORTG |= (1<<PG0); break;}
+		}
+
+	
+}
+
+void led_top_clear( uint8_t LED)
+{
+	
+	switch(LED){
+		
+		case 0: {PORTA &= (1<<PA4); break;}
+		case 1: {PORTA &= (1<<PA5); break;}
+		case 2: {PORTA &= (1<<PA6); break;}
+		case 3: {PORTA &= (1<<PA7); break;}
+		case 4: {PORTG &= (1<<PG2); break;}
+		case 5: {PORTC &= (1<<PC7); break;}
+		case 6: {PORTC &= (1<<PC6); break;}
+		case 7: {PORTC &= (1<<PC5); break;}
+		case 8: {PORTC &= (1<<PC4); break;}
+		case 9: {PORTC &= (1<<PC3); break;}
+		case 10: {PORTC &= (1<<PC2); break;}
+		case 11: {PORTC &= (1<<PC1); break;}
+		case 12: {PORTC &= (1<<PC0); break;}
+		case 13: {PORTG &= (1<<PG1); break;}
+		case 14: {PORTG &= (1<<PG0); break;}
+		
+	}
+
+	
+}
+
 void bms_error(uint8_t error)
 {
 	switch (error)
@@ -232,4 +283,42 @@ void bms_error(uint8_t error)
 		case 0: {PORTD &= (0b01100000); break;}	//Every 1 in this number represents an Pin which is connected to the bottom LED bar, 0 = on
 		case 1: {PORTD |= (0b10011111); break;}	//Every 1 in this number represents an Pin which is connected to the bottom LED bar, 1 = on
 	}
+}
+
+void led_startup_animation(uint8_t frame)
+{
+	
+			led_top_light(7+frame);
+			led_top_light(7-frame);
+			
+				
+
+			if(frame >= 8)
+			{
+				pre_defined_led_colors(PE_GREEN);
+			}
+			
+			if(frame >= 9)
+			{
+				bms_error(1);
+			} 
+			
+			if(frame >= 14)
+			{
+				pre_defined_led_colors(PE_OFF);
+				bms_error(0);
+			}
+			
+			
+			
+			
+			
+		/*
+			if (frame >= 2)
+				{
+					led_top_clear(7 + (frame - 2));
+					led_top_clear(7 - (frame + 2));
+				}
+				*/
+		
 }

@@ -35,6 +35,8 @@ int main(void)
 	volatile unsigned long sys_time_old;
 	
 	uint8_t dsp = 0;
+	uint8_t frame = 0;
+	volatile unsigned long lastframe = 0;
 	
 
 	uint8_t time_10ms = 0;
@@ -58,7 +60,10 @@ int main(void)
 	
 	struct DISPLAY_PAGE dsp_main = get_empty_display();
 	
-
+	//pre_defined_led_colors(PE_AMBER);
+	//led_left_top_bar_select(5);
+	//led_right_top_bar_select(10);
+	//bms_error(1);
 	
 	display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
 	display_write_str(&dsp_startup, "        .--.        ",1,0);
@@ -82,8 +87,23 @@ int main(void)
 		if (draw_data){
 			draw_data = 0;
 			draw_char(active_display,&display_state);
+		}
+		
+		if ((sys_time - lastframe) >=100 )
+		{
+			
+			led_startup_animation(frame);
+			frame++;
+				if (frame >= 15)
+				{
+					frame = 0;
+					clear_top_left_bar();
+					clear_top_right_bar();
+				}
+			lastframe = sys_time;
 			
 		}
+		
 		if((sys_time - sys_time_old) >= 1){
 			sys_time_old = sys_time;
 			time_10ms++;
@@ -104,11 +124,11 @@ int main(void)
 			active_display = &dsp_main;
 			
 			display_main(active_display );
-			pre_defined_led_colors(PE_AMBER);
-			led_left_top_bar_select(5);
-			led_right_top_bar_select(10);
-			bms_error(1);
-			
+			//pre_defined_led_colors(PE_OFF);
+			//clear_top_left_bar();
+			//clear_top_right_bar();
+			//bms_error(0);
+			//led_top_light(9);
 		}
 		
 		/*
