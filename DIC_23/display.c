@@ -15,6 +15,10 @@ extern uint16_t ts_voltage;
 extern uint16_t bms_max_temp;
 extern uint16_t battery_voltage;
 extern uint16_t cooling_1;
+extern uint16_t APPS1;
+extern uint16_t APPS2;
+extern uint16_t BPSF;
+extern uint16_t BPSR;
 
 
 uint8_t dsp_command [7] = {
@@ -147,8 +151,6 @@ void display_main(struct DISPLAY_PAGE *display)
 	uint8_t TS_ON = 0;
 	uint8_t Ready_2_Drive = 0;
 	
-	
-	
 	TS_ON = (~PINA & (1 << PA0));
 	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
 	display_write_str(display," -- ROLLOUT TY24 -- ", 0, 0);
@@ -158,24 +160,65 @@ void display_main(struct DISPLAY_PAGE *display)
 	
 	display_small_number(display,6, 1,ts_voltage%10) ;
 	display_small_number(display,5, 1, (ts_voltage/10)%10);
-	display_small_number(display,4, 1, ((ts_voltage/10)/10)%10);
+	display_small_number(display,4, 1, (ts_voltage/100)%10);
 	
-	display_small_number(display,18, 1,bms_max_temp%10) ;
+	display_small_number(display,18, 1,bms_max_temp%10);
 	display_small_number(display,16, 1, (bms_max_temp/10)%10);
-	display_small_number(display,15, 1, ((bms_max_temp/10)/10)%10);
+	display_small_number(display,15, 1, (bms_max_temp/100)%10);
 	
 	display_small_number(display,7, 2,battery_voltage%10) ;
 	display_small_number(display,5, 2, (battery_voltage/10)%10);
-	display_small_number(display,4, 2, ((battery_voltage/10)/10)%10);
+	display_small_number(display,4, 2, (battery_voltage/100)%10);
 	
 	display_small_number(display,18, 2, cooling_1%10) ;
 	display_small_number(display,16, 2, (cooling_1/10)%10);
-	display_small_number(display,15, 2, ((cooling_1/10)/10)%10);
+	display_small_number(display,15, 2, (cooling_1/100)%10);
 	
 		display_small_number(display,6, 3, TS_ON );
 		display_small_number(display,5, 3, Ready_2_Drive );
 	
+}
+void display_debug(struct DISPLAY_PAGE *display)
+{
+	uint8_t TS_ON = 0;
+	uint8_t Ready_2_Drive = 0;
 	
+	TS_ON = (~PINA & (1 << PA0));
+	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
+	display_write_str(display,"TSV:   V  ACCU:  . C", 0, 0);
+	display_write_str(display,"LVV:  . V COOL:  . C", 1, 0);
+	display_write_str(display,"APPS1:  %  APPS2:  %", 2, 0);
+	display_write_str(display,"BPF:  BPR:          ", 3, 0);
+	
+	display_small_number(display,6, 0,ts_voltage%10) ;
+	display_small_number(display,5, 0, (ts_voltage/10)%10);
+	display_small_number(display,4, 0, (ts_voltage/100)%10);
+	
+	display_small_number(display,18, 0,bms_max_temp%10) ;
+	display_small_number(display,16, 0, (bms_max_temp/10)%10);
+	display_small_number(display,15, 0, (bms_max_temp/100)%10);
+	
+	display_small_number(display,7, 1,battery_voltage%10) ;
+	display_small_number(display,5, 1, (battery_voltage/10)%10);
+	display_small_number(display,4, 1, (battery_voltage/100)%10);
+	
+	display_small_number(display,18, 1, cooling_1%10) ;
+	display_small_number(display,16, 1, (cooling_1/10)%10);
+	display_small_number(display,15, 1, (cooling_1/100)%10);
+	
+	display_small_number(display,7, 2, APPS1%10);
+	display_small_number(display,6, 2, (APPS1/10)%10);
+
+	display_small_number(display,16, 2, APPS2%10);
+	display_small_number(display,15, 2, (APPS2/10)%10);
+	
+	
+	display_small_number(display,5, 3, (BPSF/10)%10);
+	display_small_number(display,4, 3, (BPSF/100)%10);
+	
+	
+	display_small_number(display,11, 3, (BPSR/10)%10);
+	display_small_number(display,10, 3, (BPSR/100)%10);
 
 }
 void display_meme(struct DISPLAY_PAGE *display)
