@@ -90,10 +90,10 @@ int main(void)
 			active_display = &dsp_main;
 			
 			display_main(active_display );
-			pre_defined_led_colors(PE_AMBER);
-			led_left_top_bar_select(5);
-			led_right_top_bar_select(10);
-			bms_error(1);
+			//pre_defined_led_colors(PE_AMBER);
+			//led_left_top_bar_select(5);
+			//led_right_top_bar_select(10);
+			//bms_error(1);
 			
 		}
 		
