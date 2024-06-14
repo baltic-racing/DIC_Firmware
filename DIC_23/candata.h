@@ -28,13 +28,13 @@
 #define LOGGER_2_MOB_ID (uint16_t) 0x798
 #define LOGGER_3_MOB_ID (uint16_t) 0x799
 
-/*
-#define INV0_0_MOB_ID (uint16_t) 
-#define INV0_1_MOB_ID (uint16_t) 
 
-#define INV1_0_MOB_ID (uint16_t) 
-#define INV1_1_MOB_ID (uint16_t) 
-*/
+#define INV0_0_MOB_ID (uint16_t) 0x00
+#define INV0_1_MOB_ID (uint16_t) 0x45A
+
+#define INV1_0_MOB_ID (uint16_t) 0x00
+#define INV1_1_MOB_ID (uint16_t) 0x44A
+
 
 #define DSP_MODE_BYTE 0
 
@@ -51,16 +51,11 @@
 
 #define SWC_DATA 7
 
-#define LOGGER0_DATA 8
-#define LOGGER1_DATA 9
-#define LOGGER2_DATA 10
-#define LOGGER3_DATA 11
+#define INV00_DATA 8
+#define INV01_DATA 9
 
-#define INV00_DATA 12
-#define INV01_DATA 13
-
-#define INV10_DATA 14
-#define INV11_DATA 15
+#define INV10_DATA 10
+#define INV11_DATA 11
 
 
 void init_mobs();
