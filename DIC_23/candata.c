@@ -9,6 +9,7 @@
 
 #include "candata.h"
 #include "canlib.h"
+#include "portextender.h"
 
 uint8_t mob_databytes[12][8];
 
@@ -57,6 +58,9 @@ uint8_t fault_code_0 = 0;
 uint16_t mcu_temp_1 = 0;
 uint16_t motor_temp_1 = 0;
 uint8_t fault_code_1 = 0;
+
+uint8_t ams_error_counter = 0;
+uint8_t last_ams_counter = 0;
 
 
 // CAN MOB 0 from AMS.
@@ -263,6 +267,20 @@ void init_mobs(){
 void can_receive(){
 	
 	can_rx(&ams0_mob, mob_databytes[AMS0_DATA]);
+	uint8_t ams_counter = mob_databytes[AMS0_DATA][7];
+	if (ams_counter == last_ams_counter){
+		ams_error_counter++;
+	} else {
+		ams_error_counter = 0;
+	}
+	last_ams_counter = ams_counter;			// AMS error muss 100 mal kommen, dann dann leuchtet led bar 
+	if (ams_error_counter > 100  || ams_error != 0){
+		//LED anschalten
+		bms_error(1);
+	} else {
+		bms_error(0);
+	}
+	
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
 	can_rx(&shl_mob, mob_databytes[SHL_DATA]);
@@ -289,13 +307,25 @@ uint8_t* get_mob_data(uint8_t mob){
 
 void can_put_data(){
 	
-	ts_voltage = mob_databytes[AMS0_DATA][0] | (mob_databytes[AMS0_DATA][1] << 8);
+	ts_voltage = (mob_databytes[AMS0_DATA][0] | (mob_databytes[AMS0_DATA][1] << 8));
+	ts_voltage = ts_voltage/100;
 	//ts_current = mob_databytes[AMS0_DATA][2] | (mob_databytes[AMS0_DATA][3] << 8);
 	//state_of_charge = mob_databytes[AMS0_DATA][4] | (mob_databytes[AMS0_DATA][5] << 8);
 	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
 	imd_error = ((mob_databytes[AMS0_DATA][6]>>6) & 1);
+	if (imd_error == 0){
+		//pre_defined_led_colors(PE_RED);
+		PORTA |= (0<<PA2);
+		//extender_leds_blocking(RGB_LEFT,0|(0<<F_RED));
+	}
+	else
+	{
+		//pre_defined_led_colors(PE_OFF);
+		PORTA |= (1<<PA2);
+		//extender_leds_blocking(RGB_LEFT,0|(1<<F_RED));
+	}
 	//can_ok = ((mob_databytes[AMS0_DATA][6]>>5) & 1);
-	//precharge_active = ((mob_databytes[AMS0_DATA][6]>>4) & 1);
+	precharge_active = ((mob_databytes[AMS0_DATA][6]>>4) & 1);
     //TS_RDY = ((mob_databytes[AMS0_DATA][6]>>3) & 1);
 	
 	//bms_min_voltage = mob_databytes[AMS1_DATA][0] | (mob_databytes[AMS1_DATA][1] << 8);
@@ -305,17 +335,25 @@ void can_put_data(){
 	
 	APPS1 = mob_databytes[SHR_DATA][0] | (mob_databytes[SHR_DATA][1] << 8);
 	APPS2 = mob_databytes[SHR_DATA][2] | (mob_databytes[SHR_DATA][3] << 8);
-	//BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
-	//BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
+	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
+	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
 	//cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
 	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
 	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
 	//cooling_temp_deg =  ((0.128*cooling_1) - (8.137))*10; // NTC Kurve ist linearisiert im Bereich 80°-20°, außerhalb ungenauer
 	
 	TS_ON = (~PINA & (1 << PA0));
-	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
-
-	//battery_voltage = mob_databytes[FUSEBOX_DATA][2] | (mob_databytes[FUSEBOX_DATA][3] << 8);
+	Ready_2_Drive = 0;
+	/*
+	if (BPSR >= 10 && precharge_active){
+		Ready_2_Drive = (~PINA >> PA1) & PA1;
+	}
+	*/
+	if (BPSR >= 10){
+		Ready_2_Drive = (~PINA >> PA1) & PA1;
+	}
+	
+	battery_voltage = mob_databytes[FUSEBOX_DATA][2] | (mob_databytes[FUSEBOX_DATA][3] << 8);
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
 	

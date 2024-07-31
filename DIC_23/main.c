@@ -15,6 +15,7 @@
 extern uint16_t bms_max_temp;
 extern uint8_t ams_error;
 extern uint8_t imd_error;
+uint8_t led_test = 1;
 //extern uint16_t bms_min_temp;
 
 
@@ -45,7 +46,7 @@ int main(void)
 	//this needs interrupts to be enabled
 	configure_portextenders();
 	pre_defined_led_colors(PE_OFF);
-	bms_error(1);
+	//bms_error(1);
 	
 	//dispaly state -> saves postitions and stuff
 	struct DISPLAY_STATE display_state = get_empty_state();
@@ -91,31 +92,24 @@ int main(void)
 			//get_mob_data(AMS2_DATA);
 			can_put_data();
 			can_transmit();
-			if (activate_ams )
-			/*
-			{
-				if (ams_error){
-					bms_error(1);
-					
-					
-				}
-				else
-				{
-					bms_error(0);
-					
-				}
-			}
-			*/
-			if (imd_error){
+			if(led_test == 1){
+				bms_error(1);
+				//pre_defined_led_colors(PE_RED);
+				//extender_leds_blocking(RGB_LEFT,0|(1<<F_RED));
 				PORTA |= (1<<PA2);
 			}
+		
+			
+			
 			
 		}
 		if(time_100ms > 299){
 			active_display = &dsp_main;
-			bms_error(0);
-			display_main(active_display );
-			activate_ams =1;
+			//bms_error(0);
+			display_main(active_display);
+			led_test = 0;
+			PORTA &= ~(1<<PA2);
+			
 			//pre_defined_led_colors(PE_AMBER);
 			//led_left_top_bar_select(5);
 			//led_right_top_bar_select(10);
