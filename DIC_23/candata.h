@@ -29,11 +29,11 @@
 #define LOGGER_3_MOB_ID (uint16_t) 0x799
 
 
-#define INV0_0_MOB_ID (uint16_t) 0x00
-#define INV0_1_MOB_ID (uint16_t) 0x45A
+#define INV0_0_MOB_ID (uint16_t) 0x00A
+#define INV0_1_MOB_ID (uint16_t) 0x04A
 
-#define INV1_0_MOB_ID (uint16_t) 0x00
-#define INV1_1_MOB_ID (uint16_t) 0x44A
+#define INV1_0_MOB_ID (uint16_t) 0x014
+#define INV1_1_MOB_ID (uint16_t) 0x054
 
 
 #define DSP_MODE_BYTE 0

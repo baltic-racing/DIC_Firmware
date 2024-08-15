@@ -40,13 +40,13 @@ int main(void)
 	uint8_t time_50ms = 0;
 	uint8_t error_ams = 2;
 	uint8_t activate_ams = 0;
-	unsigned long time_100ms = 0;
+	unsigned long time_300ms = 0;
 	
 	sei();
 	//this needs interrupts to be enabled
 	configure_portextenders();
 	pre_defined_led_colors(PE_OFF);
-	//bms_error(1);
+	
 	
 	//dispaly state -> saves postitions and stuff
 	struct DISPLAY_STATE display_state = get_empty_state();
@@ -59,8 +59,6 @@ int main(void)
 	struct DISPLAY_PAGE dsp_temp = get_empty_display();
 	
 	struct DISPLAY_PAGE dsp_main = get_empty_display();
-	
-
 	
 	display_write_str(&dsp_startup, "   Baldig Resing    ",0,0);
 	display_write_str(&dsp_startup, "        .--.        ",1,0);
@@ -84,42 +82,25 @@ int main(void)
 		
 		
 		if (time_10ms > 9){
-			
-			time_10ms = 0;
-			time_50ms++;
-			time_100ms++;
-			can_receive();
-			//get_mob_data(AMS2_DATA);
-			can_put_data();
 			can_transmit();
+			can_receive();
+			can_put_data();
 			if(led_test == 1){
 				bms_error(1);
-				//pre_defined_led_colors(PE_RED);
-				//extender_leds_blocking(RGB_LEFT,0|(1<<F_RED));
 				PORTA |= (1<<PA2);
 			}
-		
-			
-			
-			
+			time_10ms = 0;
+			time_300ms++;
 		}
-		if(time_100ms > 299){
+		if(time_300ms > 299){
 			active_display = &dsp_main;
-			//bms_error(0);
 			display_main(active_display);
 			led_test = 0;
 			PORTA &= ~(1<<PA2);
-			
-			//pre_defined_led_colors(PE_AMBER);
-			//led_left_top_bar_select(5);
-			//led_right_top_bar_select(10);
-			
-			
-			
-		}
 		
+			time_300ms=0;
+		}
 	}
-	
-	}
+}
 		
 	

@@ -274,7 +274,7 @@ void can_receive(){
 		ams_error_counter = 0;
 	}
 	last_ams_counter = ams_counter;			// AMS error muss 100 mal kommen, dann dann leuchtet led bar 
-	if (ams_error_counter > 100  || ams_error != 0){
+	if (ams_error_counter > 150 || ams_error != 0){
 		//LED anschalten
 		bms_error(1);
 	} else {
