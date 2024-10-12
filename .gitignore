@@ -1,9 +1,3 @@
 
-DIC_23/Debug/main.o
-DIC_23/Debug/display.o
-DIC_23/Debug/DIC_23.srec
-DIC_23/Debug/DIC_23.map
-DIC_23/Debug/DIC_23.lss
-DIC_23/Debug/DIC_23.hex
-DIC_23/Debug/DIC_23.elf
-DIC_23/Debug/candata.o
+DIC_23/Debug
+
