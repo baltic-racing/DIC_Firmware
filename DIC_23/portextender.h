@@ -56,6 +56,8 @@ void extender_leds(enum portextender extender, uint8_t data);
 void extender_leds_blocking(enum portextender extender, uint8_t data);
 
 void pre_defined_led_colors(enum led_color color);
+void pre_defined_led_colors_left(enum led_color color);
+void pre_defined_led_colors_right(enum led_color color);
 
 void clear_top_left_bar(void);
 void clear_top_right_bar(void);

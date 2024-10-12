@@ -26,6 +26,10 @@ extern uint16_t mcu_temp_1;
 extern uint16_t motor_temp_0;
 extern uint16_t mcu_temp_0;
 
+extern uint8_t Akku_fan;
+extern uint8_t Cooling_fan;
+extern uint8_t Button_Akku;
+extern uint8_t Button_Cool; 
 
 uint8_t dsp_command [7] = {
 	0x39, //function set european chararacter set
@@ -235,6 +239,26 @@ void display_debug(struct DISPLAY_PAGE *display)
 	display_small_number(display,10, 3, (BPSR/100)%10);
 
 }
+
+void display_clear(struct DISPLAY_PAGE *display)
+{
+	uint8_t TS_ON = 0;
+	uint8_t Ready_2_Drive = 0;
+	
+	TS_ON = (~PINA & (1 << PA0));
+	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
+	display_write_str(display,"CoFa:              ", 0, 0);
+	display_write_str(display,"AkFa:              ", 1, 0);
+	display_write_str(display,"                   ", 2, 0);
+	display_write_str(display,"                   ", 3, 0);
+	
+	display_small_number(display,5, 0,Cooling_fan);
+	
+	display_small_number(display,5, 1,Akku_fan);
+	
+	//display_small_number(display, ,  ,);
+}
+
 void display_meme(struct DISPLAY_PAGE *display)
 {
 	 display_definechars();

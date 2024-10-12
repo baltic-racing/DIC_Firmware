@@ -50,6 +50,8 @@ void display_main(struct DISPLAY_PAGE *display);
 
 void display_debug(struct DISPLAY_PAGE *display);
 
+void display_clear(struct DISPLAY_PAGE *display);
+
 void display_meme(struct DISPLAY_PAGE *display);
 	
 #endif /* DISPLAY_H_ */

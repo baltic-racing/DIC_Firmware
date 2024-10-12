@@ -141,37 +141,99 @@ void configure_portextenders(){
 void pre_defined_led_colors(enum led_color color){
 	switch(color){
 		case PE_RED:
-			extender_leds_blocking(RGB_LEFT,0|(1<<F_RED)|(1<<R_RED));
-			extender_leds_blocking(RGB_RIGHT,0|(1<<F_RED)|(1<<R_RED));
-			break;
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_RED)|(1<<R_RED));
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_RED)|(1<<R_RED));
+		break;
 		case PE_GREEN:
-			extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN));
-			extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN));
-			break;
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN));
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN));
+		break;
 		case PE_BLUE:
-			extender_leds_blocking(RGB_LEFT,0|(1<<F_BLUE)|(1<<R_BLUE));
-			extender_leds_blocking(RGB_RIGHT,0|(1<<F_BLUE)|(1<<R_BLUE));
-			break;
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_BLUE)|(1<<R_BLUE));
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_BLUE)|(1<<R_BLUE));
+		break;
 		case PE_PURPLE:
-			extender_leds_blocking(RGB_LEFT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
-			extender_leds_blocking(RGB_RIGHT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
-			break;
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
+		break;
 		case PE_LIGHTBLUE:
-			extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
-			extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
-			break;
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
+		break;
 		case PE_WHITE:
-			extender_leds_blocking(RGB_LEFT,0xff);
-			extender_leds_blocking(RGB_RIGHT,0xff);
-			break;
+		extender_leds_blocking(RGB_LEFT,0xff);
+		extender_leds_blocking(RGB_RIGHT,0xff);
+		break;
 		case PE_OFF:
-			extender_leds_blocking(RGB_LEFT,0);
-			extender_leds_blocking(RGB_RIGHT,0);
-			break;
+		extender_leds_blocking(RGB_LEFT,0);
+		extender_leds_blocking(RGB_RIGHT,0);
+		break;
 		case PE_AMBER:
-			extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_RED)|(1<<F_RED));
-			extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_RED)|(1<<F_RED));
-			break;
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_RED)|(1<<F_RED));
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_RED)|(1<<F_RED));
+		break;
+	}
+
+}
+
+
+void pre_defined_led_colors_left(enum led_color color){
+	switch(color){
+		case PE_RED:
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_RED)|(1<<R_RED));
+		break;
+		case PE_GREEN:
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN));
+		break;
+		case PE_BLUE:
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_BLUE)|(1<<R_BLUE));
+		break;
+		case PE_PURPLE:
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
+		break;
+		case PE_LIGHTBLUE:
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
+		break;
+		case PE_WHITE:
+		extender_leds_blocking(RGB_LEFT,0xff);
+		break;
+		case PE_OFF:
+		extender_leds_blocking(RGB_LEFT,0);
+		break;
+		case PE_AMBER:
+		extender_leds_blocking(RGB_LEFT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_RED)|(1<<F_RED));
+		break;
+	}
+
+}
+
+
+void pre_defined_led_colors_right(enum led_color color){
+	switch(color){
+		case PE_RED:
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_RED)|(1<<R_RED));
+		break;
+		case PE_GREEN:
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN));
+		break;
+		case PE_BLUE:
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_BLUE)|(1<<R_BLUE));
+		break;
+		case PE_PURPLE:
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_BLUE)|(1<<R_BLUE)|(1<<R_RED)|(1<<F_RED));
+		break;
+		case PE_LIGHTBLUE:
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_BLUE)|(1<<F_BLUE));
+		break;
+		case PE_WHITE:
+		extender_leds_blocking(RGB_RIGHT,0xff);
+		break;
+		case PE_OFF:
+		extender_leds_blocking(RGB_RIGHT,0);
+		break;
+		case PE_AMBER:
+		extender_leds_blocking(RGB_RIGHT,0|(1<<F_GREEN)|(1<<R_GREEN)|(1<<R_RED)|(1<<F_RED));
+		break;
 	}
 
 }
@@ -322,3 +384,4 @@ void led_startup_animation(uint8_t frame)
 				*/
 		
 }
+

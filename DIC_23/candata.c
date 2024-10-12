@@ -4,63 +4,8 @@
  * Created: 23.12.2022 22:47:21
  *  Author: Ole Hannemann
  */ 
-
-
-
-#include "candata.h"
 #include "canlib.h"
-#include "portextender.h"
 
-uint8_t mob_databytes[12][8];
-
-uint16_t ts_voltage = 0;
-uint16_t ts_current = 0;
-uint16_t state_of_charge = 0;
-uint8_t ams_error = 0;
-uint8_t imd_error = 0;
-uint8_t can_ok = 0;
-uint8_t precharge_active = 0;
-uint8_t TS_RDY = 0;
-
-uint16_t bms_max_voltage = 0;
-uint16_t bms_min_voltage = 0;
-uint16_t bms_max_temp = 0;
-uint16_t bms_min_temp = 0;
-
-uint16_t APPS1 = 0;
-uint16_t APPS2 = 0;
-uint16_t BPSF = 0;
-uint16_t BPSR = 0;
-uint16_t cooling_1 = 0;
-uint16_t cooling_2 = 0;
-uint16_t cooling_temp = 0;
-float cooling_temp_deg = 0;
-uint16_t motor_temp = 0;
-uint16_t mcu_temp = 0; 
-
-uint8_t Ready_2_Drive = 0;
-uint8_t TS_ON = 0;
-uint8_t SDCIDIC = 0;
-
-uint16_t battery_voltage = 0;
-uint8_t SDCIFB = 0;
-uint16_t fuse_readout = 0;
-
-uint16_t gps_speed = 0;
-
-uint16_t ERPM_0 = 0;
-uint16_t ERPM_1 = 0;
-
-uint16_t mcu_temp_0 = 0;
-uint16_t motor_temp_0 = 0;
-uint8_t fault_code_0 = 0;
-
-uint16_t mcu_temp_1 = 0;
-uint16_t motor_temp_1 = 0;
-uint8_t fault_code_1 = 0;
-
-uint8_t ams_error_counter = 0;
-uint8_t last_ams_counter = 0;
 
 
 // CAN MOB 0 from AMS.
@@ -139,7 +84,7 @@ struct CAN_MOB dic_mob;
 // data layout:
 // 7: Fuse Read Out
 // 6: Fuse Read Out
-// 5: X
+// 5: Akku_fan_on Status
 // 4: Shutdown Circuit Indicator Fusebox
 // 3: Voltage LV Battery
 // 2: Voltage LV Battery
@@ -337,6 +282,12 @@ void can_put_data(){
 	APPS2 = mob_databytes[SHR_DATA][2] | (mob_databytes[SHR_DATA][3] << 8);
 	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
 	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
+	
+	Akku_fan = ((mob_databytes[FUSEBOX_DATA][5]>>7) & 1);
+	//Cooling_fan = ((mob_databytes[FUSEBOX_DATA][5]>>6) & 1);
+	Rotary_right = (mob_databytes[SWC_DATA][1]);
+	Rotary_left = (mob_databytes[SWC_DATA][0]);
+	
 	//cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
 	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
 	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
