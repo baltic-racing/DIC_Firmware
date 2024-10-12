@@ -85,6 +85,7 @@ int main(void)
 			can_transmit();
 			can_receive();
 			can_put_data();
+			display_main(active_display);
 			if(led_test == 1){
 				bms_error(1);
 				PORTA |= (1<<PA2);
@@ -94,7 +95,6 @@ int main(void)
 		}
 		if(time_300ms > 299){
 			active_display = &dsp_main;
-			display_main(active_display);
 			led_test = 0;
 			PORTA &= ~(1<<PA2);
 		
