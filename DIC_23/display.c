@@ -5,7 +5,6 @@
  *  Author: Admin
  */ 
 
-
 #include "display.h"
 #include "helpers.h"
 #include "port_definitions.h"

@@ -5,11 +5,8 @@
  *  Author: Admin
  */ 
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdio.h>
-#include "port_definitions.h"
 
+#include "port_definitions.h"
 
 void port_config(){
 	//DDRE = 0b11111111;

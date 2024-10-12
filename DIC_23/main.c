@@ -21,8 +21,8 @@ extern uint8_t Akku_fan;
 //extern uint8_t Cooling_fan;
 uint8_t Button_Akku = 0;
 //uint8_t Button_Cool = 0;
-extern uint8_t Rotary_right = 0;
-extern uint8_t Rotary_left = 0;
+ uint8_t Rotary_right = 0;
+ uint8_t Rotary_left = 0;
 
 //extern uint16_t bms_min_temp;
 
@@ -106,7 +106,7 @@ int main(void)
 			time_50ms++;
 			time_100ms++;
 			time_15ms++;
-			
+			active_display = &dsp_main;
 			can_receive();
 			//get_mob_data(AMS2_DATA);
 			can_put_data();
@@ -139,7 +139,7 @@ int main(void)
 		}
 		if(time_100ms > 299)
 		{
-			active_display = &dsp_main;
+			
 			//bms_error(0);
 			for (uint8_t LED = 14; LED > 0; LED--)
 			{

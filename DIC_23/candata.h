@@ -5,69 +5,10 @@
  *  Author: Ole Hannemann
  */ 
 
-#include "portextender.h"
-#include "candata.h"
-
-
-uint8_t mob_databytes[12][8];
-
-uint16_t ts_voltage = 0;
-uint16_t ts_current = 0;
-uint16_t state_of_charge = 0;
-uint8_t ams_error = 0;
-uint8_t imd_error = 0;
-uint8_t can_ok = 0;
-uint8_t precharge_active = 0;
-uint8_t TS_RDY = 0;
-
-uint16_t bms_max_voltage = 0;
-uint16_t bms_min_voltage = 0;
-uint16_t bms_max_temp = 0;
-uint16_t bms_min_temp = 0;
-
-uint16_t APPS1 = 0;
-uint16_t APPS2 = 0;
-uint16_t BPSF = 0;
-uint16_t BPSR = 0;
-uint16_t cooling_1 = 0;
-uint16_t cooling_2 = 0;
-uint16_t cooling_temp = 0;
-float cooling_temp_deg = 0;
-uint16_t motor_temp = 0;
-uint16_t mcu_temp = 0;
-
-uint8_t Ready_2_Drive = 0;
-uint8_t TS_ON = 0;
-uint8_t SDCIDIC = 0;
-
-uint16_t battery_voltage = 0;
-uint8_t SDCIFB = 0;
-uint16_t fuse_readout = 0;
-
-uint16_t gps_speed = 0;
-
-uint16_t ERPM_0 = 0;
-uint16_t ERPM_1 = 0;
-
-uint16_t mcu_temp_0 = 0;
-uint16_t motor_temp_0 = 0;
-uint8_t fault_code_0 = 0;
-
-uint16_t mcu_temp_1 = 0;
-uint16_t motor_temp_1 = 0;
-uint8_t fault_code_1 = 0;
-
-uint8_t ams_error_counter = 0;
-uint8_t last_ams_counter = 0;
-
-uint8_t Akku_fan = 0;
-uint8_t Cooling_fan = 0;
-uint8_t Rotary_right = 0;
-uint8_t Rotary_left = 0;
-
 #ifndef CANDATA_H_
 #define CANDATA_H_
 #include "canlib.h"
+#include "portextender.h"
 
 #define AMS_0_MOB_ID (uint16_t) 0x200
 #define AMS_1_MOB_ID (uint16_t) 0x201
