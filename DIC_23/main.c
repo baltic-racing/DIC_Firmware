@@ -123,6 +123,7 @@ int main(void)
 				//led_top_light(LED);
 				//LED++;
 				
+				display_main(active_display);
 				
 				if(time_15ms > 14)
 				{
@@ -149,7 +150,7 @@ int main(void)
 			
 			//if(Rotary_right == 0)
 			
-			display_main(active_display);
+			
 			
 			
 			led_test = 0;

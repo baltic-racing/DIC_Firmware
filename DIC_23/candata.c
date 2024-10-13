@@ -364,6 +364,11 @@ void can_put_data(){
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
 	
+	
+	//ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
+	//ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
+	
+	
 	motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
 	motor_temp_0 = (mob_databytes[INV11_DATA][3] | (mob_databytes[INV11_DATA][2] << 8));
 	
