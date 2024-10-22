@@ -90,6 +90,8 @@ void send_data_blocking(enum portextender extender, uint8_t control, uint8_t reg
 	send_data(extender,control,reg,data);
 };
 
+
+
 void extender_leds(enum portextender extender, uint8_t data){
 	
 	send_data(extender,0b01000000,PE_OLAT,~data);

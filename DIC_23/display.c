@@ -93,7 +93,7 @@ void display_write_data(uint8_t data,uint8_t rs){
 	//Sets enable high
 	SET_ENABLE_PIN
 	//Sets enable low
-	for(int wait = 0; wait<100; wait++){
+	for(int wait = 0; wait<50; wait++){
 		UNSET_ENABLE_PIN
 	}
 	

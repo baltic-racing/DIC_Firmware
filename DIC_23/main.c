@@ -57,8 +57,8 @@ int main(void)
 	sei();
 	//this needs interrupts to be enabled
 	configure_portextenders();
-	pre_defined_led_colors_left(PE_OFF);
 	pre_defined_led_colors_right(PE_OFF);
+	pre_defined_led_colors_left(PE_OFF);
 	//pre_defined_led_colors(PE_OFF);
 	//bms_error(1);
 	
