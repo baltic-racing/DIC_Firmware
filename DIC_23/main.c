@@ -17,6 +17,10 @@ extern uint8_t ams_error;
 extern uint8_t imd_error;
 uint8_t led_test = 1;
 
+//extern uint16_t RPM;
+//uint8_t LED_counter;
+//uint8_t LED_RPM;
+
 extern uint8_t Akku_fan;
 //extern uint8_t Cooling_fan;
 uint8_t Button_Akku = 0;
@@ -131,6 +135,13 @@ int main(void)
 					LED++;
 					time_15ms = 0;
 				}
+				
+				
+				//LED_RPM = (RPM/466,66) - 1
+				//for (uint8_t LED_counter = 0; LED_counter < LED_RPM;LED_counter++)
+				//{
+				//	led_top_light(LED_counter);
+				//}
 				
 			}
 		
