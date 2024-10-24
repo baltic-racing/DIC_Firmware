@@ -118,8 +118,8 @@ int main(void)
 			if(led_test == 1)
 			{
 				bms_error(1);
-				pre_defined_led_colors_left(PE_RED);
 				pre_defined_led_colors_right(PE_RED);
+				pre_defined_led_colors_left(PE_RED);
 				//pre_defined_led_colors(PE_RED);
 				//extender_leds_blocking(RGB_LEFT,0|(1<<F_RED));
 				PORTA |= (1<<PA2);
@@ -160,7 +160,13 @@ int main(void)
 			
 			
 			//if(Rotary_right == 0)
-			
+			//{
+			//	display_main(active_display);
+			//}
+			//if(Rotary_right == 1)
+			//{
+			//	display_clear(active_display);
+			//}
 			
 			
 			
