@@ -274,7 +274,7 @@ void can_receive(){
 		ams_error_counter = 0;
 	}
 	last_ams_counter = ams_counter;			// AMS error muss 100 mal kommen, dann dann leuchtet led bar 
-	if (ams_error_counter > 300 || ams_error != 0){
+	if (ams_error_counter > 1000 || ams_error != 0){
 		//LED anschalten
 		bms_error(1);
 	} else {
@@ -331,7 +331,8 @@ void can_put_data(){
 	//bms_min_voltage = mob_databytes[AMS1_DATA][0] | (mob_databytes[AMS1_DATA][1] << 8);
 	//bms_max_voltage = mob_databytes[AMS1_DATA][2] | (mob_databytes[AMS1_DATA][3] << 8);
 	//bms_min_temp = (mob_databytes[AMS1_DATA][4] | (mob_databytes[AMS1_DATA][5] << 8))/100;
-	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8))/100;
+	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8));
+	bms_max_temp = bms_max_temp/100;
 	
 	APPS1 = mob_databytes[SHR_DATA][0] | (mob_databytes[SHR_DATA][1] << 8);
 	APPS2 = mob_databytes[SHR_DATA][2] | (mob_databytes[SHR_DATA][3] << 8);
@@ -349,10 +350,7 @@ void can_put_data(){
 		Ready_2_Drive = (~PINA >> PA1) & PA1;
 	}
 	*/
-	if (BPSR >= 10){
-		Ready_2_Drive = (~PINA >> PA1) & PA1;
-	}
-	
+	Ready_2_Drive = (~PINA >> PA1) & PA1;
 	battery_voltage = mob_databytes[FUSEBOX_DATA][2] | (mob_databytes[FUSEBOX_DATA][3] << 8);
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
