@@ -17,9 +17,10 @@ extern uint8_t ams_error;
 extern uint8_t imd_error;
 uint8_t led_test = 1;
 
-//extern uint16_t RPM;
-//uint8_t LED_counter;
-//uint8_t LED_RPM;
+extern uint16_t RPM;
+uint8_t LED_counter1;
+uint8_t LED_counter2;
+uint8_t LED_RPM;
 
 extern uint8_t Akku_fan;
 //extern uint8_t Cooling_fan;
@@ -53,7 +54,7 @@ int main(void)
 	uint8_t error_ams = 2;
 	
 	uint8_t LED = 0;
-	uint8_t time_15ms = 0;
+	uint8_t time_150ms = 0;
 	
 	uint8_t activate_ams = 0;
 	unsigned long time_100ms = 0;
@@ -109,7 +110,7 @@ int main(void)
 			time_10ms = 0;
 			time_50ms++;
 			time_100ms++;
-			time_15ms++;
+			time_150ms++;
 			active_display = &dsp_main;
 			can_receive();
 			//get_mob_data(AMS2_DATA);
@@ -129,19 +130,25 @@ int main(void)
 				
 				display_main(active_display);
 				
-				if(time_15ms > 14)
+				if(time_150ms > 14)
 				{
 					led_top_light(LED);
 					LED++;
-					time_15ms = 0;
+					time_150ms = 0;
 				}
 				
 				
 				//LED_RPM = (RPM/466,66) - 1
-				//for (uint8_t LED_counter = 0; LED_counter < LED_RPM;LED_counter++)
+				//for (LED_counter1 = 0; LED_counter1 < LED_RPM;LED_counter1++)
 				//{
-				//	led_top_light(LED_counter);
+				//	led_top_light(LED_counter1);
 				//}
+				
+				for (LED_counter2 = LED_counter1 + 1; LED_counter2 < 15; LED_counter2++)
+				{
+					led_top_clear(LED_counter2);
+				}
+				
 				
 			}
 		

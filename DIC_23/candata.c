@@ -47,7 +47,7 @@ uint16_t gps_speed = 0;
 uint32_t ERPM_0 = 0;
 uint32_t ERPM_1 = 0;
 
-//uint16_t RPM = 0;
+uint16_t RPM = 0;
 
 uint16_t mcu_temp_0 = 0;
 uint16_t motor_temp_0 = 0;
@@ -370,7 +370,7 @@ void can_put_data(){
 	ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
 	ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
 	
-	//RPM = (ERPM_0 + ERPM_1)/2
+	RPM = (ERPM_0 + ERPM_1)/2;
 	
 	motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
 	motor_temp_0 = (mob_databytes[INV11_DATA][3] | (mob_databytes[INV11_DATA][2] << 8));
