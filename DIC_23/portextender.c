@@ -140,8 +140,10 @@ void configure_portextenders(){
 	send_data_blocking(RGB_RIGHT,0b01000010,PE_IOCON,0);
 }
 
-void pre_defined_led_colors(enum led_color color){
-	switch(color){
+void pre_defined_led_colors(enum led_color color)
+{
+	switch(color)
+	{
 		case PE_RED:
 		extender_leds_blocking(RGB_LEFT,0|(1<<F_RED)|(1<<R_RED));
 		extender_leds_blocking(RGB_RIGHT,0|(1<<F_RED)|(1<<R_RED));
@@ -210,6 +212,9 @@ void pre_defined_led_colors_right(enum led_color color)
 	}
 }
 
+
+
+
 void pre_defined_led_colors_left(enum led_color color)
 {
 	switch(color)
@@ -240,6 +245,8 @@ void pre_defined_led_colors_left(enum led_color color)
 		break;
 	}
 }
+
+
 
 
 

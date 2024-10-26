@@ -61,9 +61,13 @@ uint8_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
 
 uint8_t Akku_fan = 0;
+//<<<<<<< Updated upstream
 uint8_t Cooling_fan = 0;
 extern uint8_t Rotary_right;
 extern uint8_t Rotary_left;
+//=======
+//uint8_t Cooling_fan = 0;
+//>>>>>>> Stashed changes
 
 
 // CAN MOB 0 from AMS.
@@ -366,11 +370,18 @@ void can_put_data(){
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
 	
+//<<<<<<< Updated upstream
 	
 	ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
 	ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
 	
 	RPM = (ERPM_0 + ERPM_1)/2;
+//=======
+	//ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
+	//ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
+	//
+	//RPM = ((ERPM_0 + ERPM_1)/2);
+//>>>>>>> Stashed changes
 	
 	motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
 	motor_temp_0 = (mob_databytes[INV11_DATA][3] | (mob_databytes[INV11_DATA][2] << 8));
