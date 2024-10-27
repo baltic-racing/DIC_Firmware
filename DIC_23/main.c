@@ -16,6 +16,7 @@ extern uint16_t bms_max_temp;
 extern uint8_t ams_error;
 extern uint8_t imd_error;
 uint8_t led_test = 1;
+//extern uint16_t bms_min_temp;
 
 extern uint16_t RPM;
 uint8_t LED_counter1;
@@ -28,11 +29,6 @@ uint8_t Button_Akku = 0;
 //uint8_t Button_Cool = 0;
  uint8_t Rotary_right = 0;
  uint8_t Rotary_left = 0;
-
-
-
-
-//extern uint16_t bms_min_temp;
 
 
 /*	MAIN	*/
@@ -55,14 +51,12 @@ int main(void)
 	uint8_t time_10ms = 0;
 	uint8_t time_50ms = 0;
 	uint8_t error_ams = 2;
+	uint8_t activate_ams = 0;
+	unsigned long time_100ms = 0;
 	
 	uint8_t LED = 0;
 	uint8_t time_150ms = 0;
 	uint8_t time_300ms = 0;
-	
-	
-	uint8_t activate_ams = 0;
-	unsigned long time_100ms = 0;
 	
 	sei();
 	//this needs interrupts to be enabled
@@ -108,72 +102,15 @@ int main(void)
 			time_10ms++;
 		}
 		
-		
+
 		if (time_10ms > 9)
 		{
-			
-			time_10ms = 0;
-			time_50ms++;
-			time_100ms++;
-			time_150ms++;
-			active_display = &dsp_main;
-			can_receive();
-			//get_mob_data(AMS2_DATA);
-			can_put_data();
-			can_transmit();
-			if(led_test == 1)
-			{
-				bms_error(1);
-				pre_defined_led_colors_right(PE_RED);
-				pre_defined_led_colors_left(PE_RED);
-				//pre_defined_led_colors(PE_RED);
-				//extender_leds_blocking(RGB_LEFT,0|(1<<F_RED));
-				PORTA |= (1<<PA2);
-				
-				//led_top_light(LED);
-				//LED++;
-				
-				display_main(active_display);
-				
-				if(time_150ms > 14)
-				{
-					led_top_light(LED);
-					LED++;
-					time_150ms = 0;
-				}
-				
-				
-				LED_RPM = ((RPM/466,66) - 1);
-				for (LED_counter1 = 0; LED_counter1 < LED_RPM;LED_counter1++)
-				{
-					led_top_light(LED_counter1);
-				}
-				
-				for (LED_counter2 = LED_counter1 + 1; LED_counter2 < 15; LED_counter2++)
-				{
-					led_top_clear(LED_counter2);
-				}
-				
-				
-			}
-		
-			
-			
-			
-		}
-		if(time_100ms > 299)
-		{
-			
-			//bms_error(0);
-			for (uint8_t LED = 14; LED > 0; LED--)
-
-		if (time_10ms > 9){
 			can_transmit();
 			can_receive();
 			can_put_data();
 			display_main(active_display);
 			
-			LED_RPM = ((RPM/466,66)-1);
+			LED_RPM = ((RPM/466.66)-1);
 			for (LED_counter1 = 0; LED_counter1 < LED_RPM; LED_counter1++)
 			{
 				led_top_light(LED_counter1);
@@ -184,13 +121,13 @@ int main(void)
 				led_top_clear(LED_counter2);
 			}
 			
-			if(led_test == 1){
+			if(led_test == 1)
+			{
 				bms_error(1);
+				PORTA |= (1<<PA2);
 				
 				pre_defined_led_colors_right(PE_RED);
 				pre_defined_led_colors_left(PE_RED);
-								
-				PORTA |= (1<<PA2);
 				
 				if (time_150ms > 14)
 				{
@@ -199,23 +136,26 @@ int main(void)
 					time_150ms= 0;
 				}
 				
-			}
+			 } //end of if (led_test == 1)
 			time_10ms = 0;
-			
 			time_150ms++;
-			
 			time_300ms++;
-		}
+			
+		} //end of if (time_10ms ...)
+		
 		if(time_300ms > 299)
 		{
 			active_display = &dsp_main;
+			led_test = 0;
+			PORTA &= ~(1<<PA2);
 			
 			for (LED = 14; LED > 0; LED--)
 			{
 				led_top_clear(LED);
 			}
 			
-
+			pre_defined_led_colors_right(PE_OFF);
+			pre_defined_led_colors_left(PE_OFF);
 			
 			//if(Rotary_right == 0)
 			//{
@@ -226,15 +166,6 @@ int main(void)
 			//	display_clear(active_display);
 			//}
 			
-			
-			//
-
-			led_test = 0;
-			PORTA &= ~(1<<PA2);
-			
-			pre_defined_led_colors_right(PE_OFF);
-			pre_defined_led_colors_left(PE_GREEN);
-			
 			if(Akku_fan == 1)
 			{
 				Button_Akku = 1 - Button_Akku;
@@ -244,32 +175,11 @@ int main(void)
 			{
 				pre_defined_led_colors_right(PE_BLUE);
 			}
-			
-
-			pre_defined_led_colors_left(PE_OFF);
-			
-			if (Akku_fan == 1)
-			{
-				Button_Akku =  1 - Button_Akku;
-			}
-		
-			if (Button_Akku == 1)
-			{
-				pre_defined_led_colors_right(PE_BLUE);
-			}
-
 			if(Button_Akku == 0)
 			{
 				pre_defined_led_colors_right(PE_OFF);
 			}
-			
 
-			////if(Cooling_fan == 1)
-			////{
-				////Button_Cool = 1 - Button_Cool;
-			////}
-			////
-			////if(Button_Cool == 1)
 
 			//if (Cooling_fan == 1)
 			//{
@@ -277,7 +187,6 @@ int main(void)
 			//}
 			//
 			//if (Button_Cool == 1)
-
 			//{
 				//pre_defined_led_colors_left(PE_GREEN);
 			//}
@@ -286,23 +195,13 @@ int main(void)
 			//{
 				//pre_defined_led_colors_left(PE_OFF);
 			//}
-
 			
-			//pre_defined_led_colors(PE_BLUE);
-			//led_left_top_bar_select(5);
-			//led_right_top_bar_select(10);
-			
-
-		
-		
 			time_300ms=0;
 
-		}
-		}
+		} //end of if(time_300ms > ...)
 		
-		
-	}
+	} //end of while
 	
-}
+} //end of main
 		
 	
