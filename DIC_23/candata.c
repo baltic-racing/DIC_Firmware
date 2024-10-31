@@ -47,7 +47,7 @@ uint16_t gps_speed = 0;
 uint32_t ERPM_0 = 0;
 uint32_t ERPM_1 = 0;
 
-uint16_t RPM = 0;
+//uint16_t RPM = 0;
 
 uint16_t mcu_temp_0 = 0;
 uint16_t motor_temp_0 = 0;
@@ -60,10 +60,10 @@ uint8_t fault_code_1 = 0;
 uint8_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
 
-uint8_t Akku_fan = 0;
-uint8_t Cooling_fan = 0;
-extern uint8_t Rotary_right;
-extern uint8_t Rotary_left;
+//uint8_t Akku_fan = 0;
+//uint8_t Cooling_fan = 0;
+//extern uint8_t Rotary_right;
+//extern uint8_t Rotary_left;
 
 
 // CAN MOB 0 from AMS.
@@ -341,11 +341,11 @@ void can_put_data(){
 	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
 	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
 	
-	Akku_fan = ((mob_databytes[FUSEBOX_DATA][5]>>7) & 1);
+	//Akku_fan = ((mob_databytes[FUSEBOX_DATA][5]>>7) & 1);
 	//Cooling_fan = ((mob_databytes[FUSEBOX_DATA][5]>>6) & 1);
 	
-	Rotary_right = (mob_databytes[SWC_DATA][1]);
-	Rotary_left = (mob_databytes[SWC_DATA][0]);
+	//Rotary_right = (mob_databytes[SWC_DATA][1]);
+	//Rotary_left = (mob_databytes[SWC_DATA][0]);
 	
 	//cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
 	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
@@ -368,10 +368,10 @@ void can_put_data(){
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
 	
 	
-	ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
-	ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
-	
-	RPM = (ERPM_0 + ERPM_1)/2;
+	//ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
+	//ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
+	//
+	//RPM = (ERPM_0 + ERPM_1)/2;
 
 	
 	motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
