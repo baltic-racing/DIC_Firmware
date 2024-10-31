@@ -18,6 +18,11 @@ extern uint8_t imd_error;
 uint8_t led_test = 1;
 //extern uint16_t bms_min_temp;
 
+uint8_t LED = 0;
+extern uint8_t LED_RPM;
+uint8_t LED_counter1 = 0;
+uint8_t LED_counter2 = 0;
+extern uint32_t RPM;
 
 /*	MAIN	*/
 int main(void)
@@ -38,9 +43,10 @@ int main(void)
 	uint8_t dsp = 0;
 	uint8_t time_10ms = 0;
 	uint8_t time_50ms = 0;
+	uint8_t time_150ms = 0;
 	uint8_t error_ams = 2;
 	uint8_t activate_ams = 0;
-	unsigned long time_300ms = 0;
+	unsigned long time_3000ms = 0;
 	
 	sei();
 	//this needs interrupts to be enabled
@@ -81,26 +87,101 @@ int main(void)
 		}
 		
 		
-		if (time_10ms > 9){
+		if (time_10ms > 9)
+		{
 			can_transmit();
 			can_receive();
 			can_put_data();
 			display_main(active_display);
-			if(led_test == 1){
+			
+			if (led_test == 0)
+			{
+			
+					//for (int i = 0; i < 15; i++)
+					//{
+						//if (i <= LED_RPM)
+						//{
+							//led_top_light(i);  // Schalte die LED ein
+						//}
+						//else
+						//{
+							//led_top_clear(i);  // Schalte die LED aus
+						//}
+					//}
+	
+				
+				
+				if(LED_RPM >= 0)
+				{
+					led_top_light(LED_counter2);
+					for (LED_counter1 = 0; LED_counter1 <= LED_RPM; LED_counter1++)
+					{
+						LED_counter2++;
+					}
+					
+					
+				} //end if(time_150ms > 14)
+				
+				
+				
+				
+				
+				
+				//for (LED_counter1 = 0; LED_counter1 <= LED_RPM; LED_counter1++)
+				//{
+					//led_top_light(LED_counter1);
+				//}
+				//
+				//for (LED_counter2 = LED_RPM + 1; LED_counter2 < 15; LED_counter2++)
+				//{
+					//led_top_clear(LED_counter2);
+				//}
+			}
+			
+			
+			
+			if(led_test == 1)
+			{
 				bms_error(1);
 				PORTA |= (1<<PA2);
-			}
+				
+				pre_defined_led_colors_right(PE_RED);
+				pre_defined_led_colors_left(PE_RED);
+				
+				if(time_150ms > 14)
+				{
+					led_top_light(LED);
+					LED++;
+					time_150ms = 0;
+				} //end if(time_150ms > 14)
+				time_150ms++;
+				
+				if(time_3000ms > 290)
+				{
+					for (LED = 0; LED < 15; LED++)
+					{
+						led_top_clear(LED);
+					} //end for-Schleife
+				} //end if(time_3000 > 250)
+				
+			 } //end if(led_test == 1)
+			
 			time_10ms = 0;
-			time_300ms++;
-		}
-		if(time_300ms > 299){
+			time_3000ms++;
+			
+		} //end if(time_10ms > 9)
+		
+		if(time_3000ms > 299){
 			active_display = &dsp_main;
 			led_test = 0;
 			PORTA &= ~(1<<PA2);
 			
-			time_300ms=0;
-		}
-	}
-}
+			pre_defined_led_colors_right(PE_OFF);
+			pre_defined_led_colors_left(PE_OFF);
+			
+			time_3000ms=0;
+		} //end if(time_3000ms > 299)
+	} //end while(1)
+} //end main
 		
 	
