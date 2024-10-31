@@ -19,7 +19,7 @@ uint8_t led_test = 1;
 //extern uint16_t bms_min_temp;
 
 uint8_t LED = 0;
-extern uint8_t LED_RPM;
+uint8_t LED_RPM =10;
 uint8_t LED_counter1 = 0;
 uint8_t LED_counter2 = 0;
 extern uint32_t RPM;
@@ -108,30 +108,13 @@ int main(void)
 							//led_top_clear(i);  // Schalte die LED aus
 						//}
 					//}
-	
 				
 				
-				if(LED_RPM >= 0)
+				for (LED_counter1 = 0; LED_counter1 <= LED_RPM; LED_counter1++)
 				{
-					led_top_light(LED_counter2);
-					for (LED_counter1 = 0; LED_counter1 <= LED_RPM; LED_counter1++)
-					{
-						LED_counter2++;
-					}
-					
-					
-				} //end if(time_150ms > 14)
+					led_top_light(LED_counter1);
+				}
 				
-				
-				
-				
-				
-				
-				//for (LED_counter1 = 0; LED_counter1 <= LED_RPM; LED_counter1++)
-				//{
-					//led_top_light(LED_counter1);
-				//}
-				//
 				//for (LED_counter2 = LED_RPM + 1; LED_counter2 < 15; LED_counter2++)
 				//{
 					//led_top_clear(LED_counter2);
