@@ -14,8 +14,10 @@
 #define AMS_1_MOB_ID (uint16_t) 0x201
 
 #define SHR_MOB_ID (uint16_t) 0x400
-#define SHL_MOB_ID (uint16_t) 0x410
-#define SHB_MOB_ID (uint16_t) 0x420
+#define SHL_MOB_ID (uint16_t) 0x490 //0x410 eigentliche ID
+#define SHB_0_MOB_ID (uint16_t) 0x420
+#define SHB_1_MOB_ID (uint16_t) 0x421
+
 
 #define DIC_MOB_ID (uint16_t) 0x500
 
@@ -43,7 +45,7 @@
 
 #define SHR_DATA 2
 #define SHL_DATA 3
-#define SHB_DATA 4
+#define SHB_DATA_0 4
 
 #define DIC_DATA 5
 
@@ -56,6 +58,8 @@
 
 #define INV10_DATA 10
 #define INV11_DATA 11
+
+#define SHB_DATA_1 12
 
 
 void init_mobs();

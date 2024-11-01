@@ -29,6 +29,8 @@ uint16_t BPSF = 0;
 uint16_t BPSR = 0;
 uint16_t cooling_1 = 0;
 uint16_t cooling_2 = 0;
+uint16_t d_poti_1 = 0;
+uint16_t d_poti_2 = 0;
 uint16_t cooling_temp = 0;
 float cooling_temp_deg = 0;
 uint16_t motor_temp = 0;
@@ -47,8 +49,11 @@ uint16_t gps_speed = 0;
 uint32_t ERPM_0 = 0;
 uint32_t ERPM_1 = 0;
 
-uint16_t RPM = 0;
 
+uint16_t WHEELSPEED = 0;
+
+uint16_t RPM = 0;
+uint8_t LED_RPM = 0;
 
 uint16_t mcu_temp_0 = 0;
 uint16_t motor_temp_0 = 0;
@@ -61,7 +66,7 @@ uint8_t fault_code_1 = 0;
 uint8_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
 
-//uint8_t Akku_fan = 0;
+uint8_t Akku_fan = 0;
 //uint8_t Cooling_fan = 0;
 //extern uint8_t Rotary_right;
 //extern uint8_t Rotary_left;
@@ -231,7 +236,7 @@ void init_mobs(){
 	shl_mob.mob_idmask = 0xffff;
 	shl_mob.mob_number = 3;
 	
-	shb_mob.mob_id = SHB_MOB_ID;
+	shb_mob.mob_id = SHB_0_MOB_ID;
 	shb_mob.mob_idmask = 0xffff;
 	shb_mob.mob_number = 4;
 	
@@ -264,6 +269,9 @@ void init_mobs(){
 	inv11_mob.mob_idmask = 0xffff;
 	inv11_mob.mob_number = 11;
 	
+	shb_mob.mob_id = SHB_1_MOB_ID;
+	shb_mob.mob_idmask = 0xffff;
+	shb_mob.mob_number = 12;
 	
 	
 }
@@ -288,7 +296,8 @@ void can_receive(){
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
 	can_rx(&shl_mob, mob_databytes[SHL_DATA]);
-	can_rx(&shb_mob, mob_databytes[SHB_DATA]);
+	can_rx(&shb_mob, mob_databytes[SHB_DATA_0]);
+	can_rx(&shb_mob, mob_databytes[SHB_DATA_1]);
 	can_rx(&fusebox_mob, mob_databytes[FUSEBOX_DATA]);
 	can_rx(&swc_mob, mob_databytes[SWC_DATA]);
 	can_rx(&inv01_mob, mob_databytes[INV01_DATA]);
@@ -342,11 +351,14 @@ void can_put_data(){
 	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
 	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
 	
-	//Akku_fan = ((mob_databytes[FUSEBOX_DATA][5]>>7) & 1);
+	Akku_fan = ((mob_databytes[FUSEBOX_DATA][5]>>7) & 1);
 	//Cooling_fan = ((mob_databytes[FUSEBOX_DATA][5]>>6) & 1);
 	
 	//Rotary_right = (mob_databytes[SWC_DATA][1]);
 	//Rotary_left = (mob_databytes[SWC_DATA][0]);
+	
+	d_poti_1 = (mob_databytes[SHB_DATA_1][0] | (mob_databytes[SHB_DATA_1][1] << 8));
+	d_poti_2 = mob_databytes[SHB_DATA_1][2] | (mob_databytes[SHB_DATA_1][3] << 8);
 	
 	//cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
 	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
@@ -373,8 +385,14 @@ void can_put_data(){
 	ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
 	
 	RPM = (ERPM_0 + ERPM_1)/2;
-	//LED_RPM = ((RPM/466.66) - 1);
-
+	LED_RPM = ((RPM/466.66) - 1);
+	//LED_RPM = 8;
+	
+	
+	WHEELSPEED = (mob_databytes[SHL_DATA][1] | (mob_databytes[SHL_DATA][0] << 8));
+	
+	
+	
 	
 	motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
 	motor_temp_0 = (mob_databytes[INV11_DATA][3] | (mob_databytes[INV11_DATA][2] << 8));

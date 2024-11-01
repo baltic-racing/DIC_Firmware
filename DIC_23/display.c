@@ -25,6 +25,10 @@ extern uint16_t mcu_temp_1;
 extern uint16_t motor_temp_0;
 extern uint16_t mcu_temp_0;
 
+extern uint16_t WHEELSPEED;
+extern uint16_t d_poti_1;
+
+extern uint8_t LED_RPM;
 extern uint8_t Akku_fan;
 extern uint8_t Cooling_fan;
 extern uint8_t Button_Akku;
@@ -246,14 +250,20 @@ void display_clear(struct DISPLAY_PAGE *display)
 	
 	TS_ON = (~PINA & (1 << PA0));
 	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
-	display_write_str(display,"CoFa:              ", 0, 0);
-	display_write_str(display,"AkFa:              ", 1, 0);
-	display_write_str(display,"                   ", 2, 0);
-	display_write_str(display,"                   ", 3, 0);
+	display_write_str(display,"LED_RPM:           ", 0, 0);
+	display_write_str(display,"WHEELSPEED:        ", 1, 0);
+	display_write_str(display,"D-Poti:            ", 2, 0);
+	display_write_str(display,"       TY 24       ", 3, 0);
 	
-	display_small_number(display,5, 0,Cooling_fan);
+	//display_small_number(display,5, 0,Cooling_fan);
 	
-	display_small_number(display,5, 1,Akku_fan);
+	display_small_number(display,8, 0,LED_RPM);
+	
+	display_small_number(display,11, 1,WHEELSPEED);
+	
+	display_small_number(display,7, 1,d_poti_1);
+	
+	//display_small_number(display,5, 1,Akku_fan);
 	
 	//display_small_number(display, ,  ,);
 }

@@ -19,10 +19,13 @@ uint8_t led_test = 1;
 //extern uint16_t bms_min_temp;
 
 uint8_t LED = 0;
-uint8_t LED_RPM =10;
+extern uint8_t LED_RPM;
 uint8_t LED_counter1 = 0;
 uint8_t LED_counter2 = 0;
 extern uint32_t RPM;
+
+extern uint8_t Akku_fan;
+uint8_t Button_Akku = 0;
 
 /*	MAIN	*/
 int main(void)
@@ -76,12 +79,14 @@ int main(void)
 	
 	while (1)
 	{
-		if (draw_data){
+		if (draw_data)
+		{
 			draw_data = 0;
 			draw_char(active_display,&display_state);
 			
 		}
-		if((sys_time - sys_time_old) >= 1){
+		if((sys_time - sys_time_old) >= 1)
+		{
 			sys_time_old = sys_time;
 			time_10ms++;
 		}
@@ -92,34 +97,36 @@ int main(void)
 			can_transmit();
 			can_receive();
 			can_put_data();
-			display_main(active_display);
+			//display_main(active_display);
+			display_clear(active_display);
 			
 			if (led_test == 0)
 			{
 			
-					//for (int i = 0; i < 15; i++)
+				//for (int i = 0; i < 15; i++)
+				//{
+					//if (i >= LED_RPM)
 					//{
-						//if (i <= LED_RPM)
-						//{
-							//led_top_light(i);  // Schalte die LED ein
-						//}
-						//else
-						//{
-							//led_top_clear(i);  // Schalte die LED aus
-						//}
+						//led_top_clear(i);  // Schalte die LED ein
 					//}
+					//else
+					//{
+						//led_top_light(i);  // Schalte die LED aus
+					//}
+				//}
+				//LED_RPM = ((RPM/466.66) - 1);
 				
+				for (LED_counter2 = LED_RPM + 1; LED_counter2 < 15; LED_counter2++)
+				{
+					led_top_clear(LED_counter2);
+				}
 				
 				for (LED_counter1 = 0; LED_counter1 <= LED_RPM; LED_counter1++)
 				{
 					led_top_light(LED_counter1);
 				}
 				
-				//for (LED_counter2 = LED_RPM + 1; LED_counter2 < 15; LED_counter2++)
-				//{
-					//led_top_clear(LED_counter2);
-				//}
-			}
+			} //end if(led_test == 0)
 			
 			
 			
@@ -161,6 +168,20 @@ int main(void)
 			
 			pre_defined_led_colors_right(PE_OFF);
 			pre_defined_led_colors_left(PE_OFF);
+			
+			//if (Akku_fan == 0)
+			//{
+				//Button_Akku = 1 - Button_Akku;
+			//}
+			//
+			//if (Button_Akku == 1)
+			//{
+				//pre_defined_led_colors_right(PE_BLUE);
+			//} 
+			//else
+			//{
+				//pre_defined_led_colors_right(PE_OFF);
+			//}
 			
 			time_3000ms=0;
 		} //end if(time_3000ms > 299)
