@@ -384,6 +384,16 @@ void can_put_data(){
 	ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
 	ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
 	
+	//ERPM_00 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8));
+	//ERPM_01 = (mob_databytes[INV00_DATA][1] | (mob_databytes[INV00_DATA][0] << 8));
+	//ERPM_0 = (ERPM_00 | (ERPM_01));
+	
+	//ERPM_10 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8));
+	//ERPM_11 = (mob_databytes[INV10_DATA][1] | (mob_databytes[INV10_DATA][0] << 8
+	//ERPM_1 = (ERPM_10 | (ERPM_11));
+	
+	
+	
 	RPM = (((ERPM_0 + ERPM_1)/2)/10);
 	LED_RPM = ((RPM/466.66) - 1);
 	//LED_RPM = 8;
