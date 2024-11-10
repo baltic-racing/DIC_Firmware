@@ -27,6 +27,8 @@ extern uint16_t mcu_temp_0;
 
 extern uint16_t WHEELSPEED;
 extern uint16_t d_poti_1;
+extern uint32_t ERPM_0;
+extern uint32_t ERPM_1;
 
 extern uint8_t LED_RPM;
 extern uint8_t Akku_fan;
@@ -253,7 +255,7 @@ void display_clear(struct DISPLAY_PAGE *display)
 	display_write_str(display,"LED_RPM:           ", 0, 0);
 	display_write_str(display,"WHEELSPEED:        ", 1, 0);
 	display_write_str(display,"D-Poti:            ", 2, 0);
-	display_write_str(display,"       TY 24       ", 3, 0);
+	display_write_str(display,"ERPM0:    ERPM1:   ", 3, 0);
 	
 	//display_small_number(display,5, 0,Cooling_fan);
 	
@@ -261,7 +263,11 @@ void display_clear(struct DISPLAY_PAGE *display)
 	
 	display_small_number(display,11, 1,WHEELSPEED);
 	
-	display_small_number(display,7, 1,d_poti_1);
+	display_small_number(display,7, 2,d_poti_1);
+	
+	display_small_number(display,6, 3, ERPM_0);  //ERPM_0 ist ein uint32_t (eigentlich können nur uint8_t Werte eingetragen werden) -> prüfen/testen und beobachten
+	
+	display_small_number(display,16, 3, ERPM_1); //ERPM_1 ist ein uint32_t (eigentlich können nur uint8_t Werte eingetragen werden) -> prüfen/testen und beobachten
 	
 	//display_small_number(display,5, 1,Akku_fan);
 	

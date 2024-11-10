@@ -357,8 +357,8 @@ void can_put_data(){
 	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
 	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
 	
-	Akku_fan = ((mob_databytes[FUSEBOX_DATA][5]>>7) & 1);
-	//Cooling_fan = ((mob_databytes[FUSEBOX_DATA][5]>>6) & 1);
+	Akku_fan = ((mob_databytes[FUSEBOX_DATA][5] >>7) & 1);
+	//Cooling_fan = ((mob_databytes[FUSEBOX_DATA][5] >>6) & 1);
 	
 	//Rotary_right = (mob_databytes[SWC_DATA][1]);
 	//Rotary_left = (mob_databytes[SWC_DATA][0]);

@@ -27,6 +27,9 @@ extern uint32_t RPM;
 extern uint8_t Akku_fan;
 uint8_t Button_Akku = 0;
 
+//extern uint8_t Cooling_fan;
+//uint8_t Button_Cooling;
+
 /*	MAIN	*/
 int main(void)
 {
@@ -181,6 +184,21 @@ int main(void)
 			//else
 			//{
 				//pre_defined_led_colors_right(PE_OFF);
+			//}
+			
+			
+			//if (Cooling_fan == 1)
+			//{
+			//Button_Cooling = 1 - Button_Cooling;
+			//}
+			//
+			//if (Button_Cooling == 1)
+			//{
+			//pre_defined_led_colors_left(PE_GREEN);
+			//}
+			//else
+			//{
+			//pre_defined_led_colors_left(PE_OFF);
 			//}
 			
 			time_3000ms=0;
