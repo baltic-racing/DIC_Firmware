@@ -34,7 +34,10 @@ extern uint8_t LED_RPM;
 extern uint8_t Akku_fan;
 extern uint8_t Cooling_fan;
 extern uint8_t Button_Akku;
-extern uint8_t Button_Cool; 
+extern uint8_t Button_Cool;
+
+//extern uint8_t Rotary_right;
+//extern uint8_t Rotary_left
 
 uint8_t dsp_command [7] = {
 	0x39, //function set european chararacter set
@@ -254,7 +257,7 @@ void display_clear(struct DISPLAY_PAGE *display)
 	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
 	display_write_str(display,"LED_RPM:           ", 0, 0);
 	display_write_str(display,"WHEELSPEED:        ", 1, 0);
-	display_write_str(display,"D-Poti:            ", 2, 0);
+	display_write_str(display,"D-Poti:   Rot:     ", 2, 0);
 	display_write_str(display,"ERPM0:    ERPM1:   ", 3, 0);
 	
 	//display_small_number(display,5, 0,Cooling_fan);
@@ -268,6 +271,10 @@ void display_clear(struct DISPLAY_PAGE *display)
 	display_small_number(display,6, 3, ERPM_0);  //ERPM_0 ist ein uint32_t (eigentlich können nur uint8_t Werte eingetragen werden) -> prüfen/testen und beobachten
 	
 	display_small_number(display,16, 3, ERPM_1); //ERPM_1 ist ein uint32_t (eigentlich können nur uint8_t Werte eingetragen werden) -> prüfen/testen und beobachten
+	
+	//display_small_number(display,14 ,2, Rotary_right);  //Überprüfung der Werte von Rotary_right
+	//display_small_number(display,14 ,2, Rotary_left);  //Überprüfung der Werte von Rotary_left
+
 	
 	//display_small_number(display,5, 1,Akku_fan);
 	
