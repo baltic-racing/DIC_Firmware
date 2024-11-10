@@ -303,21 +303,21 @@ void led_top_light( uint8_t LED)
 	
 		switch(LED){
 			
-			case 0: {PORTA |= (1<<PA4); break;}
-			case 1: {PORTA |= (1<<PA5); break;}	
-			case 2: {PORTA |= (1<<PA6); break;}
-			case 3: {PORTA |= (1<<PA7); break;}
-			case 4: {PORTG |= (1<<PG2); break;}
-			case 5: {PORTC |= (1<<PC7); break;}
-			case 6: {PORTC |= (1<<PC6); break;}
-			case 7: {PORTC |= (1<<PC5); break;}
-			case 8: {PORTC |= (1<<PC4); break;}
-			case 9: {PORTC |= (1<<PC3); break;}
-			case 10: {PORTC |= (1<<PC2); break;}
-			case 11: {PORTC |= (1<<PC1); break;}
-			case 12: {PORTC |= (1<<PC0); break;}
-			case 13: {PORTG |= (1<<PG1); break;}
-			case 14: {PORTG |= (1<<PG0); break;}
+			case 1: {PORTA |= (1<<PA4); break;}
+			case 2: {PORTA |= (1<<PA5); break;}	
+			case 3: {PORTA |= (1<<PA6); break;}
+			case 4: {PORTA |= (1<<PA7); break;}
+			case 5: {PORTG |= (1<<PG2); break;}
+			case 6: {PORTC |= (1<<PC7); break;}
+			case 7: {PORTC |= (1<<PC6); break;}
+			case 8: {PORTC |= (1<<PC5); break;}
+			case 9: {PORTC |= (1<<PC4); break;}
+			case 10: {PORTC |= (1<<PC3); break;}
+			case 11: {PORTC |= (1<<PC2); break;}
+			case 12: {PORTC |= (1<<PC1); break;}
+			case 13: {PORTC |= (1<<PC0); break;}
+			case 14: {PORTG |= (1<<PG1); break;}
+			case 15: {PORTG |= (1<<PG0); break;}
 		}
 
 	
@@ -328,21 +328,21 @@ void led_top_clear( uint8_t LED)
 	
 	switch(LED){
 		
-		case 0: {PORTA &= (1<<PA4); break;}
-		case 1: {PORTA &= (1<<PA5); break;}
-		case 2: {PORTA &= (1<<PA6); break;}
-		case 3: {PORTA &= (1<<PA7); break;}
-		case 4: {PORTG &= (1<<PG2); break;}
-		case 5: {PORTC &= (1<<PC7); break;}
-		case 6: {PORTC &= (1<<PC6); break;}
-		case 7: {PORTC &= (1<<PC5); break;}
-		case 8: {PORTC &= (1<<PC4); break;}
-		case 9: {PORTC &= (1<<PC3); break;}
-		case 10: {PORTC &= (1<<PC2); break;}
-		case 11: {PORTC &= (1<<PC1); break;}
-		case 12: {PORTC &= (1<<PC0); break;}
-		case 13: {PORTG &= (1<<PG1); break;}
-		case 14: {PORTG &= (1<<PG0); break;}
+		case 1: {PORTA &= (1<<PA4); break;}
+		case 2: {PORTA &= (1<<PA5); break;}
+		case 3: {PORTA &= (1<<PA6); break;}
+		case 4: {PORTA &= (1<<PA7); break;}
+		case 5: {PORTG &= (1<<PG2); break;}
+		case 6: {PORTC &= (1<<PC7); break;}
+		case 7: {PORTC &= (1<<PC6); break;}
+		case 8: {PORTC &= (1<<PC5); break;}
+		case 9: {PORTC &= (1<<PC4); break;}
+		case 10: {PORTC &= (1<<PC3); break;}
+		case 11: {PORTC &= (1<<PC2); break;}
+		case 12: {PORTC &= (1<<PC1); break;}
+		case 13: {PORTC &= (1<<PC0); break;}
+		case 14: {PORTG &= (1<<PG1); break;}
+		case 15: {PORTG &= (1<<PG0); break;}
 		
 	}
 

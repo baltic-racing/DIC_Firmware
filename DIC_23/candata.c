@@ -46,6 +46,12 @@ uint16_t fuse_readout = 0;
 
 uint16_t gps_speed = 0;
 
+uint16_t ERPM_00 = 0;
+uint16_t ERPM_01 = 0;
+
+uint16_t ERPM_10 = 0;
+uint16_t ERPM_11 = 0; 
+
 uint32_t ERPM_0 = 0;
 uint32_t ERPM_1 = 0;
 
@@ -380,22 +386,29 @@ void can_put_data(){
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
 	
+	mob_databytes[INV00_DATA][3] = 0x5E;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
+	mob_databytes[INV00_DATA][2] = 0x24;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
+	mob_databytes[INV00_DATA][1] = 0x00;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
+	mob_databytes[INV00_DATA][0] = 0x00;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
+	
+	mob_databytes[INV10_DATA][3] = 0x6D;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
+	mob_databytes[INV10_DATA][2] = 0x24;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
+	mob_databytes[INV10_DATA][1] = 0x00;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
+	mob_databytes[INV10_DATA][0] = 0x00;	//dem CAN-Mob einen Wert zuweisen -> fürs Debugging
 	
 	ERPM_0 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8) | (mob_databytes[INV00_DATA][1] << 16) | (mob_databytes[INV00_DATA][0] << 24));
 	ERPM_1 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8) | (mob_databytes[INV10_DATA][1] << 16) | (mob_databytes[INV10_DATA][0] << 24));
 	
 	//ERPM_00 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8));
 	//ERPM_01 = (mob_databytes[INV00_DATA][1] | (mob_databytes[INV00_DATA][0] << 8));
-	//ERPM_0 = (ERPM_00 | (ERPM_01));
-	
+	//ERPM_0 = (ERPM_00 | (ERPM_01 <<16));
+	//
 	//ERPM_10 = (mob_databytes[INV10_DATA][3] | (mob_databytes[INV10_DATA][2] << 8));
-	//ERPM_11 = (mob_databytes[INV10_DATA][1] | (mob_databytes[INV10_DATA][0] << 8
-	//ERPM_1 = (ERPM_10 | (ERPM_11));
-	
-	
+	//ERPM_11 = (mob_databytes[INV10_DATA][1] | (mob_databytes[INV10_DATA][0] << 8));
+	//ERPM_1 = (ERPM_10 | (ERPM_11 <<16));
 	
 	RPM = (((ERPM_0 + ERPM_1)/2)/10);
-	LED_RPM = ((RPM/466.66) - 1);
+	LED_RPM = (RPM/466.66);
 	//LED_RPM = 8;
 	
 	

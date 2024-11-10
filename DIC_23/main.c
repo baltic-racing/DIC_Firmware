@@ -116,12 +116,12 @@ int main(void)
 				//}
 				//LED_RPM = ((RPM/466.66) - 1);
 				
-				for (LED_counter2 = LED_RPM + 1; LED_counter2 < 15; LED_counter2++)
+				for (LED_counter2 = LED_RPM; LED_counter2 < 16; LED_counter2++)
 				{
 					led_top_clear(LED_counter2);
 				}
 				
-				for (LED_counter1 = 0; LED_counter1 <= LED_RPM; LED_counter1++)
+				for (LED_counter1 = 1; LED_counter1 <= LED_RPM; LED_counter1++)
 				{
 					led_top_light(LED_counter1);
 				}
@@ -148,7 +148,7 @@ int main(void)
 				
 				if(time_3000ms > 290)
 				{
-					for (LED = 0; LED < 15; LED++)
+					for (LED = 0; LED < 16; LED++)
 					{
 						led_top_clear(LED);
 					} //end for-Schleife
@@ -169,7 +169,7 @@ int main(void)
 			pre_defined_led_colors_right(PE_OFF);
 			pre_defined_led_colors_left(PE_OFF);
 			
-			//if (Akku_fan == 0)
+			//if (Akku_fan == 1)
 			//{
 				//Button_Akku = 1 - Button_Akku;
 			//}
