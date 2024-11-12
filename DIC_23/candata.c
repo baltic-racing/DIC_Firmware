@@ -328,7 +328,8 @@ void can_put_data(){
 	precharge_active = ((mob_databytes[AMS0_DATA][6]>>4) & 1);
     //TS_RDY = ((mob_databytes[AMS0_DATA][6]>>3) & 1);
 	
-	//bms_min_voltage = mob_databytes[AMS1_DATA][0] | (mob_databytes[AMS1_DATA][1] << 8);
+	bms_min_voltage = mob_databytes[AMS1_DATA][0] | (mob_databytes[AMS1_DATA][1] << 8);
+	bms_min_voltage = bms_min_voltage/100;
 	//bms_max_voltage = mob_databytes[AMS1_DATA][2] | (mob_databytes[AMS1_DATA][3] << 8);
 	//bms_min_temp = (mob_databytes[AMS1_DATA][4] | (mob_databytes[AMS1_DATA][5] << 8))/100;
 	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8));

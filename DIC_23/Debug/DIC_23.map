@@ -271,7 +271,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x336c
+.text           0x00000000     0x34b8
  *(.vectors)
  .vectors       0x00000000       0x94 C:/Users/Marek/Documents/Stralsund/Studium - Bachelor Motorsport Engineering/Studien_Programme/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/at90can128/avr51/crtat90can128.o
                 0x00000000                __vector_default
@@ -369,79 +369,79 @@ END GROUP
                 0x0000014e                __vector_14
                 0x0000014e                __vector_10
                 0x0000014e                __vector_18
- .text          0x00000150      0x5b0 candata.o
+ .text          0x00000150      0x5f6 candata.o
                 0x00000150                init_mobs
                 0x0000030c                can_receive
                 0x000003d0                can_transmit
                 0x000003ea                get_dsp_mode
                 0x000003fc                get_mob_data
                 0x00000426                can_put_data
- .text          0x00000700      0x3e0 canlib.o
-                0x00000700                can_check_free
-                0x0000077a                can_cfg
-                0x00000888                can_rx
-                0x000009c0                can_tx
- .text          0x00000ae0     0x1b0c display.o
-                0x00000ae0                draw_char
-                0x00000ba4                get_empty_state
-                0x00000bc0                get_empty_display
-                0x00000c6c                display_write_data
-                0x00000d0c                display_definechars
-                0x00000e26                display_customchar
-                0x00000ebc                display_write_str
-                0x00000f68                init_display
-                0x00000fa6                display_main
-                0x000015de                display_debug
-                0x00001d0e                display_meme
-                0x00001d2c                display_voltage
-                0x00001e64                display_temp
-                0x00001faa                display_digits
-                0x000020a4                display_large_number
-                0x000024d2                display_small_number
- .text          0x000025ec       0x6c helpers.o
-                0x000025ec                invert_binary_number
- .text          0x00002658      0x1a8 main.o
-                0x00002658                main
- .text          0x00002800      0x990 portextender.o
-                0x00002800                configure_spi_bus
-                0x00002898                spi_free
-                0x000028b4                send_data
-                0x0000295c                send_data_blocking
-                0x000029a8                extender_leds
-                0x000029d0                extender_leds_blocking
-                0x000029f8                __vector_20
-                0x00002aae                configure_portextenders
-                0x00002ae6                pre_defined_led_colors
-                0x00002b96                clear_top_left_bar
-                0x00002bca                clear_top_right_bar
-                0x00002bf4                led_top_left_bar
-                0x00002c76                led_top_right_bar
-                0x00002d04                led_left_top_bar_select
-                0x00002d7c                led_right_top_bar_select
-                0x00002e20                led_top_light
-                0x00002f8c                led_top_clear
-                0x000030f8                bms_error
-                0x00003146                led_startup_animation
- .text          0x00003190       0xec port_definitions.o
-                0x00003190                port_config
- .text          0x0000327c       0x94 sys_timer.o
-                0x0000327c                sys_timer_config
-                0x000032aa                __vector_16
-                0x00003310                . = ALIGN (0x2)
+ .text          0x00000746      0x3e0 canlib.o
+                0x00000746                can_check_free
+                0x000007c0                can_cfg
+                0x000008ce                can_rx
+                0x00000a06                can_tx
+ .text          0x00000b26     0x1c12 display.o
+                0x00000b26                draw_char
+                0x00000bea                get_empty_state
+                0x00000c06                get_empty_display
+                0x00000cb2                display_write_data
+                0x00000d52                display_definechars
+                0x00000e6c                display_customchar
+                0x00000f02                display_write_str
+                0x00000fae                init_display
+                0x00000fec                display_main
+                0x00001726                display_debug
+                0x00001e56                display_meme
+                0x00001e74                display_voltage
+                0x00001fac                display_temp
+                0x000020f6                display_digits
+                0x000021f0                display_large_number
+                0x0000261e                display_small_number
+ .text          0x00002738       0x6c helpers.o
+                0x00002738                invert_binary_number
+ .text          0x000027a4      0x1a8 main.o
+                0x000027a4                main
+ .text          0x0000294c      0x990 portextender.o
+                0x0000294c                configure_spi_bus
+                0x000029e4                spi_free
+                0x00002a00                send_data
+                0x00002aa8                send_data_blocking
+                0x00002af4                extender_leds
+                0x00002b1c                extender_leds_blocking
+                0x00002b44                __vector_20
+                0x00002bfa                configure_portextenders
+                0x00002c32                pre_defined_led_colors
+                0x00002ce2                clear_top_left_bar
+                0x00002d16                clear_top_right_bar
+                0x00002d40                led_top_left_bar
+                0x00002dc2                led_top_right_bar
+                0x00002e50                led_left_top_bar_select
+                0x00002ec8                led_right_top_bar_select
+                0x00002f6c                led_top_light
+                0x000030d8                led_top_clear
+                0x00003244                bms_error
+                0x00003292                led_startup_animation
+ .text          0x000032dc       0xec port_definitions.o
+                0x000032dc                port_config
+ .text          0x000033c8       0x94 sys_timer.o
+                0x000033c8                sys_timer_config
+                0x000033f6                __vector_16
+                0x0000345c                . = ALIGN (0x2)
  *(.text.*)
  .text.libgcc.div
-                0x00003310       0x28 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_udivmodhi4.o)
-                0x00003310                __udivmodhi4
- .text.libgcc   0x00003338       0x12 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_tablejump2.o)
-                0x00003338                __tablejump2__
+                0x0000345c       0x28 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_udivmodhi4.o)
+                0x0000345c                __udivmodhi4
+ .text.libgcc   0x00003484       0x12 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_tablejump2.o)
+                0x00003484                __tablejump2__
  .text.libgcc.mul
-                0x0000334a       0x1e c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_umulhisi3.o)
-                0x0000334a                __umulhisi3
-                0x00003368                . = ALIGN (0x2)
+                0x00003496       0x1e c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_umulhisi3.o)
+                0x00003496                __umulhisi3
+                0x000034b4                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00003368        0x0 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
-                0x00003368                _exit
-                0x00003368                exit
+ .fini9         0x000034b4        0x0 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+                0x000034b4                _exit
+                0x000034b4                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -460,11 +460,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00003368        0x4 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+ .fini0         0x000034b4        0x4 c:/users/marek/documents/stralsund/studium - bachelor motorsport engineering/studien_programme/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000336c                _etext = .
+                0x000034b8                _etext = .
 
-.data           0x00800100      0x158 load address 0x0000336c
+.data           0x00800100      0x158 load address 0x000034b8
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0xb display.o
@@ -551,8 +551,8 @@ END GROUP
  COMMON         0x0080034a        0x4 portextender.o
                 0x0080034a                current_msg
                 0x0080034e                PROVIDE (__bss_end, .)
-                0x0000336c                __data_load_start = LOADADDR (.data)
-                0x000034c4                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000034b8                __data_load_start = LOADADDR (.data)
+                0x00003610                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0080034e        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -652,17 +652,17 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x20c1
+.debug_info     0x00000000     0x20ce
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xa2d C:/Users/Marek/Documents/Stralsund/Studium - Bachelor Motorsport Engineering/Studien_Programme/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/at90can128/avr51/crtat90can128.o
  .debug_info    0x00000a2d      0x531 candata.o
  .debug_info    0x00000f5e      0x1d6 canlib.o
- .debug_info    0x00001134      0x655 display.o
- .debug_info    0x00001789       0xbe helpers.o
- .debug_info    0x00001847      0x240 main.o
- .debug_info    0x00001a87      0x4eb portextender.o
- .debug_info    0x00001f72       0x85 port_definitions.o
- .debug_info    0x00001ff7       0xca sys_timer.o
+ .debug_info    0x00001134      0x662 display.o
+ .debug_info    0x00001796       0xbe helpers.o
+ .debug_info    0x00001854      0x240 main.o
+ .debug_info    0x00001a94      0x4eb portextender.o
+ .debug_info    0x00001f7f       0x85 port_definitions.o
+ .debug_info    0x00002004       0xca sys_timer.o
 
 .debug_abbrev   0x00000000     0x1155
  *(.debug_abbrev)
@@ -676,17 +676,17 @@ END GROUP
  .debug_abbrev  0x000010a1       0x4d port_definitions.o
  .debug_abbrev  0x000010ee       0x67 sys_timer.o
 
-.debug_line     0x00000000     0x199b
+.debug_line     0x00000000     0x19b9
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x176 C:/Users/Marek/Documents/Stralsund/Studium - Bachelor Motorsport Engineering/Studien_Programme/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/at90can128/avr51/crtat90can128.o
- .debug_line    0x00000176      0x33e candata.o
- .debug_line    0x000004b4      0x2da canlib.o
- .debug_line    0x0000078e      0x75a display.o
- .debug_line    0x00000ee8      0x111 helpers.o
- .debug_line    0x00000ff9      0x215 main.o
- .debug_line    0x0000120e      0x534 portextender.o
- .debug_line    0x00001742      0x14e port_definitions.o
- .debug_line    0x00001890      0x10b sys_timer.o
+ .debug_line    0x00000176      0x34a candata.o
+ .debug_line    0x000004c0      0x2da canlib.o
+ .debug_line    0x0000079a      0x76c display.o
+ .debug_line    0x00000f06      0x111 helpers.o
+ .debug_line    0x00001017      0x215 main.o
+ .debug_line    0x0000122c      0x534 portextender.o
+ .debug_line    0x00001760      0x14e port_definitions.o
+ .debug_line    0x000018ae      0x10b sys_timer.o
 
 .debug_frame    0x00000000      0x778
  *(.debug_frame)
@@ -707,7 +707,7 @@ END GROUP
  .debug_str     0x0000075c       0x58 canlib.o
                                 0x1bb (size before relaxing)
  .debug_str     0x000007b4      0x1b7 display.o
-                                0x384 (size before relaxing)
+                                0x394 (size before relaxing)
  .debug_str     0x0000096b       0x3d helpers.o
                                 0x16d (size before relaxing)
  .debug_str     0x000009a8       0xf6 main.o

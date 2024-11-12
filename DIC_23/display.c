@@ -13,6 +13,7 @@
 
 extern uint16_t ts_voltage;
 extern uint16_t bms_max_temp;
+extern uint16_t bms_min_voltage;
 extern uint16_t battery_voltage;
 extern uint16_t cooling_1;
 extern uint16_t APPS1;
@@ -161,8 +162,8 @@ void display_main(struct DISPLAY_PAGE *display)
 	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
 	display_write_str(display,"INV:  . C MTR:   . C", 0, 0);
 	display_write_str(display,"TSV:   V  ACCU:  . C", 1, 0);
-	display_write_str(display,"LVV:  . V COOL:25.0C", 2, 0);
-	display_write_str(display,"APPS:               ", 3, 0);
+	display_write_str(display,"LVV:  . V COOL:__._C", 2, 0);
+	display_write_str(display,"APPS:     minV: .  V", 3, 0);
 	
 	display_small_number(display,18, 0, motor_temp%10) ;
 	display_small_number(display,16, 0, (motor_temp/10)%10);
@@ -190,6 +191,10 @@ void display_main(struct DISPLAY_PAGE *display)
 	//display_small_number(display,18, 2, cooling_1%10) ;
 	//display_small_number(display,16, 2, (cooling_1/10)%10);
 	//display_small_number(display,15, 2, (cooling_1/100)%10);
+	
+	display_small_number(display,18, 3, bms_min_voltage%10) ;
+	display_small_number(display,17, 3, (bms_min_voltage/10)%10);
+	display_small_number(display,15, 3, (bms_min_voltage/100)%10);
 	
 }
 void display_debug(struct DISPLAY_PAGE *display)
