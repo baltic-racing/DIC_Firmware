@@ -167,7 +167,7 @@ void display_main(struct DISPLAY_PAGE *display)
 	display_small_number(display,18, 0, motor_temp%10) ;
 	display_small_number(display,16, 0, (motor_temp/10)%10);
 	display_small_number(display,15, 0, (motor_temp/100)%10);
-		
+	
 	display_small_number(display,7, 0, mcu_temp%10);
 	display_small_number(display,5, 0, (mcu_temp/10)%10);
 	display_small_number(display,4, 0, (mcu_temp/100)%10);

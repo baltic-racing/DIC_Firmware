@@ -10,6 +10,8 @@
 #include "candata.h"
 #include "canlib.h"
 #include "portextender.h"
+#include "display.h"
+#include "helpers.h"
 
 uint8_t mob_databytes[12][8];
 
@@ -298,7 +300,8 @@ void can_transmit(){
 }
 
 uint8_t get_dsp_mode(){
-	return mob_databytes[SWC_DATA][DSP_MODE_BYTE];
+	return gray2bin(mob_databytes[SWC_DATA][DSP_MODE_BYTE]);
+	
 }
 
 uint8_t* get_mob_data(uint8_t mob){
@@ -384,7 +387,7 @@ void can_put_data(){
 	
 	
 	
-	
+		
 }
 
 
