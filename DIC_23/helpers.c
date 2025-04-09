@@ -20,13 +20,5 @@ uint8_t invert_binary_number(uint8_t number_to_invert){
 	
 	
 }
-uint8_t gray2bin(uint8_t gray){
-	
-	int bin;
-	int i;
-	for(i=5; i >= 0; i--){
-		bin = bin | ((gray & 1<<i)>>i ^ (bin & 1<<(i + 1))>>i)<<i;
-	}
-	return bin;
-}
+
 

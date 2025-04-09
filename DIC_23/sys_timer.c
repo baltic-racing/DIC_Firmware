@@ -22,7 +22,7 @@ void sys_timer_config(void)
 	//compare interrupt enable
 	TIMSK0 = 0 | (1<<OCIE0A);
 	//compare value for 1ms;
-	OCR0A = 250;
+	OCR0A = 250-1;
 }
 
 /*	Interrupt Service Routines	*/

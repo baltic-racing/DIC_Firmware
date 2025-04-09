@@ -36,7 +36,7 @@
 #define INV1_1_MOB_ID (uint16_t) 0x054
 
 
-#define DSP_MODE_BYTE 0
+#define DSP_MODE_BYTE 1
 
 #define AMS0_DATA 0
 #define AMS1_DATA 1

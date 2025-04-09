@@ -11,20 +11,12 @@
 #include "port_definitions.h"
 #include "candata.h"
 
-extern uint16_t ts_voltage;
-extern uint16_t bms_max_temp;
-extern uint16_t battery_voltage;
-extern uint16_t cooling_1;
-extern uint16_t APPS1;
-extern uint16_t APPS2;
-extern uint16_t BPSF;
-extern uint16_t BPSR;
-extern uint16_t motor_temp; 
-extern uint16_t mcu_temp;
-extern uint16_t motor_temp_1;
-extern uint16_t mcu_temp_1;
-extern uint16_t motor_temp_0;
-extern uint16_t mcu_temp_0;
+
+ 
+ 
+
+
+
 
 
 uint8_t dsp_command [7] = {
@@ -152,89 +144,14 @@ void init_display(){
 	}	
 }
 
-void display_main(struct DISPLAY_PAGE *display)
-{
-	uint8_t TS_ON = 0;
-	uint8_t Ready_2_Drive = 0;
-	
-	TS_ON = (~PINA & (1 << PA0));
-	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
-	display_write_str(display,"INV:  . C MTR:   . C", 0, 0);
-	display_write_str(display,"TSV:   V  ACCU:  . C", 1, 0);
-	display_write_str(display,"LVV:  . V COOL:25.0C", 2, 0);
-	display_write_str(display,"APPS:               ", 3, 0);
-	
-	display_small_number(display,18, 0, motor_temp%10) ;
-	display_small_number(display,16, 0, (motor_temp/10)%10);
-	display_small_number(display,15, 0, (motor_temp/100)%10);
-	
-	display_small_number(display,7, 0, mcu_temp%10);
-	display_small_number(display,5, 0, (mcu_temp/10)%10);
-	display_small_number(display,4, 0, (mcu_temp/100)%10);
-	
-	display_small_number(display,6, 1,ts_voltage%10);
-	display_small_number(display,5, 1, (ts_voltage/10)%10);
-	display_small_number(display,4, 1, (ts_voltage/100)%10);
-	
-	display_small_number(display,18, 1,bms_max_temp%10);
-	display_small_number(display,16, 1, (bms_max_temp/10)%10);
-	display_small_number(display,15, 1, (bms_max_temp/100)%10);
-	
-	display_small_number(display,7, 2,battery_voltage%10) ;
-	display_small_number(display,5, 2, (battery_voltage/10)%10);
-	display_small_number(display,4, 2, (battery_voltage/100)%10);
-	
-	display_small_number(display,6, 3,APPS2%10) ;
-	display_small_number(display,5, 3, (APPS2/10)%10);
-	
-	//display_small_number(display,18, 2, cooling_1%10) ;
-	//display_small_number(display,16, 2, (cooling_1/10)%10);
-	//display_small_number(display,15, 2, (cooling_1/100)%10);
-	
-}
-void display_debug(struct DISPLAY_PAGE *display)
-{
-	uint8_t TS_ON = 0;
-	uint8_t Ready_2_Drive = 0;
-	
-	TS_ON = (~PINA & (1 << PA0));
-	Ready_2_Drive = ((~PINA & (1 << PA1)) >> PA1);
-	display_write_str(display,"TSV:   V  ACCU:  . C", 0, 0);
-	display_write_str(display,"LVV:  . V COOL:  . C", 1, 0);
-	display_write_str(display,"APPS1:  %  APPS2:  %", 2, 0);
-	display_write_str(display,"BPF:  BPR:          ", 3, 0);
-	
-	display_small_number(display,6, 0,ts_voltage%10) ;
-	display_small_number(display,5, 0, (ts_voltage/10)%10);
-	display_small_number(display,4, 0, (ts_voltage/100)%10);
-	
-	display_small_number(display,18, 0,bms_max_temp%10) ;
-	display_small_number(display,16, 0, (bms_max_temp/10)%10);
-	display_small_number(display,15, 0, (bms_max_temp/100)%10);
-	
-	display_small_number(display,7, 1,battery_voltage%10) ;
-	display_small_number(display,5, 1, (battery_voltage/10)%10);
-	display_small_number(display,4, 1, (battery_voltage/100)%10);
-	
-	display_small_number(display,18, 1, cooling_1%10) ;
-	display_small_number(display,16, 1, (cooling_1/10)%10);
-	display_small_number(display,15, 1, (cooling_1/100)%10);
-	
-	display_small_number(display,7, 2, APPS1%10);
-	display_small_number(display,6, 2, (APPS1/10)%10);
 
-	display_small_number(display,16, 2, APPS2%10);
-	display_small_number(display,15, 2, (APPS2/10)%10);
-	
-	
-	display_small_number(display,5, 3, (BPSF/10)%10);
-	display_small_number(display,4, 3, (BPSF/100)%10);
-	
-	
-	display_small_number(display,11, 3, (BPSR/10)%10);
-	display_small_number(display,10, 3, (BPSR/100)%10);
 
-}
+	
+	
+	
+	
+	
+
 void display_meme(struct DISPLAY_PAGE *display)
 {
 	 display_definechars();
@@ -270,33 +187,8 @@ void display_temp(struct DISPLAY_PAGE *display, uint16_t number){
 }
 
 
-// erzeugt beliebig langen string aus einem int wert, länge ist mit digits zu übergeben, geht nur ohne komma . comma gibt die Anzahl der nachkommastellen an
-void display_digits(struct DISPLAY_PAGE *display, uint8_t digits, uint8_t offset,uint8_t row,  uint16_t number, uint8_t comma){
-	
-	uint8_t i;
-	uint8_t comma_set = 0;
-	
-	for(i=0; i>= digits; i++)
-	{
-		
-		
-		if (comma >= i)
-		{
-			if (comma == i)
-			{
-				display_write_str(display, ",",row, (offset + digits-i));
-				comma_set = 1;
-			}
-			
-		}
-		else
-		{
-			display_small_number(display,(offset + (digits-i-comma_set)), row, number%10);
-			number = number/10;
-		}
-		
-	}
-}
+
+
 
 	
 
@@ -404,51 +296,3 @@ void display_large_number(struct DISPLAY_PAGE *display, uint8_t offset, uint8_t 
 	}
 }
 
-void display_small_number(struct DISPLAY_PAGE *display, uint8_t offset, uint8_t row, uint8_t number){
-
-	switch (number){
-		case 0:
-			display_write_str(display, "0",row,offset);
-		break;
-		
-		case 1:
-			display_write_str(display, "1",row,offset);
-		break;
-		
-		case 2:
-			display_write_str(display, "2",row,offset);
-		break;
-		
-		case 3:
-			display_write_str(display, "3",row,offset);
-		break;
-		
-		case 4:
-			display_write_str(display, "4",row,offset);
-		break;
-		
-		case 5:
-			display_write_str(display, "5",row,offset);
-		break;
-		
-		case 6:
-			display_write_str(display, "6",row,offset);
-		break;
-		
-		case 7:
-			display_write_str(display, "7",row,offset);
-		break;
-		
-		case 8:
-			display_write_str(display, "8",row,offset);
-		break;
-		
-		case 9:
-			display_write_str(display, "9",row,offset);
-		break;
-		//if no number was transmitted
-		default:
-		display_write_str(display, "\xFF",row,offset);
-		break;
-	}
-}

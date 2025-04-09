@@ -54,7 +54,7 @@ uint16_t ERPM_0 = 0;
 uint16_t ERPM_1 = 0;
 
 uint16_t mcu_temp_0 = 0;
-uint16_t motor_temp_0 = 0;
+uint16_t motor_temp_0 = 209;
 uint8_t fault_code_0 = 0;
 
 uint16_t mcu_temp_1 = 0;
@@ -300,7 +300,7 @@ void can_transmit(){
 }
 
 uint8_t get_dsp_mode(){
-	return gray2bin(mob_databytes[SWC_DATA][DSP_MODE_BYTE]);
+	return mob_databytes[SWC_DATA][DSP_MODE_BYTE];
 	
 }
 

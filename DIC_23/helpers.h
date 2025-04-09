@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 uint8_t invert_binary_number(uint8_t number_to_invert);
-uint8_t gray2bin(uint8_t gray);
+
 
 
 
