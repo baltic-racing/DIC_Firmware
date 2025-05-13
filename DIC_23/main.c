@@ -118,7 +118,7 @@ int main(void)
 		}
 		
 		
-		if (time_10ms > 99){
+		if (time_10ms > 9){
 			
 			
 			

@@ -161,6 +161,18 @@ struct CAN_MOB fusebox_mob;
 // 0: Rotary Encoder left
 struct CAN_MOB swc_mob;
 
+// CAN MOB from right sensorhub.
+// data layout:
+// 7: X
+// 6: X
+// 5: X
+// 4: X
+// 3: APPS2
+// 2: APPS2
+// 1: APPS1
+// 0: APPS1
+struct CAN_MOB vcu_mob;
+
 // CAN MOB 0 from Inverter0.
 // data layout:
 // 7: Voltage In
@@ -245,22 +257,27 @@ void init_mobs(){
 	swc_mob.mob_idmask = 0xffff;
 	swc_mob.mob_number = 7;
 	
+	vcu_mob.mob_id = vcu_0_mob_ID;
+	vcu_mob.mob_idmask = 0xffff;
+	vcu_mob.mob_number = 8;
 	
-	inv00_mob.mob_id = INV0_0_MOB_ID;
-	inv00_mob.mob_idmask = 0xffff;
-	inv00_mob.mob_number = 8;
 	
-	inv01_mob.mob_id = INV0_1_MOB_ID;
-	inv01_mob.mob_idmask = 0xffff;
-	inv01_mob.mob_number = 9;
-	
-	inv10_mob.mob_id = INV0_1_MOB_ID;
-	inv10_mob.mob_idmask = 0xffff;
-	inv10_mob.mob_number = 10;
-	
-	inv11_mob.mob_id = INV1_1_MOB_ID;
-	inv11_mob.mob_idmask = 0xffff;
-	inv11_mob.mob_number = 11;
+	//
+	//inv00_mob.mob_id = INV0_0_MOB_ID;
+	//inv00_mob.mob_idmask = 0xffff;
+	//inv00_mob.mob_number = 8;
+	//
+	//inv01_mob.mob_id = INV0_1_MOB_ID;
+	//inv01_mob.mob_idmask = 0xffff;
+	//inv01_mob.mob_number = 9;
+	//
+	//inv10_mob.mob_id = INV0_1_MOB_ID;
+	//inv10_mob.mob_idmask = 0xffff;
+	//inv10_mob.mob_number = 10;
+	//
+	//inv11_mob.mob_id = INV1_1_MOB_ID;
+	//inv11_mob.mob_idmask = 0xffff;
+	//inv11_mob.mob_number = 11;
 	
 	
 	
@@ -289,8 +306,9 @@ void can_receive(){
 	can_rx(&shb_mob, mob_databytes[SHB_DATA]);
 	can_rx(&fusebox_mob, mob_databytes[FUSEBOX_DATA]);
 	can_rx(&swc_mob, mob_databytes[SWC_DATA]);
-	can_rx(&inv01_mob, mob_databytes[INV01_DATA]);
-	can_rx(&inv11_mob, mob_databytes[INV11_DATA]);
+	can_rx(&vcu_mob, mob_databytes[VCU_DATA]);
+	//can_rx(&inv01_mob, mob_databytes[INV01_DATA]);
+	//can_rx(&inv11_mob, mob_databytes[INV11_DATA]);
 	
 	
 }
@@ -337,8 +355,8 @@ void can_put_data(){
 	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8));
 	bms_max_temp = bms_max_temp/100;
 	
-	APPS1 = mob_databytes[SHR_DATA][0] | (mob_databytes[SHR_DATA][1] << 8);
-	APPS2 = mob_databytes[SHR_DATA][2] | (mob_databytes[SHR_DATA][3] << 8);
+	APPS1 = (mob_databytes[VCU_DATA][0] | (mob_databytes[VCU_DATA][1] << 8))/10;
+	APPS2 = (mob_databytes[VCU_DATA][2] | (mob_databytes[VCU_DATA][3] << 8))/10;
 	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
 	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
 	//cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
@@ -358,8 +376,8 @@ void can_put_data(){
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
 	
-	motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
-	motor_temp_0 = (mob_databytes[INV11_DATA][3] | (mob_databytes[INV11_DATA][2] << 8));
+	//motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
+	//motor_temp_0 = (mob_databytes[INV11_DATA][3] | (mob_databytes[INV11_DATA][2] << 8));
 	
 	if (motor_temp_1>motor_temp_0)
 	{
@@ -370,8 +388,8 @@ void can_put_data(){
 		motor_temp = motor_temp_0;
 	}
 	
-	mcu_temp_0 = (mob_databytes[INV01_DATA][1] | (mob_databytes[INV01_DATA][0] << 8));
-	mcu_temp_1 = (mob_databytes[INV11_DATA][1] | (mob_databytes[INV11_DATA][0] << 8));
+	//mcu_temp_0 = (mob_databytes[INV01_DATA][1] | (mob_databytes[INV01_DATA][0] << 8));
+	//mcu_temp_1 = (mob_databytes[INV11_DATA][1] | (mob_databytes[INV11_DATA][0] << 8));
 	
 	if (mcu_temp_1>mcu_temp_0)
 	{
@@ -381,9 +399,10 @@ void can_put_data(){
 	{
 		mcu_temp = mcu_temp_0;
 	}
-	mob_databytes[DIC_DATA][0] = TS_ON;
-	mob_databytes[DIC_DATA][1] = Ready_2_Drive;
+	mob_databytes[DIC_DATA][0] = 0; // TS_ON;
+	mob_databytes[DIC_DATA][1] =  Ready_2_Drive;
 	mob_databytes[DIC_DATA][2] = SDCIDIC;
+	mob_databytes[DIC_DATA][5] = TS_ON;
 	
 	
 	
