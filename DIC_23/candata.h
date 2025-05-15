@@ -14,7 +14,7 @@
 #define AMS_1_MOB_ID (uint16_t) 0x201
 
 #define SHR_MOB_ID (uint16_t) 0x400
-#define SHL_MOB_ID (uint16_t) 0x410
+#define SHF_MOB_ID (uint16_t) 0x401
 #define SHB_MOB_ID (uint16_t) 0x420
 
 #define DIC_MOB_ID (uint16_t) 0x500
@@ -44,7 +44,7 @@
 #define AMS1_DATA 1
 
 #define SHR_DATA 2
-#define SHL_DATA 3
+#define SHF_DATA 3
 #define SHB_DATA 4
 
 #define DIC_DATA 5

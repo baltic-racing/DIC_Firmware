@@ -111,7 +111,7 @@ struct CAN_MOB shr_mob;
 // 2: Brake Pressure Sensor Rear
 // 1: Brake Pressure Sensor Front
 // 0: Brake Pressure Sensor Front
-struct CAN_MOB shl_mob;
+struct CAN_MOB shf_mob;
 
 // CAN MOB from back sensorhub.
 // data layout:
@@ -237,9 +237,9 @@ void init_mobs(){
 	shr_mob.mob_idmask = 0xffff;
 	shr_mob.mob_number = 2;
 	
-	shl_mob.mob_id = SHL_MOB_ID;
-	shl_mob.mob_idmask = 0xffff;
-	shl_mob.mob_number = 3;
+	shf_mob.mob_id = SHF_MOB_ID;
+	shf_mob.mob_idmask = 0xffff;
+	shf_mob.mob_number = 3;
 	
 	shb_mob.mob_id = SHB_MOB_ID;
 	shb_mob.mob_idmask = 0xffff;
@@ -302,7 +302,7 @@ void can_receive(){
 	
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
-	can_rx(&shl_mob, mob_databytes[SHL_DATA]);
+	can_rx(&shf_mob, mob_databytes[SHF_DATA]);
 	can_rx(&shb_mob, mob_databytes[SHB_DATA]);
 	can_rx(&fusebox_mob, mob_databytes[FUSEBOX_DATA]);
 	can_rx(&swc_mob, mob_databytes[SWC_DATA]);
@@ -357,8 +357,8 @@ void can_put_data(){
 	
 	APPS1 = (mob_databytes[VCU_DATA][0] | (mob_databytes[VCU_DATA][1] << 8))/10;
 	APPS2 = (mob_databytes[VCU_DATA][2] | (mob_databytes[VCU_DATA][3] << 8))/10;
-	BPSF = mob_databytes[SHL_DATA][0] | (mob_databytes[SHL_DATA][1] << 8);
-	BPSR = mob_databytes[SHL_DATA][2] | (mob_databytes[SHL_DATA][3] << 8);
+	BPSF = (mob_databytes[SHF_DATA][0] | (mob_databytes[SHF_DATA][1] << 8))/10;
+	BPSR = (mob_databytes[SHF_DATA][2] | (mob_databytes[SHF_DATA][3] << 8))/10;
 	//cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
 	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
 	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2

@@ -13,6 +13,10 @@
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
 
+#define LED_TEST_TIME 3000			// Duration of LED test in ms
+#define SYSTEM_STARTUP_TIME 4000	// Duration of system startup in ms
+
+
 extern uint16_t ts_voltage;
 extern uint16_t bms_max_temp;
 extern uint16_t battery_voltage;
@@ -31,6 +35,7 @@ extern uint16_t mcu_temp_0;
 // extern uint16_t bms_max_voltage;
 //extern uint16_t bms_min_voltage;
 uint8_t led_test = 1;
+uint8_t system_startup = 0;
 //extern uint16_t bms_min_temp;
 
 
@@ -74,25 +79,25 @@ int main(void)
 	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
 	display_write_str(&dsp_startup, "|   HIGH TORQUE    |",3,0);
 	
+	
+	 
+
 	struct DISPLAY_PAGE dsp_debug = get_empty_display();
 	//dsp_debug.number = 2;
 	display_write_str(&dsp_debug,"TSV:   V  ACCU:  . C", 0, 0);
 	display_write_str(&dsp_debug,"LVV:  . V COOL:  . C", 1, 0);
-	display_write_str(&dsp_debug,"APPS1:  % APPS2:  % ", 2, 0);
+	display_write_str(&dsp_debug,"APPS1:   %APPS2:   %", 2, 0);
 	display_write_str(&dsp_debug,"BPF:  BPR:          ", 3, 0);
 	
 	struct DISPLAY_PAGE dsp_temp = get_empty_display();
 	
 	struct DISPLAY_PAGE dsp_main = get_empty_display();
-	//dsp_main.number = 1;
+	
 	
 	display_write_str(&dsp_main,"INV:  . C MTR:   . C", 0, 0);
 	display_write_str(&dsp_main,"TSV:   V  ACCU:  . C", 1, 0);
 	display_write_str(&dsp_main,"LVV:  . V COOL:  . C", 2, 0);
 	display_write_str(&dsp_main,"APPS:               ", 3, 0);
-	
-	//dsp_main->data[0]
-	
 	
 
 	//Variable die das aktive Display hält!
@@ -104,6 +109,7 @@ int main(void)
 		&dsp_debug
 	};
 	
+	active_display = &dsp_startup;
 	
 	while (1)
 	{
@@ -118,7 +124,7 @@ int main(void)
 		}
 		
 		
-		if (time_10ms > 9){
+		if (time_10ms >9){
 			
 			
 			
@@ -182,11 +188,13 @@ int main(void)
 				dsp_debug.data [1][16] = ((cooling_1/10)%10)+48;
 				dsp_debug.data [1][15] = ((cooling_1/100)%10)+48;
 				
-				dsp_debug.data [2][7] = (APPS1%10)+48;
-				dsp_debug.data [2][6] = ((APPS1/10)%10)+48;
+				dsp_debug.data [2][8] = (APPS1%10)+48;
+				dsp_debug.data [2][7] = ((APPS1/10)%10)+48;
+				dsp_debug.data [2][6] = ((APPS1/100)%10)+48;
 				
-				dsp_debug.data [2][17] = (APPS2%10)+48;
-				dsp_debug.data [2][16] = ((APPS2/10)%10)+48;
+				dsp_debug.data [2][18] = (APPS2%10)+48;
+				dsp_debug.data [2][17] = ((APPS2/10)%10)+48;
+				dsp_debug.data [2][16] = ((APPS2/100)%10)+48;
 				
 				dsp_debug.data [3][5] = (BPSF%10)+48;
 				dsp_debug.data [3][4] = ((BPSF/10)%10)+48;
@@ -203,25 +211,26 @@ int main(void)
 				//display_write_str(active_display, "       STEHEN       ",3,0);
 			//}
 			
-			//display_main(active_display);
-			
-			if(led_test == 1){
+			if(led_test){
 				bms_error(1);
-				PORTA |= (1<<PA2);
+				PORTA |= (1<<PA2);		// IMD LED
+				if (sys_time >= LED_TEST_TIME){	// IMD & AMS error LED test 
+					PORTA &= ~(1<<PA2);
+					led_test = 0;
+				}
 			}
-			PORTG ^= (1<<PG3);
+			
+			
+			PORTG ^= (1<<PG3);		//Heart LED
 			time_10ms = 0;
 			time_300ms++;
-			if(time_300ms > 29){
-				//struct DISPLAY_PAGE *active_display = &dsp_main;
-				//active_display = get_dsp_mode();
+			
+			if(sys_time >= SYSTEM_STARTUP_TIME){
+				
 				active_display = page_order[get_dsp_mode()%NELEMS(page_order)];
-				led_test = 0;
-				PORTA &= ~(1<<PA2);
-				
-				//time_300ms=0;	
-				
 			}
+			
+			
 		}
 		
 	}
