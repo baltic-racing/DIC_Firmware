@@ -197,31 +197,6 @@ struct CAN_MOB inv00_mob;
 // 0: MCU Temperature
 struct CAN_MOB inv01_mob;
 
-// CAN MOB 0 from Inverter1.
-// data layout:
-// 7: Voltage In
-// 6: Voltage In
-// 5: DUTY
-// 4: DUTY
-// 3: ERPM
-// 2: ERPM
-// 1: ERPM
-// 0: ERPM
-struct CAN_MOB inv10_mob;
-
-// CAN MOB 1 from Inverter1.
-// data layout:
-// 7: 0xFF
-// 6: 0xFF
-// 5: 0xFF
-// 4: Fault Code
-// 3: Motor Temperature
-// 2: Motor Temperature
-// 1: MCU Temperature
-// 0: MCU Temperature
-struct CAN_MOB inv11_mob;
-
-
 
 void init_mobs(){
 	
@@ -262,24 +237,14 @@ void init_mobs(){
 	vcu_mob.mob_number = 8;
 	
 	
-	//
-	//inv00_mob.mob_id = INV0_0_MOB_ID;
-	//inv00_mob.mob_idmask = 0xffff;
-	//inv00_mob.mob_number = 8;
-	//
-	//inv01_mob.mob_id = INV0_1_MOB_ID;
-	//inv01_mob.mob_idmask = 0xffff;
-	//inv01_mob.mob_number = 9;
-	//
-	//inv10_mob.mob_id = INV0_1_MOB_ID;
-	//inv10_mob.mob_idmask = 0xffff;
-	//inv10_mob.mob_number = 10;
-	//
-	//inv11_mob.mob_id = INV1_1_MOB_ID;
-	//inv11_mob.mob_idmask = 0xffff;
-	//inv11_mob.mob_number = 11;
 	
+	inv00_mob.mob_id = INV0_0_MOB_ID;
+	inv00_mob.mob_idmask = 0xffff;
+	inv00_mob.mob_number = 9;
 	
+	inv01_mob.mob_id = INV0_1_MOB_ID;
+	inv01_mob.mob_idmask = 0xffff;
+	inv01_mob.mob_number = 10;
 	
 }
 
@@ -307,8 +272,8 @@ void can_receive(){
 	can_rx(&fusebox_mob, mob_databytes[FUSEBOX_DATA]);
 	can_rx(&swc_mob, mob_databytes[SWC_DATA]);
 	can_rx(&vcu_mob, mob_databytes[VCU_DATA]);
-	//can_rx(&inv01_mob, mob_databytes[INV01_DATA]);
-	//can_rx(&inv11_mob, mob_databytes[INV11_DATA]);
+	can_rx(&inv00_mob, mob_databytes[INV00_DATA]);
+	can_rx(&inv01_mob, mob_databytes[INV01_DATA]);
 	
 	
 }
@@ -376,8 +341,8 @@ void can_put_data(){
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
 	
-	//motor_temp_1 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
-	//motor_temp_0 = (mob_databytes[INV11_DATA][3] | (mob_databytes[INV11_DATA][2] << 8));
+	motor_temp_1 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8));
+	motor_temp_0 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
 	
 	if (motor_temp_1>motor_temp_0)
 	{
@@ -388,8 +353,8 @@ void can_put_data(){
 		motor_temp = motor_temp_0;
 	}
 	
-	//mcu_temp_0 = (mob_databytes[INV01_DATA][1] | (mob_databytes[INV01_DATA][0] << 8));
-	//mcu_temp_1 = (mob_databytes[INV11_DATA][1] | (mob_databytes[INV11_DATA][0] << 8));
+	mcu_temp_0 = (mob_databytes[INV00_DATA][1] | (mob_databytes[INV00_DATA][0] << 8));		//INV Temp
+	mcu_temp_1 = (mob_databytes[INV01_DATA][1] | (mob_databytes[INV01_DATA][0] << 8));		//INV Temp
 	
 	if (mcu_temp_1>mcu_temp_0)
 	{

@@ -30,12 +30,10 @@
 
 #define vcu_0_mob_ID (uint16_t) 0x300
 
-//
-//#define INV0_0_MOB_ID (uint16_t) 0x00A
-//#define INV0_1_MOB_ID (uint16_t) 0x04A
-//
-//#define INV1_0_MOB_ID (uint16_t) 0x014
-//#define INV1_1_MOB_ID (uint16_t) 0x054
+
+#define INV0_0_MOB_ID (uint16_t) 0x44A
+#define INV0_1_MOB_ID (uint16_t) 0x453
+
 
 
 #define DSP_MODE_BYTE 1
@@ -55,11 +53,9 @@
 
 #define VCU_DATA 8
 
-//#define INV00_DATA 8
-//#define INV01_DATA 9
-//
-//#define INV10_DATA 10
-//#define INV11_DATA 11
+#define INV00_DATA 9
+#define INV01_DATA 10
+
 
 
 void init_mobs();

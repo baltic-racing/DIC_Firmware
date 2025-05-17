@@ -58,6 +58,7 @@ int main(void)
 	uint8_t dsp = 0;
 	uint8_t time_10ms = 0;
 	uint8_t time_50ms = 0;
+	uint8_t time_100ms = 0;
 	uint8_t error_ams = 2;
 	uint8_t activate_ams = 0;
 	unsigned long time_300ms = 0;
@@ -73,11 +74,16 @@ int main(void)
 	
 	//display pages holding data
 	struct DISPLAY_PAGE dsp_startup = get_empty_display();
-	//dsp_startup.number = 0;
+	dsp_startup.number = 0;
 	display_write_str(&dsp_startup, "|    WELCOME TO    |",0,0);
 	display_write_str(&dsp_startup, "|      TY 25       |",1,0);
 	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
 	display_write_str(&dsp_startup, "|   HIGH TORQUE    |",3,0);
+	
+	//display_write_str(&dsp_startup, "|                  |",0,0);
+	//display_write_str(&dsp_startup, "|      .kotz       |",1,0);
+	//display_write_str(&dsp_startup, "|                  |",2,0);
+	//display_write_str(&dsp_startup, "|                  |",3,0);
 	
 	
 	 
@@ -121,6 +127,7 @@ int main(void)
 		if((sys_time - sys_time_old) >= 1){
 			sys_time_old = sys_time;
 			time_10ms++;
+			time_100ms++;
 		}
 		
 		
@@ -129,13 +136,29 @@ int main(void)
 			
 			
 			
-			can_transmit();
+			
 			can_receive();
 			can_put_data();
 			
 			
 			if(active_display == &dsp_startup)
 			{
+				pre_defined_led_colors(PE_WHITE);
+				//led_top_light(0);
+				//led_top_light(1);
+				//led_top_light(2);
+				//led_top_light(3);
+				//led_top_light(4);
+				//led_top_light(5);
+				//led_top_light(6);
+				//led_top_light(7);
+				//led_top_light(8);
+				//led_top_light(9);
+				//led_top_light(10);
+				//led_top_light(11);
+				//led_top_light(12);
+				//led_top_light(13);
+				//led_top_light(14);
 				
 			}
 			
@@ -165,9 +188,9 @@ int main(void)
 				dsp_main.data [2][16] = ((cooling_1/10)%10)+48;
 				dsp_main.data [2][15] = ((cooling_1/100)%10)+48;
 				
-				dsp_main.data [3][8] = (APPS2%10)+48;
-				dsp_main.data [3][7] = ((APPS2/10)%10)+48;
-				dsp_main.data [3][6] = ((APPS2/100)%10)+48;
+				dsp_main.data [3][8] = (APPS1%10)+48;
+				dsp_main.data [3][7] = ((APPS1/10)%10)+48;
+				dsp_main.data [3][6] = ((APPS1/100)%10)+48;
 				
 			}
 			if(active_display == &dsp_debug)
@@ -231,6 +254,12 @@ int main(void)
 			}
 			
 			
+		}
+		if (time_100ms > 99){
+			
+			can_transmit();
+			
+			time_100ms = 0;
 		}
 		
 	}
