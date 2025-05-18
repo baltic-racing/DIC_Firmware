@@ -66,7 +66,7 @@ int main(void)
 	sei();
 	//this needs interrupts to be enabled
 	configure_portextenders();
-	pre_defined_led_colors(PE_OFF);
+	pre_defined_led_colors(PE_RED);
 	
 	
 	//dispaly state -> saves postitions and stuff
@@ -74,7 +74,7 @@ int main(void)
 	
 	//display pages holding data
 	struct DISPLAY_PAGE dsp_startup = get_empty_display();
-	dsp_startup.number = 0;
+	//dsp_startup.number = 0;
 	display_write_str(&dsp_startup, "|    WELCOME TO    |",0,0);
 	display_write_str(&dsp_startup, "|      TY 25       |",1,0);
 	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
@@ -143,7 +143,7 @@ int main(void)
 			
 			if(active_display == &dsp_startup)
 			{
-				pre_defined_led_colors(PE_WHITE);
+				//pre_defined_led_colors(PE_WHITE);
 				//led_top_light(0);
 				//led_top_light(1);
 				//led_top_light(2);

@@ -12,6 +12,11 @@
 #include "portextender.h"
 #include "display.h"
 #include "helpers.h"
+#include "sys_timer.h"
+
+
+#define BSPD_STARTUP_TIME 15000
+
 
 uint8_t mob_databytes[12][8];
 
@@ -42,6 +47,7 @@ uint16_t mcu_temp = 0;
 
 uint8_t Ready_2_Drive = 0;
 uint8_t TS_ON = 0;
+uint8_t TSon_enabled =0;
 uint8_t SDCIDIC = 0;
 
 uint16_t battery_voltage = 0;
@@ -63,6 +69,7 @@ uint8_t fault_code_1 = 0;
 
 uint16_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
+extern volatile unsigned long sys_time;
 
 
 // CAN MOB 0 from AMS.
@@ -328,8 +335,15 @@ void can_put_data(){
 	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
 	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
 	//cooling_temp_deg =  ((0.128*cooling_1) - (8.137))*10; // NTC Kurve ist linearisiert im Bereich 80°-20°, außerhalb ungenauer
+	if(sys_time>=BSPD_STARTUP_TIME){
+		TS_ON = (~PINA & (1 << PA0));
+		if(TSon_enabled==0){
+			pre_defined_led_colors(PE_OFF);
+			
+		}
+		TSon_enabled=1;
+	}
 	
-	TS_ON = (~PINA & (1 << PA0));
 	Ready_2_Drive = 0;
 	/*
 	if (BPSR >= 10 && precharge_active){
