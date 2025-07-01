@@ -53,6 +53,10 @@ uint8_t SDCIDIC = 0;
 uint16_t battery_voltage = 0;
 uint8_t SDCIFB = 0;
 uint16_t fuse_readout = 0;
+uint8_t FRO_value = 0; 
+uint8_t fr_values[14] = {0};
+
+uint8_t Akku_fan_status = 0;
 
 uint16_t gps_speed = 0;
 
@@ -147,7 +151,7 @@ struct CAN_MOB dic_mob;
 // CAN MOB from Fusebox.
 // data layout:
 // 7: Fuse Read Out
-// 6: Fuse Read Out
+// 6: Akku_fan_on
 // 5: X
 // 4: Shutdown Circuit Indicator Fusebox
 // 3: Voltage LV Battery
@@ -354,6 +358,21 @@ void can_put_data(){
 	battery_voltage = mob_databytes[FUSEBOX_DATA][2] | (mob_databytes[FUSEBOX_DATA][3] << 8);
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
+	
+	fuse_readout = ((mob_databytes[FUSEBOX_DATA][7] & 11111110)/10); //Berechnung der gesendeten Fuse(-Stelle)
+	FRO_value = (mob_databytes[FUSEBOX_DATA][7] & 00000001); //Prüfung, ob Fuse gezogen oder nicht
+	
+	if (FRO_value == 1)
+	{
+		fr_values[fuse_readout] = 1;
+	}
+	else
+	{
+		fr_values[fuse_readout] = NULL;
+	}
+	
+	Akku_fan_status = (mob_databytes[FUSEBOX_DATA][6] & 00000001);
+	
 	
 	motor_temp_1 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8));
 	motor_temp_0 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));

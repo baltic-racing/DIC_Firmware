@@ -31,6 +31,13 @@ extern uint16_t motor_temp_1;
 extern uint16_t mcu_temp_1;
 extern uint16_t motor_temp_0;
 extern uint16_t mcu_temp_0;
+extern uint8_t FRO_value;
+extern uint8_t fr_values[14];
+//extern uint8_t sdci_values;
+extern uint8_t Akku_fan_status;
+
+
+void Akku_fan_LED(Akku_fan_status);
 
 // extern uint16_t bms_max_voltage;
 //extern uint16_t bms_min_voltage;
@@ -78,7 +85,7 @@ int main(void)
 	display_write_str(&dsp_startup, "|    WELCOME TO    |",0,0);
 	display_write_str(&dsp_startup, "|      TY 25       |",1,0);
 	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
-	display_write_str(&dsp_startup, "|   HIGH TORQUE    |",3,0);
+	display_write_str(&dsp_startup, "|   HAI  TORQUE    |",3,0);
 	
 	//display_write_str(&dsp_startup, "|                  |",0,0);
 	//display_write_str(&dsp_startup, "|      .kotz       |",1,0);
@@ -98,21 +105,46 @@ int main(void)
 	struct DISPLAY_PAGE dsp_temp = get_empty_display();
 	
 	struct DISPLAY_PAGE dsp_main = get_empty_display();
-	
-	
 	display_write_str(&dsp_main,"INV:  . C MTR:   . C", 0, 0);
 	display_write_str(&dsp_main,"TSV:   V  ACCU:  . C", 1, 0);
 	display_write_str(&dsp_main,"LVV:  . V COOL:  . C", 2, 0);
 	display_write_str(&dsp_main,"APPS:               ", 3, 0);
 	
+	struct DISPLAY_PAGE dsp_FRO0 = get_empty_display();
+	//
+	display_write_str(&dsp_FRO0,"---FUSE READ OUT----", 0, 0);
+	display_write_str(&dsp_FRO0,"AIM :               ", 1, 0);
+	display_write_str(&dsp_FRO0,"INV1:      INV0:    ", 2, 0);
+	display_write_str(&dsp_FRO0,"R2D2:      WP  :    ", 3, 0);
+	
+	struct DISPLAY_PAGE dsp_FRO1 = get_empty_display();
+	//
+	display_write_str(&dsp_FRO1,"BL  :      SERV:    ", 0, 0);
+	display_write_str(&dsp_FRO1,"SDC :      TSAL:    ", 1, 0);
+	display_write_str(&dsp_FRO1,"TSAC:      HV_D:    ", 2, 0);
+	display_write_str(&dsp_FRO1,"FTSA:      FPU  :   ", 3, 0);
+	
+	struct DISPLAY_PAGE dsp_reduced = get_empty_display();
+	//dsp_debug.number = 2;
+	display_write_str(&dsp_reduced,"TSV:   V  ACCU:  . C", 0, 0);
+	display_write_str(&dsp_reduced,"                    ", 1, 0);
+	display_write_str(&dsp_reduced,"LVV:  . V COOL:  . C", 2, 0);
+	display_write_str(&dsp_reduced,"                    ", 3, 0);
+	
 
 	//Variable die das aktive Display hält!
 	struct DISPLAY_PAGE *active_display = &dsp_startup;
 	
-	uint32_t page_order[3] = {
+	uint32_t page_order[6] = {
 		&dsp_startup,
 		&dsp_main,
-		&dsp_debug
+		&dsp_debug,
+		&dsp_FRO0,
+		&dsp_FRO1,
+		&dsp_reduced
+		
+		//&dsp_SDC0,
+		//&dsp_SDCI1
 	};
 	
 	active_display = &dsp_startup;
@@ -226,6 +258,74 @@ int main(void)
 				dsp_debug.data [3][10] = ((BPSR/10)%10)+48;
 			}
 			
+			if (active_display == &dsp_FRO0)
+			{
+				dsp_FRO0.data [1][6] = ((fr_values[12]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO0.data [2][6] = ((fr_values[11]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO0.data [1][17] = ((fr_values[10]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO0.data [3][6] = ((fr_values[9]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO0.data [3][17] = ((fr_values[8]) & 1) ? ' ' : 'X';
+			}
+			
+			if (active_display == &dsp_FRO1)
+			{
+				dsp_FRO1.data [0][6] = ((fr_values[7]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO1.data [0][17] = ((fr_values[6]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO1.data [1][6] = ((fr_values[5]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO1.data [1][17] = ((fr_values[4]) & 1) ? ' ' : 'X';
+			
+				dsp_FRO1.data [2][6] = ((fr_values[3]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO1.data [2][17] = ((fr_values[2]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO1.data [3][6] = ((fr_values[1]) & 1) ? ' ' : 'X';
+				
+				dsp_FRO1.data [3][17] = ((fr_values[0]) & 1) ? ' ' : 'X';
+			}
+			
+			
+			
+			
+			if (active_display == &dsp_reduced)
+			{
+				dsp_reduced.data [0][6] = (ts_voltage%10)+48;
+				dsp_reduced.data [0][5] = ((ts_voltage/10)%10)+48;
+				dsp_reduced.data [0][4] = ((ts_voltage/100)%10)+48;
+				
+				dsp_reduced.data [0][18] = (bms_max_temp%10)+48;
+				dsp_reduced.data [0][16] = ((bms_max_temp/10)%10)+48;
+				dsp_reduced.data [0][15] = ((bms_max_temp/100)%10)+48;
+				
+				dsp_reduced.data [2][7] = (battery_voltage%10)+48;
+				dsp_reduced.data [2][5] = ((battery_voltage/10)%10)+48;
+				dsp_reduced.data [2][4] = ((battery_voltage/100)%10)+48;
+				
+				dsp_reduced.data [2][18] = (cooling_1%10)+48;
+				dsp_reduced.data [2][16] = ((cooling_1/10)%10)+48;
+				dsp_reduced.data [2][15] = ((cooling_1/100)%10)+48;
+			}
+			
+			
+			
+			//if(active_display == &dsp_SDCI0)
+			//{
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
+			//}
+			
 			//else
 			//{
 				//display_write_str(active_display, "       HIER         ",0,0);
@@ -248,9 +348,22 @@ int main(void)
 			time_10ms = 0;
 			time_300ms++;
 			
-			if(sys_time >= SYSTEM_STARTUP_TIME){
+			if(sys_time >= SYSTEM_STARTUP_TIME)
+			{
 				
 				active_display = page_order[get_dsp_mode()%NELEMS(page_order)];
+				void Akku_fan_LED(Akku_fan_status)
+				{
+					switch (Akku_fan_status)
+					{
+					case 1:
+					pre_defined_led_colors_right(PE_BLUE);
+					break;
+					case 0:
+					pre_defined_led_colors_right(PE_OFF);
+					break;
+					}
+				}
 			}
 			
 			
