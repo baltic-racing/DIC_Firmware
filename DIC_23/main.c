@@ -43,6 +43,11 @@ void Akku_fan_LED(Akku_fan_status);
 //extern uint16_t bms_min_voltage;
 uint8_t led_test = 1;
 uint8_t system_startup = 0;
+uint8_t wait = 0;
+
+uint8_t mode_selection_active = 0;
+uint8_t active_mode = 3;
+uint8_t selected_mode = 3;
 //extern uint16_t bms_min_temp;
 
 
@@ -131,17 +136,25 @@ int main(void)
 	display_write_str(&dsp_reduced,"LVV:  . V COOL:  . C", 2, 0);
 	display_write_str(&dsp_reduced,"                    ", 3, 0);
 	
+	struct DISPLAY_PAGE dsp_modes = get_empty_display();
+	//dsp_debug.number = 2;
+	display_write_str(&dsp_modes,"--------SET---------", 0, 0);
+	display_write_str(&dsp_modes,"MODE:     ENDURANCE ", 1, 0);
+	display_write_str(&dsp_modes,"                    ", 2, 0);
+	display_write_str(&dsp_modes,"                    ", 3, 0);
+	
 
 	//Variable die das aktive Display hält!
 	struct DISPLAY_PAGE *active_display = &dsp_startup;
 	
-	uint32_t page_order[6] = {
+	uint32_t page_order[7] = {
 		&dsp_startup,
 		&dsp_main,
 		&dsp_debug,
 		&dsp_FRO0,
 		&dsp_FRO1,
-		&dsp_reduced
+		&dsp_reduced,
+		&dsp_modes
 		
 		//&dsp_SDC0,
 		//&dsp_SDCI1
@@ -310,8 +323,62 @@ int main(void)
 				dsp_reduced.data [2][18] = (cooling_1%10)+48;
 				dsp_reduced.data [2][16] = ((cooling_1/10)%10)+48;
 				dsp_reduced.data [2][15] = ((cooling_1/100)%10)+48;
+				
+				dsp_reduced.data [3][18] = get_swc_buttons()+48;
+				
 			}
 			
+			if (active_display == &dsp_modes)
+			{
+				if(get_swc_buttons()==2){
+					
+					pre_defined_led_colors(PE_AMBER);
+					mode_selection_active = 1;
+					wait = 1;
+					
+				}
+				if(mode_selection_active == 1 ){
+					selected_mode = get_dsp_mode()%6;
+					
+					if (get_swc_buttons() == 1 ){
+						
+						active_mode = selected_mode;
+						pre_defined_led_colors(PE_GREEN);
+						mode_selection_active = 0;
+						
+					}
+					
+				}
+				if (get_swc_buttons() == 12){
+					mode_selection_active = 0;
+					wait = 0;
+					pre_defined_led_colors(PE_OFF);
+					selected_mode = active_mode;
+				}
+				
+				
+				switch (selected_mode)
+				{
+					case 0: 
+					display_write_str(&dsp_modes,"MODE:     ACCEL     ", 1, 0);
+					break;
+					case 1:
+					display_write_str(&dsp_modes,"MODE:     SKIDPAD   ", 1, 0);
+					break;
+					case 2: 
+					display_write_str(&dsp_modes,"MODE:     AUTOCROSS ", 1, 0);
+					break;
+					case 3: 
+					display_write_str(&dsp_modes,"MODE:     ENDURANCE ", 1, 0);
+					break;
+					case 4: 
+					display_write_str(&dsp_modes,"MODE:     FUN1      ", 1, 0);
+					break;
+					case 5: display_write_str(&dsp_modes,"MODE:     FUN2      ", 1, 0);
+					break;
+					
+				}
+			}
 			
 			
 			//if(active_display == &dsp_SDCI0)
@@ -350,8 +417,10 @@ int main(void)
 			
 			if(sys_time >= SYSTEM_STARTUP_TIME)
 			{
+				if(wait == 0){
+					active_display = page_order[get_dsp_mode()%NELEMS(page_order)];
+				}
 				
-				active_display = page_order[get_dsp_mode()%NELEMS(page_order)];
 				void Akku_fan_LED(Akku_fan_status)
 				{
 					switch (Akku_fan_status)

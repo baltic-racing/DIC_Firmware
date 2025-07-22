@@ -74,6 +74,7 @@ uint8_t fault_code_1 = 0;
 uint16_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
 extern volatile unsigned long sys_time;
+extern uint8_t wait;
 
 
 // CAN MOB 0 from AMS.
@@ -297,6 +298,19 @@ uint8_t get_dsp_mode(){
 	return mob_databytes[SWC_DATA][DSP_MODE_BYTE];
 	
 }
+uint8_t get_swc_buttons(){
+	/*
+	 gibt die Knöpfe des Lenkrads als ein zusammengesetztes int8_t 
+	 ---x PBL Push button Left
+	 --x- PBR Push button Right
+	 -x-- SWTL Schaltwippe top left
+	 x--- SWTR Schaltwippe top right
+	*/
+	uint8_t wert = 0;
+	
+	wert = mob_databytes[SWC_DATA][PBL] | (mob_databytes[SWC_DATA][PBR]<<1) | (((~mob_databytes[SWC_DATA][SWTL])&1)<<2) | (((~mob_databytes[SWC_DATA][SWTR])&1)<<3);
+	return wert;
+}
 
 uint8_t* get_mob_data(uint8_t mob){
 	return mob_databytes[mob];
@@ -339,7 +353,7 @@ void can_put_data(){
 	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
 	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
 	//cooling_temp_deg =  ((0.128*cooling_1) - (8.137))*10; // NTC Kurve ist linearisiert im Bereich 80°-20°, außerhalb ungenauer
-	if(sys_time>=BSPD_STARTUP_TIME){
+	if(sys_time>=BSPD_STARTUP_TIME && wait == 0){
 		TS_ON = (~PINA & (1 << PA0));
 		if(TSon_enabled==0){
 			pre_defined_led_colors(PE_OFF);

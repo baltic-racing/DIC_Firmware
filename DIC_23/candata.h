@@ -37,6 +37,10 @@
 
 
 #define DSP_MODE_BYTE 1
+#define PBL 2
+#define PBR 3
+#define SWTL 4
+#define SWTR 6
 
 #define AMS0_DATA 0
 #define AMS1_DATA 1
@@ -66,6 +70,8 @@ void can_transmit();
 void can_put_data();
 
 uint8_t get_dsp_mode();
+
+uint8_t get_swc_mode();
 
 //this function will return all databytes from a mob
 uint8_t* get_mob_data(uint8_t mob);
