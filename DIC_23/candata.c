@@ -75,7 +75,7 @@ uint16_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
 extern volatile unsigned long sys_time;
 extern uint8_t wait;
-extern active_mode;
+extern uint8_t active_mode;
 
 
 // CAN MOB 0 from AMS.
@@ -412,10 +412,10 @@ void can_put_data(){
 	{
 		mcu_temp = mcu_temp_0;
 	}
-	mob_databytes[DIC_DATA][0] = 0; // TS_ON;
+	mob_databytes[DIC_DATA][0] = TS_ON; // TS_ON;
 	mob_databytes[DIC_DATA][1] =  Ready_2_Drive;
 	mob_databytes[DIC_DATA][2] = SDCIDIC;
-	mob_databytes[DIC_DATA][5] = TS_ON;
+	mob_databytes[DIC_DATA][5] = 0;
 	mob_databytes[DIC_DATA][7] = active_mode;
 	
 	
