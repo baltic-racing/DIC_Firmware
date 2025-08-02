@@ -363,13 +363,32 @@ void can_put_data(){
 		TSon_enabled=1;
 	}
 	
-	Ready_2_Drive = 0;
+	//Ready_2_Drive = 0;
 	/*
 	if (BPSR >= 10 && precharge_active){
 		Ready_2_Drive = (~PINA >> PA1) & PA1;
 	}
 	*/
-	Ready_2_Drive = (~PINA >> PA1) & PA1;
+	//Ready_2_Drive = (~PINA >> PA1) & PA1;
+	/*
+	if ((PINA & (1 << PA1)) == 0)
+	{
+		Ready_2_Drive = 1;
+	} 
+	else
+	{
+		Ready_2_Drive = 0;
+	}
+	*/
+		if (!(PINA & (1 << PA1)))
+		{
+			Ready_2_Drive = 1;
+		}
+		else
+		{
+			Ready_2_Drive = 0;
+		}
+	
 	battery_voltage = mob_databytes[FUSEBOX_DATA][2] | (mob_databytes[FUSEBOX_DATA][3] << 8);
 	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
 	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
