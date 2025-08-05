@@ -16,6 +16,7 @@
 
 
 #define BSPD_STARTUP_TIME 15000
+#define AMS_DISCONNECT_TIME 1000
 
 
 uint8_t mob_databytes[12][8];
@@ -74,8 +75,10 @@ uint8_t fault_code_1 = 0;
 uint16_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
 extern volatile unsigned long sys_time;
+volatile unsigned long ams_disconnect_timestamp = 0;
 extern uint8_t wait;
 extern uint8_t active_mode;
+
 
 
 // CAN MOB 0 from AMS.
@@ -265,13 +268,12 @@ void can_receive(){
 	
 	can_rx(&ams0_mob, mob_databytes[AMS0_DATA]);
 	uint8_t ams_counter = mob_databytes[AMS0_DATA][7];
-	if (ams_counter == last_ams_counter){
-		ams_error_counter++;
-	} else {
-		ams_error_counter = 0;
+	if (ams_counter != last_ams_counter){
+		ams_disconnect_timestamp = sys_time;
 	}
-	last_ams_counter = ams_counter;			// AMS error muss 100 mal kommen, dann dann leuchtet led bar 
-	if (ams_error_counter > 1000 || ams_error != 0){
+	
+	last_ams_counter = ams_counter;			 
+	if (sys_time - ams_disconnect_timestamp >= AMS_DISCONNECT_TIME){
 		//LED anschalten
 		bms_error(1);
 	} else {

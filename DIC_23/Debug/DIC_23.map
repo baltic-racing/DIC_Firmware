@@ -332,7 +332,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x3f04
+.text           0x00000000     0x3f3c
  *(.vectors)
  .vectors       0x00000000       0x94 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/at90can128/avr51/crtat90can128.o
                 0x00000000                __vector_default
@@ -430,91 +430,91 @@ END GROUP
                 0x0000015a                __vector_14
                 0x0000015a                __vector_10
                 0x0000015a                __vector_18
- .text          0x0000015c      0x6d6 candata.o
+ .text          0x0000015c      0x70e candata.o
                 0x0000015c                init_mobs
                 0x000002f4                can_receive
-                0x000003c2                can_transmit
-                0x000003dc                get_dsp_mode
-                0x000003ee                get_swc_buttons
-                0x0000044a                get_mob_data
-                0x00000474                can_put_data
- .text          0x00000832      0x3e0 canlib.o
-                0x00000832                can_check_free
-                0x000008ac                can_cfg
-                0x000009ba                can_rx
-                0x00000af2                can_tx
- .text          0x00000c12      0xb14 display.o
-                0x00000c12                draw_char
-                0x00000cd6                get_empty_state
-                0x00000cf2                get_empty_display
-                0x00000d9e                display_write_data
-                0x00000e3c                display_definechars
-                0x00000f56                display_customchar
-                0x00000fec                display_write_str
-                0x00001098                init_display
-                0x000010d6                display_meme
-                0x000010f2                display_voltage
-                0x0000122a                display_temp
-                0x00001370                display_large_number
- .text          0x00001726       0x6c helpers.o
-                0x00001726                invert_binary_number
- .text          0x00001792     0x1a68 main.o
-                0x00001792                main
- .text          0x000031fa      0xa8c portextender.o
-                0x000031fa                configure_spi_bus
-                0x00003292                spi_free
-                0x000032ae                send_data
-                0x00003356                send_data_blocking
-                0x000033a2                extender_leds
-                0x000033ca                extender_leds_blocking
-                0x000033f2                __vector_20
-                0x000034a8                configure_portextenders
-                0x000034e0                pre_defined_led_colors_right
-                0x0000355e                pre_defined_led_colors_left
-                0x000035dc                pre_defined_led_colors
-                0x0000368c                clear_top_left_bar
-                0x000036c0                clear_top_right_bar
-                0x000036ea                led_top_left_bar
-                0x0000376c                led_top_right_bar
-                0x000037fa                led_left_top_bar_select
-                0x00003872                led_right_top_bar_select
-                0x00003916                led_top_light
-                0x00003a82                led_top_clear
-                0x00003bee                bms_error
-                0x00003c3c                led_startup_animation
- .text          0x00003c86       0xec port_definitions.o
-                0x00003c86                port_config
- .text          0x00003d72       0x94 sys_timer.o
-                0x00003d72                sys_timer_config
-                0x00003da0                __vector_16
-                0x00003e06                . = ALIGN (0x2)
+                0x000003fa                can_transmit
+                0x00000414                get_dsp_mode
+                0x00000426                get_swc_buttons
+                0x00000482                get_mob_data
+                0x000004ac                can_put_data
+ .text          0x0000086a      0x3e0 canlib.o
+                0x0000086a                can_check_free
+                0x000008e4                can_cfg
+                0x000009f2                can_rx
+                0x00000b2a                can_tx
+ .text          0x00000c4a      0xb14 display.o
+                0x00000c4a                draw_char
+                0x00000d0e                get_empty_state
+                0x00000d2a                get_empty_display
+                0x00000dd6                display_write_data
+                0x00000e74                display_definechars
+                0x00000f8e                display_customchar
+                0x00001024                display_write_str
+                0x000010d0                init_display
+                0x0000110e                display_meme
+                0x0000112a                display_voltage
+                0x00001262                display_temp
+                0x000013a8                display_large_number
+ .text          0x0000175e       0x6c helpers.o
+                0x0000175e                invert_binary_number
+ .text          0x000017ca     0x1a68 main.o
+                0x000017ca                main
+ .text          0x00003232      0xa8c portextender.o
+                0x00003232                configure_spi_bus
+                0x000032ca                spi_free
+                0x000032e6                send_data
+                0x0000338e                send_data_blocking
+                0x000033da                extender_leds
+                0x00003402                extender_leds_blocking
+                0x0000342a                __vector_20
+                0x000034e0                configure_portextenders
+                0x00003518                pre_defined_led_colors_right
+                0x00003596                pre_defined_led_colors_left
+                0x00003614                pre_defined_led_colors
+                0x000036c4                clear_top_left_bar
+                0x000036f8                clear_top_right_bar
+                0x00003722                led_top_left_bar
+                0x000037a4                led_top_right_bar
+                0x00003832                led_left_top_bar_select
+                0x000038aa                led_right_top_bar_select
+                0x0000394e                led_top_light
+                0x00003aba                led_top_clear
+                0x00003c26                bms_error
+                0x00003c74                led_startup_animation
+ .text          0x00003cbe       0xec port_definitions.o
+                0x00003cbe                port_config
+ .text          0x00003daa       0x94 sys_timer.o
+                0x00003daa                sys_timer_config
+                0x00003dd8                __vector_16
+                0x00003e3e                . = ALIGN (0x2)
  *(.text.*)
  .text.libgcc.div
-                0x00003e06       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_udivmodhi4.o)
-                0x00003e06                __udivmodhi4
+                0x00003e3e       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_udivmodhi4.o)
+                0x00003e3e                __udivmodhi4
  .text.libgcc.div
-                0x00003e2e       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_divmodhi4.o)
-                0x00003e2e                _div
-                0x00003e2e                __divmodhi4
+                0x00003e66       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_divmodhi4.o)
+                0x00003e66                _div
+                0x00003e66                __divmodhi4
  .text.libgcc.div
-                0x00003e54       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_divmodsi4.o)
-                0x00003e54                __divmodsi4
+                0x00003e8c       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_divmodsi4.o)
+                0x00003e8c                __divmodsi4
  .text.libgcc.div
-                0x00003e7c       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_negsi2.o)
-                0x00003e7c                __negsi2
- .text.libgcc   0x00003e8c       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_tablejump2.o)
-                0x00003e8c                __tablejump2__
+                0x00003eb4       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_negsi2.o)
+                0x00003eb4                __negsi2
+ .text.libgcc   0x00003ec4       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_tablejump2.o)
+                0x00003ec4                __tablejump2__
  .text.libgcc.mul
-                0x00003e9e       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_umulhisi3.o)
-                0x00003e9e                __umulhisi3
+                0x00003ed6       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_umulhisi3.o)
+                0x00003ed6                __umulhisi3
  .text.libgcc.div
-                0x00003ebc       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_udivmodsi4.o)
-                0x00003ebc                __udivmodsi4
-                0x00003f00                . = ALIGN (0x2)
+                0x00003ef4       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_udivmodsi4.o)
+                0x00003ef4                __udivmodsi4
+                0x00003f38                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00003f00        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
-                0x00003f00                _exit
-                0x00003f00                exit
+ .fini9         0x00003f38        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+                0x00003f38                _exit
+                0x00003f38                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -533,11 +533,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00003f00        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+ .fini0         0x00003f38        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x00003f04                _etext = .
+                0x00003f3c                _etext = .
 
-.data           0x00800100      0x27e load address 0x00003f04
+.data           0x00800100      0x27e load address 0x00003f3c
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x2 candata.o
@@ -560,10 +560,10 @@ END GROUP
                 0x0080037e                _edata = .
                 0x0080037e                PROVIDE (__data_end, .)
 
-.bss            0x0080037e      0x102
+.bss            0x0080037e      0x106
                 0x0080037e                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x0080037e       0x53 candata.o
+ .bss           0x0080037e       0x57 candata.o
                 0x0080037e                ts_voltage
                 0x00800380                ts_current
                 0x00800382                state_of_charge
@@ -606,41 +606,42 @@ END GROUP
                 0x008003cd                fault_code_1
                 0x008003ce                ams_error_counter
                 0x008003d0                last_ams_counter
- .bss           0x008003d1        0x3 main.o
-                0x008003d1                system_startup
-                0x008003d2                wait
-                0x008003d3                mode_selection_active
- .bss           0x008003d4        0x1 portextender.o
-                0x008003d4                spi_state
- .bss           0x008003d5        0x5 sys_timer.o
-                0x008003d5                sys_time
-                0x008003d9                draw_data
+                0x008003d1                ams_disconnect_timestamp
+ .bss           0x008003d5        0x3 main.o
+                0x008003d5                system_startup
+                0x008003d6                wait
+                0x008003d7                mode_selection_active
+ .bss           0x008003d8        0x1 portextender.o
+                0x008003d8                spi_state
+ .bss           0x008003d9        0x5 sys_timer.o
+                0x008003d9                sys_time
+                0x008003dd                draw_data
  *(.bss*)
  *(COMMON)
- COMMON         0x008003da       0xa2 candata.o
-                0x008003da                dic_mob
-                0x008003e0                swc_mob
-                0x008003e6                shr_mob
-                0x008003ec                inv00_mob
-                0x008003f2                shb_mob
-                0x008003f8                vcu_mob
-                0x008003fe                ams1_mob
-                0x00800404                inv01_mob
-                0x0080040a                ams0_mob
-                0x00800410                mob_databytes
-                0x00800470                shf_mob
-                0x00800476                fusebox_mob
- COMMON         0x0080047c        0x4 portextender.o
-                0x0080047c                current_msg
-                0x00800480                PROVIDE (__bss_end, .)
-                0x00003f04                __data_load_start = LOADADDR (.data)
-                0x00004182                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x008003de       0xa2 candata.o
+                0x008003de                dic_mob
+                0x008003e4                swc_mob
+                0x008003ea                shr_mob
+                0x008003f0                inv00_mob
+                0x008003f6                shb_mob
+                0x008003fc                vcu_mob
+                0x00800402                ams1_mob
+                0x00800408                inv01_mob
+                0x0080040e                ams0_mob
+                0x00800414                mob_databytes
+                0x00800474                shf_mob
+                0x0080047a                fusebox_mob
+ COMMON         0x00800480        0x4 portextender.o
+                0x00800480                current_msg
+                0x00800484                PROVIDE (__bss_end, .)
+                0x00003f3c                __data_load_start = LOADADDR (.data)
+                0x000041ba                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800480        0x0
+.noinit         0x00800484        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800480                _end = .
+                0x00800484                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -734,17 +735,17 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2217
+.debug_info     0x00000000     0x2229
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xa2d C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/at90can128/avr51/crtat90can128.o
- .debug_info    0x00000a2d      0x619 candata.o
- .debug_info    0x00001046      0x1d6 canlib.o
- .debug_info    0x0000121c      0x458 display.o
- .debug_info    0x00001674       0xbe helpers.o
- .debug_info    0x00001732      0x445 main.o
- .debug_info    0x00001b77      0x551 portextender.o
- .debug_info    0x000020c8       0x85 port_definitions.o
- .debug_info    0x0000214d       0xca sys_timer.o
+ .debug_info    0x00000a2d      0x62b candata.o
+ .debug_info    0x00001058      0x1d6 canlib.o
+ .debug_info    0x0000122e      0x458 display.o
+ .debug_info    0x00001686       0xbe helpers.o
+ .debug_info    0x00001744      0x445 main.o
+ .debug_info    0x00001b89      0x551 portextender.o
+ .debug_info    0x000020da       0x85 port_definitions.o
+ .debug_info    0x0000215f       0xca sys_timer.o
 
 .debug_abbrev   0x00000000     0x116a
  *(.debug_abbrev)
@@ -758,59 +759,59 @@ END GROUP
  .debug_abbrev  0x000010b6       0x4d port_definitions.o
  .debug_abbrev  0x00001103       0x67 sys_timer.o
 
-.debug_line     0x00000000     0x1c35
+.debug_line     0x00000000     0x1c23
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x176 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/at90can128/avr51/crtat90can128.o
- .debug_line    0x00000176      0x3c7 candata.o
- .debug_line    0x0000053d      0x29f canlib.o
- .debug_line    0x000007dc      0x4e1 display.o
- .debug_line    0x00000cbd       0xd6 helpers.o
- .debug_line    0x00000d93      0x6e2 main.o
- .debug_line    0x00001475      0x5dd portextender.o
- .debug_line    0x00001a52      0x113 port_definitions.o
- .debug_line    0x00001b65       0xd0 sys_timer.o
+ .debug_line    0x00000176      0x3b5 candata.o
+ .debug_line    0x0000052b      0x29f canlib.o
+ .debug_line    0x000007ca      0x4e1 display.o
+ .debug_line    0x00000cab       0xd6 helpers.o
+ .debug_line    0x00000d81      0x6e2 main.o
+ .debug_line    0x00001463      0x5dd portextender.o
+ .debug_line    0x00001a40      0x113 port_definitions.o
+ .debug_line    0x00001b53       0xd0 sys_timer.o
 
-.debug_frame    0x00000000      0x748
+.debug_frame    0x00000000      0x75c
  *(.debug_frame)
- .debug_frame   0x00000000       0xf4 candata.o
- .debug_frame   0x000000f4       0x94 canlib.o
- .debug_frame   0x00000188      0x1d4 display.o
- .debug_frame   0x0000035c       0x34 helpers.o
- .debug_frame   0x00000390       0x38 main.o
- .debug_frame   0x000003c8      0x2dc portextender.o
- .debug_frame   0x000006a4       0x34 port_definitions.o
- .debug_frame   0x000006d8       0x70 sys_timer.o
+ .debug_frame   0x00000000      0x108 candata.o
+ .debug_frame   0x00000108       0x94 canlib.o
+ .debug_frame   0x0000019c      0x1d4 display.o
+ .debug_frame   0x00000370       0x34 helpers.o
+ .debug_frame   0x000003a4       0x38 main.o
+ .debug_frame   0x000003dc      0x2dc portextender.o
+ .debug_frame   0x000006b8       0x34 port_definitions.o
+ .debug_frame   0x000006ec       0x70 sys_timer.o
 
-.debug_str      0x00000000      0xe5b
+.debug_str      0x00000000      0xe73
  *(.debug_str)
  .debug_str     0x00000000      0x39f C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/at90can128/avr51/crtat90can128.o
- .debug_str     0x0000039f      0x464 candata.o
-                                0x4a9 (size before relaxing)
- .debug_str     0x00000803       0x92 canlib.o
+ .debug_str     0x0000039f      0x47c candata.o
+                                0x4c1 (size before relaxing)
+ .debug_str     0x0000081b       0x92 canlib.o
                                 0x1bb (size before relaxing)
- .debug_str     0x00000895      0x163 display.o
+ .debug_str     0x000008ad      0x163 display.o
                                 0x2be (size before relaxing)
- .debug_str     0x000009f8       0x3d helpers.o
+ .debug_str     0x00000a10       0x3d helpers.o
                                 0x16d (size before relaxing)
- .debug_str     0x00000a35      0x120 main.o
+ .debug_str     0x00000a4d      0x120 main.o
                                 0x37e (size before relaxing)
- .debug_str     0x00000b55      0x2b4 portextender.o
+ .debug_str     0x00000b6d      0x2b4 portextender.o
                                 0x460 (size before relaxing)
- .debug_str     0x00000e09       0x24 port_definitions.o
+ .debug_str     0x00000e21       0x24 port_definitions.o
                                 0x154 (size before relaxing)
- .debug_str     0x00000e2d       0x2e sys_timer.o
+ .debug_str     0x00000e45       0x2e sys_timer.o
                                 0x171 (size before relaxing)
 
-.debug_loc      0x00000000      0xe60
+.debug_loc      0x00000000      0xe94
  *(.debug_loc)
- .debug_loc     0x00000000      0x1c4 candata.o
- .debug_loc     0x000001c4      0x120 canlib.o
- .debug_loc     0x000002e4      0x3ed display.o
- .debug_loc     0x000006d1       0x48 helpers.o
- .debug_loc     0x00000719       0x48 main.o
- .debug_loc     0x00000761      0x600 portextender.o
- .debug_loc     0x00000d61       0x3b port_definitions.o
- .debug_loc     0x00000d9c       0xc4 sys_timer.o
+ .debug_loc     0x00000000      0x1f8 candata.o
+ .debug_loc     0x000001f8      0x120 canlib.o
+ .debug_loc     0x00000318      0x3ed display.o
+ .debug_loc     0x00000705       0x48 helpers.o
+ .debug_loc     0x0000074d       0x48 main.o
+ .debug_loc     0x00000795      0x600 portextender.o
+ .debug_loc     0x00000d95       0x3b port_definitions.o
+ .debug_loc     0x00000dd0       0xc4 sys_timer.o
 
 .debug_macinfo
  *(.debug_macinfo)
