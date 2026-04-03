@@ -88,9 +88,9 @@ int main(void)
 	struct DISPLAY_PAGE dsp_startup = get_empty_display();
 	//dsp_startup.number = 0;
 	display_write_str(&dsp_startup, "|    WELCOME TO    |",0,0);
-	display_write_str(&dsp_startup, "|      TY 25       |",1,0);
+	display_write_str(&dsp_startup, "|      TY 26       |",1,0);
 	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
-	display_write_str(&dsp_startup, "|   HAI  TORQUE    |",3,0);
+	display_write_str(&dsp_startup, "| Martin Mondarsch |",3,0);
 	
 	//display_write_str(&dsp_startup, "|                  |",0,0);
 	//display_write_str(&dsp_startup, "|      .kotz       |",1,0);
