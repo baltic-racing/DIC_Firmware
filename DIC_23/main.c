@@ -89,8 +89,8 @@ int main(void)
 	//dsp_startup.number = 0;
 	display_write_str(&dsp_startup, "|    WELCOME TO    |",0,0);
 	display_write_str(&dsp_startup, "|      TY 26       |",1,0);
-	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
-	display_write_str(&dsp_startup, "| Martin Mondarsch |",3,0);
+	display_write_str(&dsp_startup, "|     TOD DEM      |",2,0);
+	display_write_str(&dsp_startup, "|     KORMORAN     |",3,0);
 	
 	//display_write_str(&dsp_startup, "|                  |",0,0);
 	//display_write_str(&dsp_startup, "|      .kotz       |",1,0);

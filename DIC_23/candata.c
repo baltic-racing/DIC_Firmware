@@ -79,7 +79,9 @@ volatile unsigned long ams_disconnect_timestamp = 0;
 extern uint8_t wait;
 extern uint8_t active_mode;
 
-
+static uint8_t imd_error_count = 0;
+static uint8_t IMD_LED_ON = 0;
+#define IMD_ERROR_THRESHOLD 200  // Anzahl benötigter Empfangsvorgänge
 
 // CAN MOB 0 from AMS.
 // data layout:
@@ -327,7 +329,28 @@ void can_put_data(){
 	//state_of_charge = mob_databytes[AMS0_DATA][4] | (mob_databytes[AMS0_DATA][5] << 8);
 	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
 	imd_error = ((mob_databytes[AMS0_DATA][6]>>6) & 1);
-	if (imd_error == 0){
+	if (imd_error == 0 && !IMD_LED_ON){
+		imd_error_count = 0;          // Zähler zurücksetzen
+		PORTA &= ~(1<<PA2);           // LED aus
+	}
+	else if(!IMD_LED_ON)
+	{
+		if (imd_error_count < IMD_ERROR_THRESHOLD){
+			imd_error_count++;        // Zähler erhöhen
+		}
+		
+		if (imd_error_count >= IMD_ERROR_THRESHOLD){
+			IMD_LED_ON = 1;
+			PORTA |= (1<<PA2);        // LED an (erst nach 10 Empfangsvorgängen = 1s)
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/*if (imd_error == 0){
 		//pre_defined_led_colors(PE_RED);
 		PORTA |= (0<<PA2);
 		//extender_leds_blocking(RGB_LEFT,0|(0<<F_RED));
@@ -338,6 +361,7 @@ void can_put_data(){
 		PORTA |= (1<<PA2);
 		//extender_leds_blocking(RGB_LEFT,0|(1<<F_RED));
 	}
+	*/
 	//can_ok = ((mob_databytes[AMS0_DATA][6]>>5) & 1);
 	precharge_active = ((mob_databytes[AMS0_DATA][6]>>4) & 1);
     //TS_RDY = ((mob_databytes[AMS0_DATA][6]>>3) & 1);
