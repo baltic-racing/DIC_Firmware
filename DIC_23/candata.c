@@ -25,6 +25,7 @@ uint16_t ts_voltage = 0;
 uint16_t ts_current = 0;
 uint16_t state_of_charge = 0;
 uint8_t ams_error = 0;
+uint8_t ams_error_byte = 0;
 uint8_t imd_error = 0;
 uint8_t can_ok = 0;
 uint8_t precharge_active = 0;
@@ -73,6 +74,7 @@ uint16_t motor_temp_1 = 0;
 uint8_t fault_code_1 = 0;
 
 uint16_t ams_error_counter = 0;
+uint16_t ams_error_counter1 = 0;
 uint8_t last_ams_counter = 0;
 extern volatile unsigned long sys_time;
 volatile unsigned long ams_disconnect_timestamp = 0;
@@ -82,6 +84,8 @@ extern uint8_t active_mode;
 static uint8_t imd_error_count = 0;
 static uint8_t IMD_LED_ON = 0;
 #define IMD_ERROR_THRESHOLD 200  // Anzahl benötigter Empfangsvorgänge
+
+extern uint8_t led_test;
 
 // CAN MOB 0 from AMS.
 // data layout:
@@ -273,14 +277,13 @@ void can_receive(){
 	if (ams_counter != last_ams_counter){
 		ams_disconnect_timestamp = sys_time;
 	}
-	
-	last_ams_counter = ams_counter;			 
-	if (sys_time - ams_disconnect_timestamp >= AMS_DISCONNECT_TIME){
+	last_ams_counter = ams_counter;
+	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
+	if ((sys_time-ams_disconnect_timestamp>=AMS_DISCONNECT_TIME)|| ams_error){
 		//LED anschalten
 		bms_error(1);
-	} else {
-		bms_error(0);
-	}
+	} 
+	
 	
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
@@ -327,7 +330,7 @@ void can_put_data(){
 	ts_voltage = ts_voltage/100;
 	//ts_current = mob_databytes[AMS0_DATA][2] | (mob_databytes[AMS0_DATA][3] << 8);
 	//state_of_charge = mob_databytes[AMS0_DATA][4] | (mob_databytes[AMS0_DATA][5] << 8);
-	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
+	//ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
 	imd_error = ((mob_databytes[AMS0_DATA][6]>>6) & 1);
 	if (imd_error == 0 && !IMD_LED_ON){
 		imd_error_count = 0;          // Zähler zurücksetzen

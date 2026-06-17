@@ -42,6 +42,7 @@ void Akku_fan_LED(Akku_fan_status);
 // extern uint16_t bms_max_voltage;
 //extern uint16_t bms_min_voltage;
 uint8_t led_test = 1;
+uint8_t led_test_aus = 0;
 uint8_t system_startup = 0;
 uint8_t wait = 0;
 
@@ -407,8 +408,13 @@ int main(void)
 				if (sys_time >= LED_TEST_TIME){	// IMD & AMS error LED test 
 					PORTA &= ~(1<<PA2);
 					led_test = 0;
+					bms_error(0);
 				}
+			
+
 			}
+			
+			
 			
 			
 			PORTG ^= (1<<PG3);		//Heart LED
