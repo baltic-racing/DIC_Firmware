@@ -75,6 +75,7 @@ uint8_t fault_code_1 = 0;
 
 uint16_t ams_error_counter = 0;
 uint16_t ams_error_counter1 = 0;
+static uint8_t bms_error_active = 0;
 uint8_t last_ams_counter = 0;
 extern volatile unsigned long sys_time;
 volatile unsigned long ams_disconnect_timestamp = 0;
@@ -273,16 +274,29 @@ void init_mobs(){
 void can_receive(){
 	
 	can_rx(&ams0_mob, mob_databytes[AMS0_DATA]);
-	uint8_t ams_counter = mob_databytes[AMS0_DATA][7];
+	/*uint8_t ams_counter = mob_databytes[AMS0_DATA][7];
 	if (ams_counter != last_ams_counter){
 		ams_disconnect_timestamp = sys_time;
 	}
-	last_ams_counter = ams_counter;
+	last_ams_counter = ams_counter;*/
 	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
-	if ((sys_time-ams_disconnect_timestamp>=AMS_DISCONNECT_TIME)|| ams_error){
-		//LED anschalten
-		bms_error(1);
-	} 
+	 //if ((sys_time-ams_disconnect_timestamp>=AMS_DISCONNECT_TIME)|| ams_error)
+	if(ams_error == 1 && !bms_error_active)
+		{
+			ams_error_counter1++;
+		}
+	else if (ams_error==0)
+		{
+			ams_error_counter1 = 0;
+		}
+		if (ams_error_counter1 >= 50)
+		{
+				//LED anschalten
+				bms_error(1);
+				bms_error_active = 1;
+		}
+
+	
 	
 	
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
