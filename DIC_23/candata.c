@@ -271,6 +271,34 @@ void can_receive(){
 	if (ams_counter != last_ams_counter){
 		ams_disconnect_timestamp = sys_time;
 	}
+<<<<<<< Updated upstream
+=======
+	last_ams_counter = ams_counter;
+	if (sys_time-ams_disconnect_timestamp>=AMS_DISCONNECT_TIME)
+	{
+		bms_error(1);
+	}
+	
+	
+	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
+	
+	if(ams_error == 1 && !bms_error_active)
+		{
+			ams_error_counter1++;
+		}
+	else if (ams_error==0)
+		{
+			ams_error_counter1 = 0;
+		}
+		if (ams_error_counter1 >= 50)
+		{
+				//LED anschalten
+				bms_error(1);
+				bms_error_active = 1;
+		}
+
+	
+>>>>>>> Stashed changes
 	
 	last_ams_counter = ams_counter;			 
 	if (sys_time - ams_disconnect_timestamp >= AMS_DISCONNECT_TIME){

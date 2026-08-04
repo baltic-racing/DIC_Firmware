@@ -409,8 +409,12 @@ int main(void)
 					led_test = 0;
 				}
 			}
+<<<<<<< Updated upstream
 			
 			
+=======
+		
+>>>>>>> Stashed changes
 			PORTG ^= (1<<PG3);		//Heart LED
 			time_10ms = 0;
 			time_300ms++;
