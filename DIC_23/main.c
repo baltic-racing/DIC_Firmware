@@ -19,28 +19,32 @@
 
 extern uint16_t ts_voltage;
 extern uint16_t bms_max_temp;
-extern uint16_t battery_voltage;
-extern uint16_t cooling_1;
+
 extern uint16_t APPS1;
 extern uint16_t APPS2;
 extern uint16_t BPSF;
 extern uint16_t BPSR;
+
+extern char SAS_sign;
+extern uint8_t SAS_abs;
+
+extern uint16_t brake_balance_front;
+extern uint16_t brake_balance_rear;
+
+extern uint16_t battery_voltage;
+extern uint8_t FRO_value;
+extern uint8_t fr_values[14];
+
 extern uint16_t motor_temp;
 extern uint16_t mcu_temp;
 extern uint16_t motor_temp_1;
 extern uint16_t mcu_temp_1;
 extern uint16_t motor_temp_0;
 extern uint16_t mcu_temp_0;
-extern uint8_t FRO_value;
-extern uint8_t fr_values[14];
-//extern uint8_t sdci_values;
-extern uint8_t Akku_fan_status;
 
+//extern uint8_t Akku_fan_status;
+//void Akku_fan_LED(Akku_fan_status);
 
-void Akku_fan_LED(Akku_fan_status);
-
-// extern uint16_t bms_max_voltage;
-//extern uint16_t bms_min_voltage;
 uint8_t led_test = 1;
 uint8_t system_startup = 0;
 uint8_t wait = 0;
@@ -48,7 +52,7 @@ uint8_t wait = 0;
 uint8_t mode_selection_active = 0;
 uint8_t active_mode = 3;
 uint8_t selected_mode = 3;
-//extern uint16_t bms_min_temp;
+
 
 
 /*	MAIN	*/
@@ -67,12 +71,8 @@ int main(void)
 	
 	volatile unsigned long sys_time_old;
 	
-	uint8_t dsp = 0;
 	uint8_t time_10ms = 0;
-	uint8_t time_50ms = 0;
 	uint8_t time_100ms = 0;
-	uint8_t error_ams = 2;
-	uint8_t activate_ams = 0;
 	unsigned long time_300ms = 0;
 	
 	sei();
@@ -89,32 +89,29 @@ int main(void)
 	//dsp_startup.number = 0;
 	display_write_str(&dsp_startup, "|    WELCOME TO    |",0,0);
 	display_write_str(&dsp_startup, "|      TY 26       |",1,0);
+<<<<<<< Updated upstream
 	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
 	display_write_str(&dsp_startup, "| Martin Mondarsch |",3,0);
+=======
+	display_write_str(&dsp_startup, "|    TOD DEM DEM   |",2,0);
+	display_write_str(&dsp_startup, "|     KORMORAN     |",3,0);
+>>>>>>> Stashed changes
 	
-	//display_write_str(&dsp_startup, "|                  |",0,0);
-	//display_write_str(&dsp_startup, "|      .kotz       |",1,0);
-	//display_write_str(&dsp_startup, "|                  |",2,0);
-	//display_write_str(&dsp_startup, "|                  |",3,0);
-	
-	
-	 
 
 	struct DISPLAY_PAGE dsp_debug = get_empty_display();
 	//dsp_debug.number = 2;
-	display_write_str(&dsp_debug,"TSV:   V  ACCU:  . C", 0, 0);
-	display_write_str(&dsp_debug,"LVV:  . V COOL:  . C", 1, 0);
-	display_write_str(&dsp_debug,"APPS1:   %APPS2:   %", 2, 0);
-	display_write_str(&dsp_debug,"BPF:  BPR:          ", 3, 0);
-	
-	struct DISPLAY_PAGE dsp_temp = get_empty_display();
+	display_write_str(&dsp_debug,"APPS1:       BPF:   ", 0, 0);
+	display_write_str(&dsp_debug,"APPS2:       BPR:   ", 1, 0);
+	display_write_str(&dsp_debug,"Balance:     F :   %", 2, 0);
+	display_write_str(&dsp_debug,"             R :   %", 3, 0);
 	
 	struct DISPLAY_PAGE dsp_main = get_empty_display();
-	display_write_str(&dsp_main,"INV:  . C MTR:   . C", 0, 0);
-	display_write_str(&dsp_main,"TSV:   V  ACCU:  . C", 1, 0);
-	display_write_str(&dsp_main,"LVV:  . V COOL:  . C", 2, 0);
-	display_write_str(&dsp_main,"APPS:               ", 3, 0);
+	display_write_str(&dsp_main,"INV :  . C APPS:    ", 0, 0);
+	display_write_str(&dsp_main,"MTR :  . C BP  :    ", 1, 0);
+	display_write_str(&dsp_main,"ACCU:  . C SAS :    ", 2, 0);
+	display_write_str(&dsp_main,"LVV :  . V TSV :   V", 3, 0);
 	
+	/*
 	struct DISPLAY_PAGE dsp_FRO0 = get_empty_display();
 	//
 	display_write_str(&dsp_FRO0,"---FUSE READ OUT----", 0, 0);
@@ -128,12 +125,21 @@ int main(void)
 	display_write_str(&dsp_FRO1,"SDC :      TSAL:    ", 1, 0);
 	display_write_str(&dsp_FRO1,"TSAC:      HV_D:    ", 2, 0);
 	display_write_str(&dsp_FRO1,"FTSA:      FPU  :   ", 3, 0);
+	*/
+
+	//SDC Indicator anzeige
+	struct DISPLAY_PAGE dsp_SDCI = get_empty_display();
+	
+	display_write_str(&dsp_SDCI,"B_DB:      DIST:    ", 0, 0);
+	display_write_str(&dsp_SDCI,"INER:      TSAC:    ", 1, 0);
+	display_write_str(&dsp_SDCI,"BOTS:      B_R :    ", 2, 0);
+	display_write_str(&dsp_SDCI,"B_L :      TSMS:    ", 3, 0);
 	
 	struct DISPLAY_PAGE dsp_reduced = get_empty_display();
 	//dsp_debug.number = 2;
-	display_write_str(&dsp_reduced,"TSV:   V  ACCU:  . C", 0, 0);
+	display_write_str(&dsp_reduced,"TSV :       V       ", 0, 0);
 	display_write_str(&dsp_reduced,"                    ", 1, 0);
-	display_write_str(&dsp_reduced,"LVV:  . V COOL:  . C", 2, 0);
+	display_write_str(&dsp_reduced,"ACCU:    .  C       ", 2, 0);
 	display_write_str(&dsp_reduced,"                    ", 3, 0);
 	
 	struct DISPLAY_PAGE dsp_modes = get_empty_display();
@@ -147,15 +153,16 @@ int main(void)
 	//Variable die das aktive Display hält!
 	struct DISPLAY_PAGE *active_display = &dsp_startup;
 	
-	uint32_t page_order[7] = {
+	uint32_t page_order[6] = {
 		&dsp_startup,
 		&dsp_main,
 		&dsp_debug,
-		&dsp_FRO0,
-		&dsp_FRO1,
+		&dsp_SDCI,
 		&dsp_reduced,
 		&dsp_modes
 		
+		/*&dsp_FRO0,
+		&dsp_FRO1,*/
 		//&dsp_SDC0,
 		//&dsp_SDCI1
 	};
@@ -209,68 +216,66 @@ int main(void)
 			
 			if(active_display == &dsp_main)
 			{
-				dsp_main.data [0][18] = (motor_temp%10)+48;			// 48 ist der ascii offset
-				dsp_main.data [0][16] = ((motor_temp/10)%10)+48;
-				dsp_main.data [0][15] = ((motor_temp/100)%10)+48;
-				
-				dsp_main.data [0][7] = (mcu_temp%10)+48;
-				dsp_main.data [0][5] = ((mcu_temp/10)%10)+48;
-				dsp_main.data [0][4] = ((mcu_temp/100)%10)+48;
-				
-				dsp_main.data [1][6] = (ts_voltage%10)+48;
-				dsp_main.data [1][5] = ((ts_voltage/10)%10)+48;
-				dsp_main.data [1][4] = ((ts_voltage/100)%10)+48;
-				
-				dsp_main.data [1][18] = (bms_max_temp%10)+48;
-				dsp_main.data [1][16] = ((bms_max_temp/10)%10)+48;
-				dsp_main.data [1][15] = ((bms_max_temp/100)%10)+48;
-				
-				dsp_main.data [2][7] = (battery_voltage%10)+48;
-				dsp_main.data [2][5] = ((battery_voltage/10)%10)+48;
-				dsp_main.data [2][4] = ((battery_voltage/100)%10)+48;
-				
-				dsp_main.data [2][18] = (cooling_1%10)+48;
-				dsp_main.data [2][16] = ((cooling_1/10)%10)+48;
-				dsp_main.data [2][15] = ((cooling_1/100)%10)+48;
-				
-				dsp_main.data [3][8] = (APPS1%10)+48;
-				dsp_main.data [3][7] = ((APPS1/10)%10)+48;
-				dsp_main.data [3][6] = ((APPS1/100)%10)+48;
-				
+				dsp_main.data [0][8] = (mcu_temp%10)+48;
+				dsp_main.data [0][6] = ((mcu_temp/10)%10)+48;
+				dsp_main.data [0][5] = ((mcu_temp/100)%10)+48;
+
+				dsp_main.data [0][19] = (APPS1%10)+48;
+				dsp_main.data [0][18] = ((APPS1/10)%10)+48;
+				dsp_main.data [0][17] = ((APPS1/100)%10)+48;
+
+
+				dsp_main.data [1][8] = (motor_temp%10)+48;
+				dsp_main.data [1][6] = ((motor_temp/10)%10)+48;
+				dsp_main.data [1][5] = ((motor_temp/100)%10)+48;
+
+				dsp_main.data [1][19] = (BPSF%10)+48;
+				dsp_main.data [1][18] = ((BPSF/10)%10)+48;
+
+				dsp_main.data [2][8] = (bms_max_temp%10)+48;
+				dsp_main.data [2][6] = ((bms_max_temp/10)%10)+48;
+				dsp_main.data [2][5] = ((bms_max_temp/100)%10)+48;
+
+				dsp_main.data [2][19] = ((SAS_abs/1)%10)+48;
+				dsp_main.data [2][18] = ((SAS_abs/10)%10)+48;
+				dsp_main.data [2][17] = SAS_sign;
+
+				dsp_main.data [3][8] = (battery_voltage%10)+48;
+				dsp_main.data [3][6] = ((battery_voltage/10)%10)+48;
+				dsp_main.data [3][5] = ((battery_voltage/100)%10)+48;
+
+				dsp_main.data [3][18] = (ts_voltage%10)+48;
+				dsp_main.data [3][17] = ((ts_voltage/10)%10)+48;
+				dsp_main.data [3][16] = ((ts_voltage/100)%10)+48;
 			}
 			if(active_display == &dsp_debug)
 			{
-				dsp_debug.data [0][6] = (ts_voltage%10)+48;
-				dsp_debug.data [0][5] = ((ts_voltage/10)%10)+48;
-				dsp_debug.data [0][4] = ((ts_voltage/100)%10)+48;
 				
-				dsp_debug.data [0][18] = (bms_max_temp%10)+48;
-				dsp_debug.data [0][16] = ((bms_max_temp/10)%10)+48;
-				dsp_debug.data [0][15] = ((bms_max_temp/100)%10)+48;
+				dsp_debug.data [0][8] = (APPS1%10)+48;
+				dsp_debug.data [0][7] = ((APPS1/10)%10)+48;
+				dsp_debug.data [0][6] = ((APPS1/100)%10)+48;
 				
-				dsp_debug.data [1][7] = (battery_voltage%10)+48;
-				dsp_debug.data [1][5] = ((battery_voltage/10)%10)+48;
-				dsp_debug.data [1][4] = ((battery_voltage/100)%10)+48;
+				dsp_debug.data [1][8] = (APPS2%10)+48;
+				dsp_debug.data [1][7] = ((APPS2/10)%10)+48;
+				dsp_debug.data [1][6] = ((APPS2/100)%10)+48;
 				
-				dsp_debug.data [1][18] = (cooling_1%10)+48;
-				dsp_debug.data [1][16] = ((cooling_1/10)%10)+48;
-				dsp_debug.data [1][15] = ((cooling_1/100)%10)+48;
+				dsp_debug.data [0][18] = (BPSF%10)+48;
+				dsp_debug.data [0][17] = ((BPSF/10)%10)+48;
 				
-				dsp_debug.data [2][8] = (APPS1%10)+48;
-				dsp_debug.data [2][7] = ((APPS1/10)%10)+48;
-				dsp_debug.data [2][6] = ((APPS1/100)%10)+48;
-				
-				dsp_debug.data [2][18] = (APPS2%10)+48;
-				dsp_debug.data [2][17] = ((APPS2/10)%10)+48;
-				dsp_debug.data [2][16] = ((APPS2/100)%10)+48;
-				
-				dsp_debug.data [3][5] = (BPSF%10)+48;
-				dsp_debug.data [3][4] = ((BPSF/10)%10)+48;
-				
-				dsp_debug.data [3][11] = (BPSR%10)+48;
-				dsp_debug.data [3][10] = ((BPSR/10)%10)+48;
-			}
+				dsp_debug.data [1][18] = (BPSR%10)+48;
+				dsp_debug.data [1][17] = ((BPSR/10)%10)+48;
+
+				dsp_debug.data [2][18] = (brake_balance_front%10)+48;
+				dsp_debug.data [2][17] = ((brake_balance_front/10)%10)+48;
+				dsp_debug.data [2][16] = ((brake_balance_front/100)%10)+48;
+
+				dsp_debug.data [3][18] = (brake_balance_rear%10)+48;
+				dsp_debug.data [3][17] = ((brake_balance_rear/10)%10)+48;
+				dsp_debug.data [3][16] = ((brake_balance_rear/100)%10)+48;
+
+}
 			
+			/*
 			if (active_display == &dsp_FRO0)
 			{
 				dsp_FRO0.data [1][6] = ((fr_values[12]) & 1) ? ' ' : 'X';
@@ -302,30 +307,31 @@ int main(void)
 				
 				dsp_FRO1.data [3][17] = ((fr_values[0]) & 1) ? ' ' : 'X';
 			}
-			
-			
-			
+			*/
+
+			if (active_display == &dsp_SDCI)
+			{
+				uint16_t sdc_status_dic = get_mob_data(FUSEBOX_DATA)[4] | (get_mob_data(FUSEBOX_DATA)[5] << 8);
+				
+				dsp_SDCI.data [0][6]  = ((sdc_status_dic >> 15) & 1) ? 'H' : ' ';   // B_DB
+				dsp_SDCI.data [1][6]  = ((sdc_status_dic >> 14) & 1) ? 'H' : ' ';   // INER
+				dsp_SDCI.data [2][6]  = ((sdc_status_dic >> 13) & 1) ? 'H' : ' ';   // BOTS
+				dsp_SDCI.data [3][6]  = ((sdc_status_dic >> 12) & 1) ? 'H' : ' ';   // B_L
+				dsp_SDCI.data [0][17] = ((sdc_status_dic >> 11) & 1) ? 'H' : ' ';   // DIST
+				dsp_SDCI.data [1][17] = ((sdc_status_dic >> 8)  & 1) ? 'H' : ' ';   // TSAC
+				dsp_SDCI.data [2][17] = ((sdc_status_dic >> 7)  & 1) ? 'H' : ' ';   // B_R
+				dsp_SDCI.data [3][17] = ((sdc_status_dic >> 6)  & 1) ? 'H' : ' ';   // TSMS
+			}	
 			
 			if (active_display == &dsp_reduced)
 			{
-				dsp_reduced.data [0][6] = (ts_voltage%10)+48;
-				dsp_reduced.data [0][5] = ((ts_voltage/10)%10)+48;
-				dsp_reduced.data [0][4] = ((ts_voltage/100)%10)+48;
+				dsp_reduced.data [0][9] = (ts_voltage%10)+48;
+				dsp_reduced.data [0][8] = ((ts_voltage/10)%10)+48;
+				dsp_reduced.data [0][7] = ((ts_voltage/100)%10)+48;
 				
-				dsp_reduced.data [0][18] = (bms_max_temp%10)+48;
-				dsp_reduced.data [0][16] = ((bms_max_temp/10)%10)+48;
-				dsp_reduced.data [0][15] = ((bms_max_temp/100)%10)+48;
-				
-				dsp_reduced.data [2][7] = (battery_voltage%10)+48;
-				dsp_reduced.data [2][5] = ((battery_voltage/10)%10)+48;
-				dsp_reduced.data [2][4] = ((battery_voltage/100)%10)+48;
-				
-				dsp_reduced.data [2][18] = (cooling_1%10)+48;
-				dsp_reduced.data [2][16] = ((cooling_1/10)%10)+48;
-				dsp_reduced.data [2][15] = ((cooling_1/100)%10)+48;
-				
-				dsp_reduced.data [3][18] = get_swc_buttons()+48;
-				
+				dsp_reduced.data [2][10] = (bms_max_temp%10)+48;
+				dsp_reduced.data [2][8] = ((bms_max_temp/10)%10)+48;
+				dsp_reduced.data [2][7] = ((bms_max_temp/100)%10)+48;	
 			}
 			
 			if (active_display == &dsp_modes)
@@ -356,7 +362,6 @@ int main(void)
 					selected_mode = active_mode;
 				}
 				
-				
 				switch (selected_mode)
 				{
 					case 0: 
@@ -381,26 +386,6 @@ int main(void)
 			}
 			
 			
-			//if(active_display == &dsp_SDCI0)
-			//{
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-				//dsp.SDCI0.data [][] = ((sdci_values[]) &1) ? ' ' : 'X';
-			//}
-			
-			//else
-			//{
-				//display_write_str(active_display, "       HIER         ",0,0);
-				//display_write_str(active_display, "      KÖNNTEN       ",1,0);
-				//display_write_str(active_display, "     IHRE DATEN     ",2,0);
-				//display_write_str(active_display, "       STEHEN       ",3,0);
-			//}
-			
 			if(led_test){
 				bms_error(1);
 				PORTA |= (1<<PA2);		// IMD LED
@@ -408,12 +393,19 @@ int main(void)
 					PORTA &= ~(1<<PA2);
 					led_test = 0;
 				}
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 			}
 <<<<<<< Updated upstream
 			
+<<<<<<< Updated upstream
 			
 =======
 		
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 			PORTG ^= (1<<PG3);		//Heart LED
 			time_10ms = 0;
@@ -421,22 +413,24 @@ int main(void)
 			
 			if(sys_time >= SYSTEM_STARTUP_TIME)
 			{
-				if(wait == 0){
+				if(wait == 0)
+				{
 					active_display = page_order[get_dsp_mode()%NELEMS(page_order)];
 				}
 				
+				/*
 				void Akku_fan_LED(Akku_fan_status)
 				{
 					switch (Akku_fan_status)
 					{
-					case 1:
-					pre_defined_led_colors_right(PE_BLUE);
-					break;
-					case 0:
-					pre_defined_led_colors_right(PE_OFF);
-					break;
+						case 1:
+						pre_defined_led_colors_right(PE_BLUE);
+						break;
+						case 0:
+						pre_defined_led_colors_right(PE_OFF);
+						break;
 					}
-				}
+				}*/
 			}
 			
 			

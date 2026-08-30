@@ -23,13 +23,7 @@
 
 #define SWC_MOB_ID (uint16_t) 0x750
 
-#define LOGGER_0_MOB_ID (uint16_t) 0x796
-#define LOGGER_1_MOB_ID (uint16_t) 0x797
-#define LOGGER_2_MOB_ID (uint16_t) 0x798
-#define LOGGER_3_MOB_ID (uint16_t) 0x799
-
 #define vcu_0_mob_ID (uint16_t) 0x300
-
 
 #define INV0_0_MOB_ID (uint16_t) 0x44A
 #define INV0_1_MOB_ID (uint16_t) 0x453

@@ -35,31 +35,33 @@ uint16_t bms_min_voltage = 0;
 uint16_t bms_max_temp = 0;
 uint16_t bms_min_temp = 0;
 
+
 uint16_t APPS1 = 0;
 uint16_t APPS2 = 0;
 uint16_t BPSF = 0;
 uint16_t BPSR = 0;
-uint16_t cooling_1 = 0;
-uint16_t cooling_2 = 0;
-uint16_t cooling_temp = 0;
-float cooling_temp_deg = 0;
+uint16_t brake_balance_front = 0;
+uint16_t brake_balance_rear = 0;
+uint16_t brake_sum = 0;
+
+int8_t steering_angle = 0;
+uint8_t SAS_abs = 0;
+char SAS_sign = ' ';
+
 uint16_t motor_temp = 0;
 uint16_t mcu_temp = 0; 
 
 uint8_t Ready_2_Drive = 0;
 uint8_t TS_ON = 0;
 uint8_t TSon_enabled =0;
-uint8_t SDCIDIC = 0;
 
 uint16_t battery_voltage = 0;
-uint8_t SDCIFB = 0;
+
 uint16_t fuse_readout = 0;
 uint8_t FRO_value = 0; 
 uint8_t fr_values[14] = {0};
 
-uint8_t Akku_fan_status = 0;
-
-uint16_t gps_speed = 0;
+//uint8_t Akku_fan_status = 0;
 
 uint16_t ERPM_0 = 0;
 uint16_t ERPM_1 = 0;
@@ -74,6 +76,7 @@ uint8_t fault_code_1 = 0;
 
 uint16_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
+
 extern volatile unsigned long sys_time;
 volatile unsigned long ams_disconnect_timestamp = 0;
 extern uint8_t wait;
@@ -105,43 +108,43 @@ struct CAN_MOB ams0_mob;
 // 0: BMS Voltage MIN
 struct CAN_MOB ams1_mob;
 
-// CAN MOB from right sensorhub.
+// CAN MOB from right sensorhub. //0x400
+// data layout:
+// 7: SAS
+// 6: X
+// 5: X
+// 4: X
+// 3: DTS_FL
+// 2: DTS_FL
+// 1: DTS_FR
+// 0: DTS_FR
+struct CAN_MOB shr_mob;
+
+// CAN MOB from SH front. //0x401
 // data layout:
 // 7: X
 // 6: X
-// 5: Wheelspeed Front Right
-// 4: Wheelspeed Front Right
-// 3: APPS2
-// 2: APPS2
-// 1: APPS1
-// 0: APPS1
-struct CAN_MOB shr_mob;
-
-// CAN MOB from left sensorhub.
-// data layout:
-// 7: Steering Angle
-// 6: Steering Angle
-// 5: Wheelspeed Front Left
-// 4: Wheelspeed Front Left
+// 5: X
+// 4: X
 // 3: Brake Pressure Sensor Rear
 // 2: Brake Pressure Sensor Rear
 // 1: Brake Pressure Sensor Front
 // 0: Brake Pressure Sensor Front
 struct CAN_MOB shf_mob;
 
-// CAN MOB from back sensorhub.
+// CAN MOB from Sensorhub back //0x420 //unused ID
 // data layout:
-// 7: Cooling Temperature Rear 2
-// 6: Cooling Temperature Rear 2
-// 5: Cooling Temperature Rear 1
-// 4: Cooling Temperature Rear 1
-// 3: Cooling Temperature Front 2
-// 2: Cooling Temperature Front 2
-// 1: Cooling Temperature Front 1
-// 0: Cooling Temperature Front 1
+// 7: X
+// 6: X
+// 5: X
+// 4: X
+// 3: X
+// 2: X
+// 1: X
+// 0: X
 struct CAN_MOB shb_mob;
 
-// CAN MOB from back sensorhub.
+// CAN MOB from DIC.
 // data layout:
 // 7: X
 // 6: X
@@ -155,14 +158,14 @@ struct CAN_MOB dic_mob;
 
 // CAN MOB from Fusebox.
 // data layout:
-// 7: Fuse Read Out
-// 6: Akku_fan_on
-// 5: X
-// 4: Shutdown Circuit Indicator Fusebox
-// 3: Voltage LV Battery
-// 2: Voltage LV Battery
-// 1: Voltage Board
-// 0: Voltage Board
+// 7: FuseReadOut
+// 6: FuseReadOut
+// 5: SDC_status (high)
+// 4: SDC-status (low)
+// 3: LV-Voltage_mV (high)
+// 2: LV-Voltage_mV (low)
+// 1: Bat_sense_mV	(high)
+// 0: Bat_sense_mV  (low) 
 struct CAN_MOB fusebox_mob;
 
 // CAN MOB from SWC.
@@ -177,12 +180,12 @@ struct CAN_MOB fusebox_mob;
 // 0: Rotary Encoder left
 struct CAN_MOB swc_mob;
 
-// CAN MOB from right sensorhub.
+// CAN MOB from VCU.
 // data layout:
 // 7: X
 // 6: X
 // 5: X
-// 4: X
+// 4: start_motor_control
 // 3: APPS2
 // 2: APPS2
 // 1: APPS1
@@ -216,49 +219,47 @@ struct CAN_MOB inv01_mob;
 
 void init_mobs(){
 	
-	ams0_mob.mob_id = AMS_0_MOB_ID;
+	ams0_mob.mob_id = AMS_0_MOB_ID; //0x200
 	ams0_mob.mob_idmask = 0xffff;
 	ams0_mob.mob_number = 0;
 	
-	ams1_mob.mob_id = AMS_1_MOB_ID;
+	ams1_mob.mob_id = AMS_1_MOB_ID; //0x201
 	ams1_mob.mob_idmask = 0xffff;
 	ams1_mob.mob_number = 1;
 	
-	shr_mob.mob_id = SHR_MOB_ID;
+	shr_mob.mob_id = SHR_MOB_ID; //0x400
 	shr_mob.mob_idmask = 0xffff;
 	shr_mob.mob_number = 2;
 	
-	shf_mob.mob_id = SHF_MOB_ID;
+	shf_mob.mob_id = SHF_MOB_ID; //0x401
 	shf_mob.mob_idmask = 0xffff;
 	shf_mob.mob_number = 3;
 	
-	shb_mob.mob_id = SHB_MOB_ID;
+	shb_mob.mob_id = SHB_MOB_ID; //0x420
 	shb_mob.mob_idmask = 0xffff;
 	shb_mob.mob_number = 4;
 	
-	dic_mob.mob_id = DIC_MOB_ID;
+	dic_mob.mob_id = DIC_MOB_ID; //0x500
 	dic_mob.mob_idmask = 0xffff;
 	dic_mob.mob_number = 5;
 	
-	fusebox_mob.mob_id = FUSEBOX_MOB_ID;
+	fusebox_mob.mob_id = FUSEBOX_MOB_ID; //0x600
 	fusebox_mob.mob_idmask = 0xffff;
 	fusebox_mob.mob_number = 6;
 	
-	swc_mob.mob_id = SWC_MOB_ID;
+	swc_mob.mob_id = SWC_MOB_ID; //0x750
 	swc_mob.mob_idmask = 0xffff;
 	swc_mob.mob_number = 7;
 	
-	vcu_mob.mob_id = vcu_0_mob_ID;
+	vcu_mob.mob_id = vcu_0_mob_ID; //0x300
 	vcu_mob.mob_idmask = 0xffff;
 	vcu_mob.mob_number = 8;
-	
-	
-	
-	inv00_mob.mob_id = INV0_0_MOB_ID;
+		
+	inv00_mob.mob_id = INV0_0_MOB_ID; //0x44A
 	inv00_mob.mob_idmask = 0xffff;
 	inv00_mob.mob_number = 9;
 	
-	inv01_mob.mob_id = INV0_1_MOB_ID;
+	inv01_mob.mob_id = INV0_1_MOB_ID; //0x453
 	inv01_mob.mob_idmask = 0xffff;
 	inv01_mob.mob_number = 10;
 	
@@ -267,6 +268,7 @@ void init_mobs(){
 void can_receive(){
 	
 	can_rx(&ams0_mob, mob_databytes[AMS0_DATA]);
+<<<<<<< Updated upstream
 	uint8_t ams_counter = mob_databytes[AMS0_DATA][7];
 	if (ams_counter != last_ams_counter){
 		ams_disconnect_timestamp = sys_time;
@@ -282,6 +284,11 @@ void can_receive(){
 	
 	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
 	
+=======
+
+	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
+
+>>>>>>> Stashed changes
 	if(ams_error == 1 && !bms_error_active)
 		{
 			ams_error_counter1++;
@@ -298,6 +305,7 @@ void can_receive(){
 		}
 
 	
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 	
 	last_ams_counter = ams_counter;			 
@@ -308,6 +316,8 @@ void can_receive(){
 		bms_error(0);
 	}
 	
+=======
+>>>>>>> Stashed changes
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
 	can_rx(&shf_mob, mob_databytes[SHF_DATA]);
@@ -317,8 +327,7 @@ void can_receive(){
 	can_rx(&vcu_mob, mob_databytes[VCU_DATA]);
 	can_rx(&inv00_mob, mob_databytes[INV00_DATA]);
 	can_rx(&inv01_mob, mob_databytes[INV01_DATA]);
-	
-	
+		
 }
 
 void can_transmit(){
@@ -355,6 +364,7 @@ void can_put_data(){
 	//state_of_charge = mob_databytes[AMS0_DATA][4] | (mob_databytes[AMS0_DATA][5] << 8);
 	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
 	imd_error = ((mob_databytes[AMS0_DATA][6]>>6) & 1);
+<<<<<<< Updated upstream
 	if (imd_error == 0){
 		//pre_defined_led_colors(PE_RED);
 		PORTA |= (0<<PA2);
@@ -373,69 +383,51 @@ void can_put_data(){
 	//bms_min_voltage = mob_databytes[AMS1_DATA][0] | (mob_databytes[AMS1_DATA][1] << 8);
 	//bms_max_voltage = mob_databytes[AMS1_DATA][2] | (mob_databytes[AMS1_DATA][3] << 8);
 	//bms_min_temp = (mob_databytes[AMS1_DATA][4] | (mob_databytes[AMS1_DATA][5] << 8))/100;
+=======
+	if (imd_error == 0 && !IMD_LED_ON){
+		imd_error_count = 0;          // Zähler zurücksetzen
+		PORTA &= ~(1<<PA2);           // LED aus
+	}
+	else if(!IMD_LED_ON)
+	{
+		if (imd_error_count < IMD_ERROR_THRESHOLD){
+			imd_error_count++;        // Zähler erhöhen
+		}
+		
+		if (imd_error_count >= IMD_ERROR_THRESHOLD){
+			IMD_LED_ON = 1;
+			PORTA |= (1<<PA2);        // LED an (erst nach 10 Empfangsvorgängen = 1s)
+		}
+	}
+
+	precharge_active = ((mob_databytes[AMS0_DATA][6]>>4) & 1);	
+
+>>>>>>> Stashed changes
 	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8));
 	bms_max_temp = bms_max_temp/100;
 	
 	APPS1 = (mob_databytes[VCU_DATA][0] | (mob_databytes[VCU_DATA][1] << 8))/10;
 	APPS2 = (mob_databytes[VCU_DATA][2] | (mob_databytes[VCU_DATA][3] << 8))/10;
+
 	BPSF = (mob_databytes[SHF_DATA][0] | (mob_databytes[SHF_DATA][1] << 8))/10;
+
 	BPSR = (mob_databytes[SHF_DATA][2] | (mob_databytes[SHF_DATA][3] << 8))/10;
-	//cooling_1 = (mob_databytes[SHB_DATA][0] | (mob_databytes[SHB_DATA][1] << 8));
-	//cooling_2 = mob_databytes[SHB_DATA][2] | (mob_databytes[SHB_DATA][3] << 8);
-	//cooling_temp = (cooling_1 + cooling_2) / 2 ;		//Mittelwert aus cooling 1 und 2
-	//cooling_temp_deg =  ((0.128*cooling_1) - (8.137))*10; // NTC Kurve ist linearisiert im Bereich 80°-20°, außerhalb ungenauer
-	if(sys_time>=BSPD_STARTUP_TIME && wait == 0){
-		TS_ON = (~PINA & (1 << PA0));
-		if(TSon_enabled==0){
-			pre_defined_led_colors(PE_OFF);
-			
-		}
-		TSon_enabled=1;
-	}
-	
-	//Ready_2_Drive = 0;
-	/*
-	if (BPSR >= 10 && precharge_active){
-		Ready_2_Drive = (~PINA >> PA1) & PA1;
-	}
-	*/
-	//Ready_2_Drive = (~PINA >> PA1) & PA1;
-	/*
-	if ((PINA & (1 << PA1)) == 0)
+
+	brake_sum = (4*BPSF) + (2*BPSR);		//*4 and *2 for break pistons
+	if (brake_sum > 10)
 	{
-		Ready_2_Drive = 1;
-	} 
-	else
-	{
-		Ready_2_Drive = 0;
+		brake_balance_front = (uint16_t)((4*BPSF * 100UL) / brake_sum);
+		brake_balance_rear = (uint16_t)((2*BPSR * 100UL) / brake_sum);
 	}
-	*/
-		if (!(PINA & (1 << PA1)))
-		{
-			Ready_2_Drive = 1;
-		}
-		else
-		{
-			Ready_2_Drive = 0;
-		}
+
+	steering_angle = (int8_t)mob_databytes[SHR_DATA][7];
+
+	SAS_abs = (steering_angle < 0) ? (uint8_t)(-steering_angle) : (uint8_t)steering_angle;
+	SAS_sign = (steering_angle < 0) ? '-' : ' ';
 	
 	battery_voltage = mob_databytes[FUSEBOX_DATA][2] | (mob_databytes[FUSEBOX_DATA][3] << 8);
-	//SDCIFB = mob_databytes[FUSEBOX_DATA][4];
-	//fuse_readout = mob_databytes[FUSEBOX_DATA][6] | (mob_databytes[FUSEBOX_DATA][7] << 8);
-	
-	fuse_readout = ((mob_databytes[FUSEBOX_DATA][7] & 11111110)/10); //Berechnung der gesendeten Fuse(-Stelle)
-	FRO_value = (mob_databytes[FUSEBOX_DATA][7] & 00000001); //Prüfung, ob Fuse gezogen oder nicht
-	
-	if (FRO_value == 1)
-	{
-		fr_values[fuse_readout] = 1;
-	}
-	else
-	{
-		fr_values[fuse_readout] = NULL;
-	}
-	
-	Akku_fan_status = (mob_databytes[FUSEBOX_DATA][6] & 00000001);
+
+	//Akku_fan_status = (mob_databytes[FUSEBOX_DATA][6] & 00000001);
 	
 	
 	motor_temp_1 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8));
@@ -461,9 +453,30 @@ void can_put_data(){
 	{
 		mcu_temp = mcu_temp_0;
 	}
+
+	if(sys_time>=BSPD_STARTUP_TIME && wait == 0)
+	{
+		TS_ON = (~PINA & (1 << PA0));
+		if(TSon_enabled==0){
+			pre_defined_led_colors(PE_OFF);
+		
+		}
+		TSon_enabled=1;
+	}
+
+
+	if (!(PINA & (1 << PA1)))
+	{
+		Ready_2_Drive = 1;
+	}
+	else
+	{
+		Ready_2_Drive = 0;
+	}
+
 	mob_databytes[DIC_DATA][0] = TS_ON; // TS_ON;
-	mob_databytes[DIC_DATA][1] =  Ready_2_Drive;
-	mob_databytes[DIC_DATA][2] = SDCIDIC;
+	mob_databytes[DIC_DATA][1] = Ready_2_Drive;
+	mob_databytes[DIC_DATA][2] = 0;
 	mob_databytes[DIC_DATA][5] = 0;
 	mob_databytes[DIC_DATA][7] = active_mode;
 	
