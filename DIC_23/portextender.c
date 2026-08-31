@@ -200,7 +200,7 @@ void pre_defined_led_colors_left(enum led_color color){
 }
 
 
-void pre_defined_led_colors(enum led_color color){
+void pre_defined_led_colors(enum led_color color){   //Leds row left and right of dashboard
 	switch(color){
 		case PE_RED:
 		extender_leds_blocking(RGB_LEFT,0|(1<<F_RED)|(1<<R_RED));

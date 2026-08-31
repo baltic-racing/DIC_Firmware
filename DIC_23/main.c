@@ -12,10 +12,8 @@
 
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
-
-#define LED_TEST_TIME 3000			// Duration of LED test in ms
-#define SYSTEM_STARTUP_TIME 4000	// Duration of system startup in ms
-
+#define LED_TEST_TIME 2000			// Duration of LED test in ms
+#define SYSTEM_STARTUP_TIME 2000	// Duration of system startup in ms
 
 extern uint16_t ts_voltage;
 extern uint16_t bms_max_temp;
@@ -54,7 +52,6 @@ uint8_t active_mode = 3;
 uint8_t selected_mode = 3;
 
 
-
 /*	MAIN	*/
 int main(void)
 {
@@ -73,13 +70,11 @@ int main(void)
 	
 	uint8_t time_10ms = 0;
 	uint8_t time_100ms = 0;
-	unsigned long time_300ms = 0;
 	
 	sei();
 	//this needs interrupts to be enabled
 	configure_portextenders();
-	pre_defined_led_colors(PE_RED);
-	
+
 	
 	//dispaly state -> saves postitions and stuff
 	struct DISPLAY_STATE display_state = get_empty_state();
@@ -89,14 +84,8 @@ int main(void)
 	//dsp_startup.number = 0;
 	display_write_str(&dsp_startup, "|    WELCOME TO    |",0,0);
 	display_write_str(&dsp_startup, "|      TY 26       |",1,0);
-<<<<<<< Updated upstream
-	display_write_str(&dsp_startup, "|    BEWARE OF     |",2,0);
-	display_write_str(&dsp_startup, "| Martin Mondarsch |",3,0);
-=======
 	display_write_str(&dsp_startup, "|    TOD DEM DEM   |",2,0);
-	display_write_str(&dsp_startup, "|     KORMORAN     |",3,0);
->>>>>>> Stashed changes
-	
+	display_write_str(&dsp_startup, "|     KORMORAN     |",3,0);	
 
 	struct DISPLAY_PAGE dsp_debug = get_empty_display();
 	//dsp_debug.number = 2;
@@ -137,9 +126,9 @@ int main(void)
 	
 	struct DISPLAY_PAGE dsp_reduced = get_empty_display();
 	//dsp_debug.number = 2;
-	display_write_str(&dsp_reduced,"TSV :       V       ", 0, 0);
+	display_write_str(&dsp_reduced,"   TSV :       V    ", 0, 0);
 	display_write_str(&dsp_reduced,"                    ", 1, 0);
-	display_write_str(&dsp_reduced,"ACCU:    .  C       ", 2, 0);
+	display_write_str(&dsp_reduced,"   ACCU:    .  C    ", 2, 0);
 	display_write_str(&dsp_reduced,"                    ", 3, 0);
 	
 	struct DISPLAY_PAGE dsp_modes = get_empty_display();
@@ -168,6 +157,10 @@ int main(void)
 	};
 	
 	active_display = &dsp_startup;
+	pre_defined_led_colors(PE_RED);		// red led bars besides display, turn off in candata (by BSPD startup time)
+	bms_error(1);						// test ams_error led
+	PORTA |= (1<<PA2);					// test IMD led
+						
 	
 	while (1)
 	{
@@ -184,36 +177,13 @@ int main(void)
 		
 		
 		if (time_10ms >9){
-			
-			
-			
-			
-			
+						
 			can_receive();
+			if(!led_test){
+				check_bms_imd_status();}
 			can_put_data();
-			
-			
-			if(active_display == &dsp_startup)
-			{
-				//pre_defined_led_colors(PE_WHITE);
-				//led_top_light(0);
-				//led_top_light(1);
-				//led_top_light(2);
-				//led_top_light(3);
-				//led_top_light(4);
-				//led_top_light(5);
-				//led_top_light(6);
-				//led_top_light(7);
-				//led_top_light(8);
-				//led_top_light(9);
-				//led_top_light(10);
-				//led_top_light(11);
-				//led_top_light(12);
-				//led_top_light(13);
-				//led_top_light(14);
-				
-			}
-			
+						
+		
 			if(active_display == &dsp_main)
 			{
 				dsp_main.data [0][8] = (mcu_temp%10)+48;
@@ -248,9 +218,9 @@ int main(void)
 				dsp_main.data [3][17] = ((ts_voltage/10)%10)+48;
 				dsp_main.data [3][16] = ((ts_voltage/100)%10)+48;
 			}
+			
 			if(active_display == &dsp_debug)
 			{
-				
 				dsp_debug.data [0][8] = (APPS1%10)+48;
 				dsp_debug.data [0][7] = ((APPS1/10)%10)+48;
 				dsp_debug.data [0][6] = ((APPS1/100)%10)+48;
@@ -272,42 +242,7 @@ int main(void)
 				dsp_debug.data [3][18] = (brake_balance_rear%10)+48;
 				dsp_debug.data [3][17] = ((brake_balance_rear/10)%10)+48;
 				dsp_debug.data [3][16] = ((brake_balance_rear/100)%10)+48;
-
-}
-			
-			/*
-			if (active_display == &dsp_FRO0)
-			{
-				dsp_FRO0.data [1][6] = ((fr_values[12]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO0.data [2][6] = ((fr_values[11]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO0.data [1][17] = ((fr_values[10]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO0.data [3][6] = ((fr_values[9]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO0.data [3][17] = ((fr_values[8]) & 1) ? ' ' : 'X';
-			}
-			
-			if (active_display == &dsp_FRO1)
-			{
-				dsp_FRO1.data [0][6] = ((fr_values[7]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO1.data [0][17] = ((fr_values[6]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO1.data [1][6] = ((fr_values[5]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO1.data [1][17] = ((fr_values[4]) & 1) ? ' ' : 'X';
-			
-				dsp_FRO1.data [2][6] = ((fr_values[3]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO1.data [2][17] = ((fr_values[2]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO1.data [3][6] = ((fr_values[1]) & 1) ? ' ' : 'X';
-				
-				dsp_FRO1.data [3][17] = ((fr_values[0]) & 1) ? ' ' : 'X';
-			}
-			*/
+			}			
 
 			if (active_display == &dsp_SDCI)
 			{
@@ -325,13 +260,13 @@ int main(void)
 			
 			if (active_display == &dsp_reduced)
 			{
-				dsp_reduced.data [0][9] = (ts_voltage%10)+48;
-				dsp_reduced.data [0][8] = ((ts_voltage/10)%10)+48;
-				dsp_reduced.data [0][7] = ((ts_voltage/100)%10)+48;
+				dsp_reduced.data [0][10] = (ts_voltage%10)+48;
+				dsp_reduced.data [0][9] = ((ts_voltage/10)%10)+48;
+				dsp_reduced.data [0][8] = ((ts_voltage/100)%10)+48;
 				
-				dsp_reduced.data [2][10] = (bms_max_temp%10)+48;
-				dsp_reduced.data [2][8] = ((bms_max_temp/10)%10)+48;
-				dsp_reduced.data [2][7] = ((bms_max_temp/100)%10)+48;	
+				dsp_reduced.data [2][11] = (bms_max_temp%10)+48;
+				dsp_reduced.data [2][9] = ((bms_max_temp/10)%10)+48;
+				dsp_reduced.data [2][8] = ((bms_max_temp/100)%10)+48;	
 			}
 			
 			if (active_display == &dsp_modes)
@@ -385,31 +320,16 @@ int main(void)
 				}
 			}
 			
-			
-			if(led_test){
-				bms_error(1);
-				PORTA |= (1<<PA2);		// IMD LED
-				if (sys_time >= LED_TEST_TIME){	// IMD & AMS error LED test 
-					PORTA &= ~(1<<PA2);
-					led_test = 0;
-				}
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
-			}
-<<<<<<< Updated upstream
+			if (led_test && sys_time >= LED_TEST_TIME) 
+				{	 
+					PORTA &= ~(1<<PA2);	// end test imd led 
+					bms_error(0);		// end test ams_error led
+					led_test = 0;
+				}	
 			
-<<<<<<< Updated upstream
-			
-=======
-		
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 			PORTG ^= (1<<PG3);		//Heart LED
 			time_10ms = 0;
-			time_300ms++;
 			
 			if(sys_time >= SYSTEM_STARTUP_TIME)
 			{
@@ -417,20 +337,7 @@ int main(void)
 				{
 					active_display = page_order[get_dsp_mode()%NELEMS(page_order)];
 				}
-				
-				/*
-				void Akku_fan_LED(Akku_fan_status)
-				{
-					switch (Akku_fan_status)
-					{
-						case 1:
-						pre_defined_led_colors_right(PE_BLUE);
-						break;
-						case 0:
-						pre_defined_led_colors_right(PE_OFF);
-						break;
-					}
-				}*/
+
 			}
 			
 			

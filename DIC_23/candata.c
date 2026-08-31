@@ -30,6 +30,9 @@ uint8_t can_ok = 0;
 uint8_t precharge_active = 0;
 uint8_t TS_RDY = 0;
 
+uint8_t bms_error_active = 0;
+uint8_t ams_error_counter1 = 0;
+
 uint16_t bms_max_voltage = 0;
 uint16_t bms_min_voltage = 0;
 uint16_t bms_max_temp = 0;
@@ -81,6 +84,10 @@ extern volatile unsigned long sys_time;
 volatile unsigned long ams_disconnect_timestamp = 0;
 extern uint8_t wait;
 extern uint8_t active_mode;
+
+static uint8_t imd_error_count = 0;
+static uint8_t IMD_LED_ON = 0;
+#define IMD_ERROR_THRESHOLD 200  // Anzahl ben?tigter Empfangsvorg?nge
 
 
 
@@ -264,60 +271,64 @@ void init_mobs(){
 	inv01_mob.mob_number = 10;
 	
 }
-
-void can_receive(){
-	
-	can_rx(&ams0_mob, mob_databytes[AMS0_DATA]);
-<<<<<<< Updated upstream
+void check_bms_imd_status(void)
+{
+	// - - - ams master freeze - - -
 	uint8_t ams_counter = mob_databytes[AMS0_DATA][7];
-	if (ams_counter != last_ams_counter){
+	if (ams_counter != last_ams_counter)
+	{
 		ams_disconnect_timestamp = sys_time;
 	}
-<<<<<<< Updated upstream
-=======
 	last_ams_counter = ams_counter;
-	if (sys_time-ams_disconnect_timestamp>=AMS_DISCONNECT_TIME)
+
+	if (sys_time - ams_disconnect_timestamp >= AMS_DISCONNECT_TIME)
 	{
 		bms_error(1);
 	}
-	
-	
-	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
-	
-=======
 
-	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
+	// - - - ams error send by master - - - 
+	ams_error = ((mob_databytes[AMS0_DATA][6] >> 7) & 1);
 
->>>>>>> Stashed changes
-	if(ams_error == 1 && !bms_error_active)
-		{
-			ams_error_counter1++;
-		}
-	else if (ams_error==0)
-		{
-			ams_error_counter1 = 0;
-		}
-		if (ams_error_counter1 >= 50)
-		{
-				//LED anschalten
-				bms_error(1);
-				bms_error_active = 1;
-		}
-
-	
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-	
-	last_ams_counter = ams_counter;			 
-	if (sys_time - ams_disconnect_timestamp >= AMS_DISCONNECT_TIME){
-		//LED anschalten
-		bms_error(1);
-	} else {
-		bms_error(0);
+	if (ams_error == 1 && !bms_error_active)
+	{
+		ams_error_counter1++;
 	}
+	else if (ams_error == 0)
+	{
+		ams_error_counter1 = 0;
+	}
+
+	if (ams_error_counter1 >= 50)
+	{
+		bms_error(1);
+		bms_error_active = 1;
+	}
+
+	// - - - imd error - -  -
+	imd_error = ((mob_databytes[AMS0_DATA][6] >> 6) & 1);
+
+	if (imd_error == 0 && !IMD_LED_ON)
+	{
+		imd_error_count = 0;
+		PORTA &= ~(1 << PA2);
+	}
+	else if (!IMD_LED_ON)
+	{
+		if (imd_error_count < IMD_ERROR_THRESHOLD)
+		{
+			imd_error_count++;
+		}
+
+		if (imd_error_count >= IMD_ERROR_THRESHOLD)
+		{
+			IMD_LED_ON = 1;
+			PORTA |= (1 << PA2);
+		}
+	}
+}
+void can_receive(){
 	
-=======
->>>>>>> Stashed changes
+	can_rx(&ams0_mob, mob_databytes[AMS0_DATA]);
 	can_rx(&ams1_mob, mob_databytes[AMS1_DATA]);
 	can_rx(&shr_mob, mob_databytes[SHR_DATA]);
 	can_rx(&shf_mob, mob_databytes[SHF_DATA]);
@@ -360,49 +371,12 @@ void can_put_data(){
 	
 	ts_voltage = (mob_databytes[AMS0_DATA][0] | (mob_databytes[AMS0_DATA][1] << 8));
 	ts_voltage = ts_voltage/100;
-	//ts_current = mob_databytes[AMS0_DATA][2] | (mob_databytes[AMS0_DATA][3] << 8);
-	//state_of_charge = mob_databytes[AMS0_DATA][4] | (mob_databytes[AMS0_DATA][5] << 8);
+
 	ams_error = ((mob_databytes[AMS0_DATA][6]>>7) & 1);
 	imd_error = ((mob_databytes[AMS0_DATA][6]>>6) & 1);
-<<<<<<< Updated upstream
-	if (imd_error == 0){
-		//pre_defined_led_colors(PE_RED);
-		PORTA |= (0<<PA2);
-		//extender_leds_blocking(RGB_LEFT,0|(0<<F_RED));
-	}
-	else
-	{
-		//pre_defined_led_colors(PE_OFF);
-		PORTA |= (1<<PA2);
-		//extender_leds_blocking(RGB_LEFT,0|(1<<F_RED));
-	}
-	//can_ok = ((mob_databytes[AMS0_DATA][6]>>5) & 1);
-	precharge_active = ((mob_databytes[AMS0_DATA][6]>>4) & 1);
-    //TS_RDY = ((mob_databytes[AMS0_DATA][6]>>3) & 1);
 	
-	//bms_min_voltage = mob_databytes[AMS1_DATA][0] | (mob_databytes[AMS1_DATA][1] << 8);
-	//bms_max_voltage = mob_databytes[AMS1_DATA][2] | (mob_databytes[AMS1_DATA][3] << 8);
-	//bms_min_temp = (mob_databytes[AMS1_DATA][4] | (mob_databytes[AMS1_DATA][5] << 8))/100;
-=======
-	if (imd_error == 0 && !IMD_LED_ON){
-		imd_error_count = 0;          // Zähler zurücksetzen
-		PORTA &= ~(1<<PA2);           // LED aus
-	}
-	else if(!IMD_LED_ON)
-	{
-		if (imd_error_count < IMD_ERROR_THRESHOLD){
-			imd_error_count++;        // Zähler erhöhen
-		}
-		
-		if (imd_error_count >= IMD_ERROR_THRESHOLD){
-			IMD_LED_ON = 1;
-			PORTA |= (1<<PA2);        // LED an (erst nach 10 Empfangsvorgängen = 1s)
-		}
-	}
-
 	precharge_active = ((mob_databytes[AMS0_DATA][6]>>4) & 1);	
 
->>>>>>> Stashed changes
 	bms_max_temp = (mob_databytes[AMS1_DATA][6] | (mob_databytes[AMS1_DATA][7] << 8));
 	bms_max_temp = bms_max_temp/100;
 	
@@ -426,9 +400,6 @@ void can_put_data(){
 	SAS_sign = (steering_angle < 0) ? '-' : ' ';
 	
 	battery_voltage = mob_databytes[FUSEBOX_DATA][2] | (mob_databytes[FUSEBOX_DATA][3] << 8);
-
-	//Akku_fan_status = (mob_databytes[FUSEBOX_DATA][6] & 00000001);
-	
 	
 	motor_temp_1 = (mob_databytes[INV00_DATA][3] | (mob_databytes[INV00_DATA][2] << 8));
 	motor_temp_0 = (mob_databytes[INV01_DATA][3] | (mob_databytes[INV01_DATA][2] << 8));
@@ -457,9 +428,10 @@ void can_put_data(){
 	if(sys_time>=BSPD_STARTUP_TIME && wait == 0)
 	{
 		TS_ON = (~PINA & (1 << PA0));
-		if(TSon_enabled==0){
-			pre_defined_led_colors(PE_OFF);
 		
+		if(TSon_enabled==0)
+		{
+			pre_defined_led_colors(PE_OFF);
 		}
 		TSon_enabled=1;
 	}
@@ -474,7 +446,7 @@ void can_put_data(){
 		Ready_2_Drive = 0;
 	}
 
-	mob_databytes[DIC_DATA][0] = TS_ON; // TS_ON;
+	mob_databytes[DIC_DATA][0] = TS_ON;
 	mob_databytes[DIC_DATA][1] = Ready_2_Drive;
 	mob_databytes[DIC_DATA][2] = 0;
 	mob_databytes[DIC_DATA][5] = 0;
