@@ -80,6 +80,9 @@ uint8_t fault_code_1 = 0;
 uint16_t ams_error_counter = 0;
 uint8_t last_ams_counter = 0;
 
+uint16_t speed_kmh = 0;
+uint8_t speed_valid = 0;
+
 extern volatile unsigned long sys_time;
 volatile unsigned long ams_disconnect_timestamp = 0;
 extern uint8_t wait;
@@ -222,6 +225,8 @@ struct CAN_MOB inv00_mob;
 // 1: MCU Temperature
 // 0: MCU Temperature
 struct CAN_MOB inv01_mob;
+struct CAN_MOB gps_mob;
+static uint8_t gps_age_ticks = 100;
 
 
 void init_mobs(){
@@ -269,6 +274,10 @@ void init_mobs(){
 	inv01_mob.mob_id = INV0_1_MOB_ID; //0x453
 	inv01_mob.mob_idmask = 0xffff;
 	inv01_mob.mob_number = 10;
+	
+	gps_mob.mob_id = GPS_MOB_ID;
+	gps_mob.mob_idmask = 0xffff;
+	gps_mob.mob_number = 11;
 	
 }
 void check_bms_imd_status(void)
@@ -338,7 +347,38 @@ void can_receive(){
 	can_rx(&vcu_mob, mob_databytes[VCU_DATA]);
 	can_rx(&inv00_mob, mob_databytes[INV00_DATA]);
 	can_rx(&inv01_mob, mob_databytes[INV01_DATA]);
-		
+	
+	// Vor dem Auslesen prüfen, ob eine neue GPS-Nachricht angekommen ist.
+	CANPAGE = gps_mob.mob_number << MOBNB0;
+	uint8_t gps_new = (CANSTMOB & (1 << RXOK)) != 0;
+
+	can_rx(&gps_mob, mob_databytes[GPS_DATA]);
+
+	if (gps_new) {
+		// DBC: Byte 6 ist das höherwertige Byte, Byte 7 das niederwertige.
+		// Ein Rohwert von 523 entspricht 52,3 km/h.
+		uint16_t gps_raw =
+		((uint16_t)mob_databytes[GPS_DATA][6] << 8) |
+		(uint16_t)mob_databytes[GPS_DATA][7];
+
+		uint16_t rounded_kmh = (gps_raw + 5UL) / 10UL;
+
+		if (rounded_kmh <= 999U) {
+			speed_kmh = rounded_kmh;
+			speed_valid = 1;
+			} else {
+			speed_valid = 0;
+		}
+
+		gps_age_ticks = 0;
+		} else {
+		if (gps_age_ticks < 100U) {
+			gps_age_ticks++;
+		}
+		if (gps_age_ticks >= 100U) {
+			speed_valid = 0;
+		}
+	}
 }
 
 void can_transmit(){

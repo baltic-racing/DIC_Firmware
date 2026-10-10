@@ -27,7 +27,7 @@
 
 #define INV0_0_MOB_ID (uint16_t) 0x44A
 #define INV0_1_MOB_ID (uint16_t) 0x453
-
+#define GPS_MOB_ID (uint16_t) 0x797
 
 
 #define DSP_MODE_BYTE 1
@@ -53,7 +53,7 @@
 
 #define INV00_DATA 9
 #define INV01_DATA 10
-
+#define GPS_DATA 11
 
 
 void init_mobs();

@@ -40,6 +40,9 @@ extern uint16_t mcu_temp_1;
 extern uint16_t motor_temp_0;
 extern uint16_t mcu_temp_0;
 
+extern uint16_t speed_kmh;
+extern uint8_t speed_valid;
+
 //extern uint8_t Akku_fan_status;
 //void Akku_fan_LED(Akku_fan_status);
 
@@ -93,10 +96,12 @@ int main(void)
 	display_write_str(&dsp_debug,"APPS2:       BPR:   ", 1, 0);
 	display_write_str(&dsp_debug,"Balance:     F :   %", 2, 0);
 	display_write_str(&dsp_debug,"             R :   %", 3, 0);
+	display_write_str(&dsp_debug,"V:---km/h", 3, 0);
 	
 	struct DISPLAY_PAGE dsp_main = get_empty_display();
 	display_write_str(&dsp_main,"INV :  . C APPS:    ", 0, 0);
 	display_write_str(&dsp_main,"MTR :  . C BP  :    ", 1, 0);
+	//display_write_str(&dsp_main,"MTR :  . C BP  :    ", 1, 0);
 	display_write_str(&dsp_main,"ACCU:  . C SAS :    ", 2, 0);
 	display_write_str(&dsp_main,"LVV :  . V TSV :   V", 3, 0);
 	
@@ -242,7 +247,17 @@ int main(void)
 				dsp_debug.data [3][18] = (brake_balance_rear%10)+48;
 				dsp_debug.data [3][17] = ((brake_balance_rear/10)%10)+48;
 				dsp_debug.data [3][16] = ((brake_balance_rear/100)%10)+48;
-			}			
+
+				if (speed_valid && speed_kmh <= 999U) {
+					dsp_debug.data[3][2] = '0' + (speed_kmh / 100U);
+					dsp_debug.data[3][3] = '0' + ((speed_kmh / 10U) % 10U);
+					dsp_debug.data[3][4] = '0' + (speed_kmh % 10U);
+					} else {
+					dsp_debug.data[3][2] = '-';
+					dsp_debug.data[3][3] = '-';
+					dsp_debug.data[3][4] = '-';
+				}
+			}  // Diese vorhandene Klammer schließt if(active_display == &dsp_debug)		
 
 			if (active_display == &dsp_SDCI)
 			{
@@ -350,6 +365,7 @@ int main(void)
 		}
 		
 	}
-}
+	
+				}
 		
 	
