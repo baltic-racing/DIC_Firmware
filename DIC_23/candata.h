@@ -12,6 +12,8 @@
 
 #define AMS_0_MOB_ID (uint16_t) 0x200
 #define AMS_1_MOB_ID (uint16_t) 0x201
+#define AMS_DIAG_MOB_ID (uint16_t) 0x204
+
 
 #define SHR_MOB_ID (uint16_t) 0x400
 #define SHF_MOB_ID (uint16_t) 0x401
@@ -54,6 +56,9 @@
 #define INV00_DATA 9
 #define INV01_DATA 10
 #define GPS_DATA 11
+
+#define AMS_DIAG_DATA 12
+
 
 
 void init_mobs();

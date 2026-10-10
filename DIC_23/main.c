@@ -18,6 +18,9 @@
 extern uint16_t ts_voltage;
 extern uint16_t bms_max_temp;
 
+extern uint8_t ams_diagnostic_code;
+extern uint8_t ams_diagnostic_valid;
+
 extern uint16_t APPS1;
 extern uint16_t APPS2;
 extern uint16_t BPSF;
@@ -132,7 +135,7 @@ int main(void)
 	struct DISPLAY_PAGE dsp_reduced = get_empty_display();
 	//dsp_debug.number = 2;
 	display_write_str(&dsp_reduced,"   TSV :       V    ", 0, 0);
-	display_write_str(&dsp_reduced,"                    ", 1, 0);
+	display_write_str(&dsp_reduced,"   AMS-E:           ", 1, 0);
 	display_write_str(&dsp_reduced,"   ACCU:    .  C    ", 2, 0);
 	display_write_str(&dsp_reduced,"                    ", 3, 0);
 	
@@ -282,6 +285,32 @@ int main(void)
 				dsp_reduced.data [2][11] = (bms_max_temp%10)+48;
 				dsp_reduced.data [2][9] = ((bms_max_temp/10)%10)+48;
 				dsp_reduced.data [2][8] = ((bms_max_temp/100)%10)+48;	
+				
+				// AMS-Diagnose als Abkuerzung anzeigen
+				const char *ams_text = "---";
+
+				if (ams_diagnostic_valid)
+				{
+					switch (ams_diagnostic_code)
+					{
+						case 0: ams_text = "OK "; break;
+						case 1: ams_text = "OV "; break;
+						case 2: ams_text = "UV "; break;
+						case 3: ams_text = "OT "; break;
+						case 4: ams_text = "UT "; break;
+						case 5: ams_text = "NTC"; break;
+						case 6: ams_text = "PEC"; break;
+						case 7: ams_text = "IVT"; break;
+						case 8: ams_text = "ALV"; break;
+						case 9: ams_text = "IMD"; break;
+						default: ams_text = "???"; break;
+					}
+				}
+
+				dsp_reduced.data[1][11] = ams_text[0];
+				dsp_reduced.data[1][12] = ams_text[1];
+				dsp_reduced.data[1][13] = ams_text[2];
+
 			}
 			
 			if (active_display == &dsp_modes)

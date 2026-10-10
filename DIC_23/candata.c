@@ -18,14 +18,20 @@
 #define BSPD_STARTUP_TIME 15000
 #define AMS_DISCONNECT_TIME 1000
 
+//uint8_t mob_databytes[12][8];
 
-uint8_t mob_databytes[12][8];
+uint8_t mob_databytes[13][8];
 
 uint16_t ts_voltage = 0;
 uint16_t ts_current = 0;
 uint16_t state_of_charge = 0;
 uint8_t ams_error = 0;
 uint8_t imd_error = 0;
+
+uint8_t ams_diagnostic_code = 0;
+uint8_t ams_diagnostic_valid = 0;
+static uint8_t ams_diag_age_ticks = 100;
+
 uint8_t can_ok = 0;
 uint8_t precharge_active = 0;
 uint8_t TS_RDY = 0;
@@ -117,6 +123,10 @@ struct CAN_MOB ams0_mob;
 // 1: BMS Voltage MIN
 // 0: BMS Voltage MIN
 struct CAN_MOB ams1_mob;
+
+
+struct CAN_MOB ams_diag_mob;
+
 
 // CAN MOB from right sensorhub. //0x400
 // data layout:
@@ -238,6 +248,10 @@ void init_mobs(){
 	ams1_mob.mob_id = AMS_1_MOB_ID; //0x201
 	ams1_mob.mob_idmask = 0xffff;
 	ams1_mob.mob_number = 1;
+	
+	ams_diag_mob.mob_id = AMS_DIAG_MOB_ID;
+	ams_diag_mob.mob_idmask = 0xffff;
+	ams_diag_mob.mob_number = 12;
 	
 	shr_mob.mob_id = SHR_MOB_ID; //0x400
 	shr_mob.mob_idmask = 0xffff;
@@ -379,6 +393,48 @@ void can_receive(){
 			speed_valid = 0;
 		}
 	}
+	if (gps_age_ticks >= 100U) {
+		speed_valid = 0;
+	}
+	
+	// Neue AMS-Diagnose empfangen (CAN 0x204)
+	CANPAGE = ams_diag_mob.mob_number << MOBNB0;
+
+	// Pruefen, ob eine neue Nachricht angekommen ist
+	uint8_t ams_diag_new =
+	(CANSTMOB & (1 << RXOK)) != 0;
+
+	// CAN-Daten auslesen
+	can_rx(&ams_diag_mob, mob_databytes[AMS_DIAG_DATA]);
+
+	if (ams_diag_new)
+	{
+		uint8_t code = mob_databytes[AMS_DIAG_DATA][0];
+
+		if (code <= 22U)
+		{
+			ams_diagnostic_code = code;
+			ams_diagnostic_valid = 1;
+			ams_diag_age_ticks = 0;
+		}
+		else
+		{
+			ams_diagnostic_valid = 0;
+		}
+	}
+	else
+	{
+		if (ams_diag_age_ticks < 100U)
+		{
+			ams_diag_age_ticks++;
+		}
+
+		if (ams_diag_age_ticks >= 100U)
+		{
+			ams_diagnostic_valid = 0;
+		}
+	}
+
 }
 
 void can_transmit(){
